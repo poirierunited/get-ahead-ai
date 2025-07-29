@@ -3,9 +3,7 @@
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 import { handleAuthError } from "@/lib/auth.utils";
-
-// Session duration (1 week)
-const SESSION_DURATION = 60 * 60 * 24 * 7;
+import { AUTH_COOKIES, SESSION_DURATION, COOKIE_OPTIONS } from "@/constants";
 
 // Set session cookie
 export async function setSessionCookie(idToken: string) {
@@ -17,13 +15,7 @@ export async function setSessionCookie(idToken: string) {
   });
 
   // Set cookie in the browser
-  cookieStore.set("session", sessionCookie, {
-    maxAge: SESSION_DURATION,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    sameSite: "lax",
-  });
+  cookieStore.set(AUTH_COOKIES.SESSION, sessionCookie, COOKIE_OPTIONS);
 }
 
 export async function signUp(params: SignUpParams) {
@@ -89,14 +81,14 @@ export async function signIn(params: SignInParams) {
 export async function signOut() {
   const cookieStore = await cookies();
 
-  cookieStore.delete("session");
+  cookieStore.delete(AUTH_COOKIES.SESSION);
 }
 
 // Get current user from session cookie
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
 
-  const sessionCookie = cookieStore.get("session")?.value;
+  const sessionCookie = cookieStore.get(AUTH_COOKIES.SESSION)?.value;
   if (!sessionCookie) return null;
 
   try {

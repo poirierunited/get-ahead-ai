@@ -1,6 +1,21 @@
 // import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 // import { z } from "zod";
 
+// Auth constants
+export const AUTH_COOKIES = {
+  SESSION: "session",
+} as const;
+
+export const SESSION_DURATION = 60 * 60 * 24 * 7; // 1 week in seconds
+
+export const COOKIE_OPTIONS = {
+  maxAge: SESSION_DURATION,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  sameSite: "lax" as const,
+} as const;
+
 export const mappings = {
   "react.js": "react",
   reactjs: "react",
