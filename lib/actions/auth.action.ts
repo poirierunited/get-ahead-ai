@@ -2,8 +2,8 @@
 
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
-import { handleAuthError } from "@/lib/auth.utils";
 import { AUTH_COOKIES, SESSION_DURATION, COOKIE_OPTIONS } from "@/constants";
+import { handleAuthError } from "@/lib/auth.utils";
 
 // Set session cookie
 export async function setSessionCookie(idToken: string) {
