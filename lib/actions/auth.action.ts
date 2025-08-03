@@ -84,6 +84,12 @@ export async function signOut() {
   cookieStore.delete(AUTH_COOKIES.SESSION);
 }
 
+// Check if user is authenticated
+export async function isAuthenticated() {
+  const user = await getCurrentUser();
+  return !!user;
+}
+
 // Get current user from session cookie
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
@@ -111,10 +117,4 @@ export async function getCurrentUser(): Promise<User | null> {
     // Invalid or expired session
     return null;
   }
-}
-
-// Check if user is authenticated
-export async function isAuthenticated() {
-  const user = await getCurrentUser();
-  return !!user;
 }

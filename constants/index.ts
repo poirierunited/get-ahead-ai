@@ -6,7 +6,7 @@ export const AUTH_COOKIES = {
   SESSION: "session",
 } as const;
 
-export const SESSION_DURATION = 60 * 60 * 2; // * 7; //
+export const SESSION_DURATION = 60 * 30 * 1; // * 7; //
 
 export const COOKIE_OPTIONS = {
   maxAge: SESSION_DURATION,

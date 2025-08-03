@@ -45,7 +45,3 @@ export async function POST(request: Request) {
     return Response.json({ success: false, error: error }, { status: 500 });
   }
 }
-
-export async function GET() {
-  return Response.json({ success: true, data: "Thank you!" }, { status: 200 });
-}
