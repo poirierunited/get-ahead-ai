@@ -42,3 +42,9 @@ next-env.d.ts
 
 # prettier  
 .prettierrc
+
+# cursor rules
+/.cursor/
+
+# extra-resources folder
+/extra-resources
