@@ -2,9 +2,8 @@
 
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
-
-// Session duration (1 week)
-const SESSION_DURATION = 60 * 60 * 24 * 7;
+import { AUTH_COOKIES, SESSION_DURATION, COOKIE_OPTIONS } from "@/constants";
+import { handleAuthError } from "@/lib/auth.utils";
 
 // Set session cookie
 export async function setSessionCookie(idToken: string) {
@@ -16,13 +15,7 @@ export async function setSessionCookie(idToken: string) {
   });
 
   // Set cookie in the browser
-  cookieStore.set("session", sessionCookie, {
-    maxAge: SESSION_DURATION,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    sameSite: "lax",
-  });
+  cookieStore.set(AUTH_COOKIES.SESSION, sessionCookie, COOKIE_OPTIONS);
 }
 
 export async function signUp(params: SignUpParams) {
@@ -51,18 +44,9 @@ export async function signUp(params: SignUpParams) {
     };
   } catch (error: any) {
     console.error("Error creating user:", error);
-
-    // Handle Firebase specific errors
-    if (error.code === "auth/email-already-exists") {
-      return {
-        success: false,
-        message: "This email is already in use",
-      };
-    }
-
     return {
       success: false,
-      message: "Failed to create account. Please try again.",
+      message: handleAuthError(error),
     };
   }
 }
@@ -79,12 +63,16 @@ export async function signIn(params: SignInParams) {
       };
 
     await setSessionCookie(idToken);
-  } catch (error: any) {
-    console.log("");
 
     return {
+      success: true,
+      message: "Signed in successfully.",
+    };
+  } catch (error: any) {
+    console.error("Sign in error:", error);
+    return {
       success: false,
-      message: "Failed to log into account. Please try again.",
+      message: handleAuthError(error),
     };
   }
 }
@@ -93,14 +81,20 @@ export async function signIn(params: SignInParams) {
 export async function signOut() {
   const cookieStore = await cookies();
 
-  cookieStore.delete("session");
+  cookieStore.delete(AUTH_COOKIES.SESSION);
+}
+
+// Check if user is authenticated
+export async function isAuthenticated() {
+  const user = await getCurrentUser();
+  return !!user;
 }
 
 // Get current user from session cookie
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies();
 
-  const sessionCookie = cookieStore.get("session")?.value;
+  const sessionCookie = cookieStore.get(AUTH_COOKIES.SESSION)?.value;
   if (!sessionCookie) return null;
 
   try {
@@ -123,10 +117,4 @@ export async function getCurrentUser(): Promise<User | null> {
     // Invalid or expired session
     return null;
   }
-}
-
-// Check if user is authenticated
-export async function isAuthenticated() {
-  const user = await getCurrentUser();
-  return !!user;
 }
