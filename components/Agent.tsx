@@ -91,9 +91,15 @@ const Agent = ({
     const handleGenerateFeedback = async (messages: SavedMessage[]) => {
       console.log("handleGenerateFeedback");
 
+      if (!userId) {
+        console.error("userId is missing");
+        router.push("/");
+        return;
+      }
+
       const { success, feedbackId: id } = await createFeedback({
         interviewId: interviewId!,
-        userId: userId!,
+        userId: userId,
         transcript: messages,
         feedbackId,
       });
@@ -146,6 +152,39 @@ const Agent = ({
       });
     }
   };
+
+  // const handleCall = async () => {
+  //   setCallStatus(CallStatus.CONNECTING);
+
+  //   if (type === "generate") {
+  //     await vapi.start(
+  //       undefined,
+  //       {
+  //         variableValues: {
+  //           username: userName,
+  //           userid: userId,
+  //         },
+  //       },
+  //       undefined,
+  //       generator
+  //     );
+  //   } else {
+  //     let formattedQuestions = "";
+  //     if (questions) {
+  //       formattedQuestions = questions
+  //         .map((question) => `- ${question}`)
+  //         .join("\n");
+  //     }
+
+  //     await vapi.start(interviewer, {
+  //       variableValues: {
+  //         questions: formattedQuestions,
+  //       },
+  //       clientMessages: ["transcript"],
+  //       serverMessages: [],
+  //     });
+  //   }
+  // };
 
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
