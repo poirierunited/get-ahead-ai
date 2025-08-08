@@ -5,9 +5,37 @@ import { db } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
 
 export async function POST(request: Request) {
-  const { type, role, level, techstack, amount, userid } = await request.json();
+  console.log("=== VAPI API CALL RECEIVED ===");
+  console.log("Request URL:", request.url);
+  console.log("Request method:", request.method);
 
   try {
+    const body = await request.json();
+    console.log("Request body:", JSON.stringify(body, null, 2));
+
+    const { type, role, level, techstack, amount, userid } = body;
+
+    const missingFields = validateRequest(
+      type,
+      role,
+      level,
+      techstack,
+      amount,
+      userid
+    );
+
+    if (missingFields) {
+      console.log("Validation failed:", missingFields);
+      return Response.json(
+        { success: false, error: missingFields },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    console.log("Validation passed, proceeding with interview generation...");
+
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001"),
       prompt: `Prepare questions for a job interview.
@@ -25,6 +53,8 @@ export async function POST(request: Request) {
     `,
     });
 
+    console.log("Generated questions:", questions);
+
     const interview = {
       role: role,
       type: type,
@@ -37,15 +67,56 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
     };
 
+    console.log("Saving interview to Firestore:", interview);
+
     await db.collection("interviews").add(interview);
 
-    return Response.json({ success: true }, { status: 200 });
+    console.log("Interview saved successfully");
+    return Response.json(
+      { success: true, message: "Interview created successfully" },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Error:", error);
-    return Response.json({ success: false, error: error }, { status: 500 });
+    console.error("Error in POST /api/vapi/generate:", error);
+    return Response.json(
+      { success: false, error: error?.toString() },
+      { status: 500 }
+    );
   }
 }
 
 export async function GET() {
-  return Response.json({ success: true, data: "Thank you!" }, { status: 200 });
+  console.log("=== VAPI API GET REQUEST RECEIVED ===");
+  return Response.json(
+    { success: true, data: "API is working!" },
+    { status: 200 }
+  );
+}
+
+function validateRequest(
+  type: string,
+  role: string,
+  level: string,
+  techstack: string,
+  amount: number,
+  userid: string
+) {
+  if (!type) {
+    return "type is missing";
+  }
+  if (!role) {
+    return "role is missing";
+  }
+  if (!level) {
+    return "level is missing";
+  }
+  if (!techstack) {
+    return "techstack is missing";
+  }
+  if (!amount) {
+    return "amount is missing";
+  }
+  if (!userid) {
+    return "userid is missing";
+  }
 }
