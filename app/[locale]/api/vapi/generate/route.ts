@@ -37,3 +37,11 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+  const locale = pathname.split("/")[1];
+  return NextResponse.json({
+    message: "Endpoint working, language: " + locale,
+  });
+}
