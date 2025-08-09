@@ -153,39 +153,6 @@ const Agent = ({
     }
   };
 
-  // const handleCall = async () => {
-  //   setCallStatus(CallStatus.CONNECTING);
-
-  //   if (type === "generate") {
-  //     await vapi.start(
-  //       undefined,
-  //       {
-  //         variableValues: {
-  //           username: userName,
-  //           userid: userId,
-  //         },
-  //       },
-  //       undefined,
-  //       generator
-  //     );
-  //   } else {
-  //     let formattedQuestions = "";
-  //     if (questions) {
-  //       formattedQuestions = questions
-  //         .map((question) => `- ${question}`)
-  //         .join("\n");
-  //     }
-
-  //     await vapi.start(interviewer, {
-  //       variableValues: {
-  //         questions: formattedQuestions,
-  //       },
-  //       clientMessages: ["transcript"],
-  //       serverMessages: [],
-  //     });
-  //   }
-  // };
-
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
     vapi.stop();
