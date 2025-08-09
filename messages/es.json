@@ -1,0 +1,110 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "submit": "Enviar"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "interviews": "Entrevistas",
+    "profile": "Perfil",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "signOut": "Cerrar Sesión"
+  },
+  "home": {
+    "title": "Prepárate para Entrevistas con IA: Práctica y Retroalimentación",
+    "subtitle": "Practica preguntas reales de entrevista y obtén retroalimentación instantánea",
+    "startInterview": "Comenzar Entrevista",
+    "yourInterviews": "Tus Entrevistas",
+    "noInterviews": "Aún no has tomado ninguna entrevista",
+    "takeInterviews": "Tomar Entrevistas",
+    "noAvailableInterviews": "No hay entrevistas disponibles"
+  },
+  "interview": {
+    "start": "Iniciar Entrevista",
+    "end": "Finalizar Entrevista",
+    "connecting": "Conectando...",
+    "active": "Entrevista en Progreso",
+    "finished": "Entrevista Finalizada",
+    "call": "Llamar",
+    "disconnect": "Desconectar",
+    "notTakenYet": "Aún no has tomado esta entrevista. Tómala ahora para mejorar tus habilidades.",
+    "checkFeedback": "Ver Retroalimentación",
+    "viewInterview": "Ver Entrevista"
+  },
+  "feedback": {
+    "communicationSkills": "Habilidades de Comunicación",
+    "technicalKnowledge": "Conocimiento Técnico",
+    "problemSolving": "Resolución de Problemas",
+    "culturalFit": "Ajuste Cultural",
+    "confidenceClarity": "Confianza y Claridad",
+    "strengths": "Fortalezas",
+    "areasForImprovement": "Áreas de Mejora",
+    "finalAssessment": "Evaluación Final",
+    "totalScore": "Puntuación Total"
+  },
+  "auth": {
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "signInTitle": "Bienvenido de vuelta",
+    "signUpTitle": "Crea tu cuenta",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "name": "Nombre",
+    "namePlaceholder": "Tu Nombre",
+    "emailPlaceholder": "Tu dirección de correo electrónico",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "createAccount": "Crear una Cuenta",
+    "practiceInterviews": "Practica entrevistas de trabajo con IA",
+    "accountCreatedSuccess": "Cuenta creada exitosamente. Por favor inicia sesión.",
+    "signInFailed": "Falló el inicio de sesión. Por favor intenta de nuevo.",
+    "signedInSuccess": "Sesión iniciada exitosamente."
+  },
+  "ai": {
+    "interviewer": "Entrevistador IA",
+    "firstMessage": "¡Hola! Gracias por tomar el tiempo de hablar conmigo hoy. Estoy emocionado de conocer más sobre ti y tu experiencia.",
+    "systemPrompt": "Eres un entrevistador profesional de trabajo que realiza una entrevista de voz en tiempo real con un candidato. Tu objetivo es evaluar sus calificaciones, motivación y ajuste para el puesto.",
+    "interviewGuidelines": "Pautas de la Entrevista:",
+    "followQuestions": "Sigue el flujo estructurado de preguntas:",
+    "engageNaturally": "Participa naturalmente y reacciona apropiadamente:",
+    "listenActively": "Escucha activamente las respuestas y reconócelas antes de continuar.",
+    "askFollowUp": "Haz preguntas de seguimiento breves si una respuesta es vaga o requiere más detalle.",
+    "keepConversationFlowing": "Mantén la conversación fluyendo suavemente mientras mantienes el control.",
+    "beProfessional": "Sé profesional, pero cálido y acogedor:",
+    "useOfficialLanguage": "Usa un lenguaje oficial pero amigable.",
+    "keepResponsesConcise": "Mantén las respuestas concisas y al punto (como en una entrevista de voz real).",
+    "avoidRoboticPhrasing": "Evita frases robóticas—suena natural y conversacional.",
+    "answerQuestionsProfessionally": "Responde las preguntas del candidato profesionalmente:",
+    "ifAskedAboutRole": "Si te preguntan sobre el puesto, la empresa o las expectativas, proporciona una respuesta clara y relevante.",
+    "ifUnsureRedirect": "Si no estás seguro, redirige al candidato a RRHH para más detalles.",
+    "concludeProperly": "Concluye la entrevista apropiadamente:",
+    "thankCandidate": "Agradece al candidato por su tiempo.",
+    "informCompanyReachOut": "Infórmales que la empresa se pondrá en contacto pronto con retroalimentación.",
+    "endPolitely": "Termina la conversación de manera educada y positiva.",
+    "beProfessionalPolite": "Asegúrate de ser profesional y educado.",
+    "keepResponsesShort": "Mantén todas tus respuestas cortas y simples. Usa lenguaje oficial, pero sé amable y acogedor.",
+    "voiceConversation": "Esta es una conversación de voz, así que mantén tus respuestas cortas, como en una conversación real. No te extiendas demasiado."
+  },
+  "api": {
+    "generateInterview": {
+      "prompt": "Prepara preguntas para una entrevista de trabajo. El puesto es {role}. El nivel de experiencia del trabajo es {level}. El stack tecnológico usado en el trabajo es: {techstack}. El enfoque entre preguntas de comportamiento y técnicas debe inclinarse hacia: {type}. La cantidad de preguntas requeridas es: {amount}. Por favor devuelve solo las preguntas, sin texto adicional. Las preguntas serán leídas por un asistente de voz, así que no uses \"/\" o \"*\" u otros caracteres especiales que puedan romper el asistente de voz. Devuelve las preguntas formateadas así: [\"Pregunta 1\", \"Pregunta 2\", \"Pregunta 3\"] ¡Gracias! <3",
+      "systemPrompt": "Eres un asistente de IA que genera preguntas de entrevista. Genera las preguntas en idioma {language}."
+    },
+    "generateFeedback": {
+      "prompt": "Eres un entrevistador de IA analizando una entrevista simulada. Tu tarea es evaluar al candidato basándote en categorías estructuradas. Sé exhaustivo y detallado en tu análisis. No seas indulgente con el candidato. Si hay errores o áreas de mejora, señálalas. Transcripción: {transcript} Por favor puntúa al candidato de 0 a 100 en las siguientes áreas. No agregues categorías distintas a las proporcionadas: - **Habilidades de Comunicación**: Claridad, articulación, respuestas estructuradas. - **Conocimiento Técnico**: Comprensión de conceptos clave para el puesto. - **Resolución de Problemas**: Capacidad de analizar problemas y proponer soluciones. - **Ajuste Cultural y de Puesto**: Alineación con valores de la empresa y rol del trabajo. - **Confianza y Claridad**: Confianza en las respuestas, compromiso y claridad.",
+      "systemPrompt": "Eres un entrevistador profesional analizando una entrevista simulada. Tu tarea es evaluar al candidato basándote en categorías estructuradas. Por favor proporciona retroalimentación en idioma {language}."
+    }
+  }
+}

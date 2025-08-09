@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
-import { interviewer } from "@/constants";
+import { getInterviewerConfig } from "@/constants";
 import { createFeedback } from "@/lib/actions/general.action";
+import { useParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -31,6 +33,9 @@ const Agent = ({
   profileImage,
 }: AgentProps) => {
   const router = useRouter();
+  const params = useParams();
+  const locale = useLocale();
+  const t = useTranslations();
   const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -93,7 +98,7 @@ const Agent = ({
 
       if (!userId) {
         console.error("userId is missing");
-        router.push("/");
+        router.push(`/${locale}`);
         return;
       }
 
@@ -101,25 +106,34 @@ const Agent = ({
         interviewId: interviewId!,
         userId: userId,
         transcript: messages,
-        feedbackId,
+        language: locale,
       });
 
       if (success && id) {
-        router.push(`/interview/${interviewId}/feedback`);
+        router.push(`/${locale}/interview/${interviewId}/feedback`);
       } else {
         console.log("Error saving feedback");
-        router.push("/");
+        router.push(`/${locale}`);
       }
     };
 
     if (callStatus === CallStatus.FINISHED) {
       if (type === "generate") {
-        router.push("/");
+        router.push(`/${locale}`);
       } else {
         handleGenerateFeedback(messages);
       }
     }
-  }, [messages, callStatus, feedbackId, interviewId, router, type, userId]);
+  }, [
+    messages,
+    callStatus,
+    feedbackId,
+    interviewId,
+    router,
+    type,
+    userId,
+    locale,
+  ]);
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
@@ -145,7 +159,8 @@ const Agent = ({
           .join("\n");
       }
 
-      await vapi.start(interviewer, {
+      const interviewerConfig = getInterviewerConfig(locale);
+      await vapi.start(interviewerConfig, {
         variableValues: {
           questions: formattedQuestions,
         },
@@ -173,7 +188,7 @@ const Agent = ({
             />
             {isSpeaking && <span className="animate-speak" />}
           </div>
-          <h3>AI Interviewer</h3>
+          <h3>{t("ai.interviewer")}</h3>
         </div>
 
         {/* User Profile Card */}
@@ -220,13 +235,13 @@ const Agent = ({
             <span className="relative">
               {callStatus === CallStatus.INACTIVE ||
               callStatus === CallStatus.FINISHED
-                ? "Call"
+                ? t("interview.call")
                 : ". . ."}
             </span>
           </button>
         ) : (
           <button className="btn-disconnect" onClick={() => handleDisconnect()}>
-            End
+            {t("interview.end")}
           </button>
         )}
       </div>
