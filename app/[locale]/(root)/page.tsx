@@ -13,8 +13,8 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
-  const t = await getTranslations();
   const { locale } = await params;
+  const t = await getTranslations({ locale });
 
   const user = await getCurrentUser();
   if (!user) {

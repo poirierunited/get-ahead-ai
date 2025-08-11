@@ -5,7 +5,7 @@ export const locales = ["en", "es"] as const;
 export type Locale = (typeof locales)[number];
 
 // Simple configuration for next-intl v4
-export const defaultLocale = "es";
+export const defaultLocale = "en";
 
 // This is the configuration used by the next-intl plugin
 export default getRequestConfig(async ({ locale }) => {
