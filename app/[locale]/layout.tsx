@@ -39,7 +39,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className="dark">
       <body className={`${monaSans.className} antialiased pattern`}>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
           <Toaster />
         </NextIntlClientProvider>
