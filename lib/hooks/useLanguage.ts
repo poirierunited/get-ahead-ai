@@ -24,6 +24,8 @@ export function useLanguage() {
       ? browserLang
       : "en";
 
+    console.log("====User Browser Language====", detectedLocale);
+
     // Extract locale from current path
     const pathLocale = pathname.split("/")[1];
     if (locales.includes(pathLocale as any)) {

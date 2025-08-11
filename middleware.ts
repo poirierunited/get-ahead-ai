@@ -10,6 +10,9 @@ export default createMiddleware({
 
   // Always use the default locale for static assets
   localePrefix: "always",
+
+  // Force locale detection to prefer Spanish when available
+  localeDetection: true,
 });
 
 export const config = {

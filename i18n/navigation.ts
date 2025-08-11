@@ -1,7 +1,7 @@
-import { createSharedPathnamesNavigation } from "next-intl/navigation";
+// Navigation utilities for next-intl
+// This file provides navigation functions that work with the locale routing
 
-export const locales = ["en", "es"] as const;
-export const defaultLocale = "en";
-
-export const { Link, redirect, usePathname, useRouter } =
-  createSharedPathnamesNavigation({ locales, defaultLocale });
+export { default as Link } from "next/link";
+export { redirect } from "next/navigation";
+export { usePathname } from "next/navigation";
+export { useRouter } from "next/navigation";
