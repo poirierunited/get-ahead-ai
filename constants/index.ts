@@ -227,7 +227,9 @@ export const dummyInterviews: Interview[] = [
 const englishFirstMessage =
   `Hello! Thank you for taking the time to speak with me today.` +
   `I'm excited to learn more about you and your experience.`;
-const englishSystemPrompt = `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
+const englishSystemPrompt =
+  `You are a professional job interviewer conducting a real-time voice interview with a candidate.` +
+  `Your goal is to assess their qualifications, motivation, and fit for the role.
 
 Interview Guidelines:
 Follow the structured question flow:
