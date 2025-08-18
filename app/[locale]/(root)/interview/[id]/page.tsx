@@ -11,16 +11,20 @@ import {
 import { getCurrentUser } from "@/lib/actions/auth.action";
 import DisplayTechIcons from "@/components/DisplayTechIcons";
 
-const InterviewDetails = async ({ params }: RouteParams) => {
-  const { id } = await params;
+const InterviewDetails = async ({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>;
+}) => {
+  const { id, locale } = await params;
 
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/sign-in");
+    redirect(`/${locale}/sign-in`);
   }
 
   const interview = await getInterviewById(id);
-  if (!interview) redirect("/");
+  if (!interview) redirect(`/${locale}`);
 
   const feedback = await getFeedbackByInterviewId({
     interviewId: id,

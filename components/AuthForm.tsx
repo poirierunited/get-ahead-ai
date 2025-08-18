@@ -8,6 +8,7 @@ import { auth } from "@/firebase/client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLocale, useTranslations } from "next-intl";
 
 import {
   createUserWithEmailAndPassword,
@@ -31,6 +32,8 @@ const authFormSchema = (type: FormType) => {
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations();
 
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,8 +68,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
           return;
         }
 
-        toast.success("Account created successfully. Please sign in.");
-        router.push("/sign-in");
+        toast.success(t("auth.accountCreatedSuccess"));
+        router.push(`/${locale}/sign-in`);
       } else {
         const { email, password } = data;
 
@@ -78,7 +81,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
         const idToken = await userCredential.user.getIdToken();
         if (!idToken) {
-          toast.error("Sign in Failed. Please try again.");
+          toast.error(t("auth.signInFailed"));
           return;
         }
 
@@ -92,8 +95,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
           return;
         }
 
-        toast.success("Signed in successfully.");
-        router.push("/");
+        toast.success(t("auth.signedInSuccess"));
+        router.push(`/${locale}`);
       }
     } catch (error: any) {
       console.error("Authentication error:", error);
@@ -112,7 +115,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <h2 className="text-primary-100">PrepWise</h2>
         </div>
 
-        <h3>Practice job interviews with AI</h3>
+        <h3>{t("auth.practiceInterviews")}</h3>
 
         <Form {...form}>
           <form
@@ -123,8 +126,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
               <FormField
                 control={form.control}
                 name="name"
-                label="Name"
-                placeholder="Your Name"
+                label={t("auth.name")}
+                placeholder={t("auth.namePlaceholder")}
                 type="text"
               />
             )}
@@ -132,32 +135,32 @@ const AuthForm = ({ type }: { type: FormType }) => {
             <FormField
               control={form.control}
               name="email"
-              label="Email"
-              placeholder="Your email address"
+              label={t("auth.email")}
+              placeholder={t("auth.emailPlaceholder")}
               type="email"
             />
 
             <FormField
               control={form.control}
               name="password"
-              label="Password"
-              placeholder="Enter your password"
+              label={t("auth.password")}
+              placeholder={t("auth.passwordPlaceholder")}
               type="password"
             />
 
             <Button className="btn" type="submit">
-              {isSignIn ? "Sign In" : "Create an Account"}
+              {isSignIn ? t("auth.signIn") : t("auth.createAccount")}
             </Button>
           </form>
         </Form>
 
         <p className="text-center">
-          {isSignIn ? "No account yet?" : "Have an account already?"}
+          {isSignIn ? t("auth.dontHaveAccount") : t("auth.alreadyHaveAccount")}
           <Link
-            href={!isSignIn ? "/sign-in" : "/sign-up"}
+            href={!isSignIn ? `/${locale}/sign-in` : `/${locale}/sign-up`}
             className="font-bold text-user-primary ml-1"
           >
-            {!isSignIn ? "Sign In" : "Sign Up"}
+            {!isSignIn ? t("auth.signIn") : t("auth.signUp")}
           </Link>
         </p>
       </div>

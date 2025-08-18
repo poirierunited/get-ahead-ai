@@ -9,13 +9,16 @@ import {
   getInterviewsByUserId,
   getLatestInterviews,
 } from "@/lib/actions/general.action";
-
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
-const Page = async () => {
+const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
+  const { locale } = await params;
+  const t = await getTranslations({ locale });
+
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/sign-in");
+    redirect(`/${locale}/sign-in`);
   }
   const [userInterviews, allInterview] = await Promise.all([
     getInterviewsByUserId(user?.id!),
@@ -29,13 +32,13 @@ const Page = async () => {
     <>
       <section className="card-cta">
         <div className="flex flex-col gap-6 max-w-lg">
-          <h2>Get Interview-Ready with AI-Powered Practice & Feedback</h2>
-          <p className="text-lg">
-            Practice real interview questions & get instant feedback
-          </p>
+          <h2>{t("home.title")}</h2>
+          <p className="text-lg">{t("home.subtitle")}</p>
 
           <Button asChild className="btn-primary max-sm:w-full">
-            <Link href="/interview">Start an Interview</Link>
+            <Link href={`/${locale}/interview`}>
+              {t("home.startInterview")}
+            </Link>
           </Button>
         </div>
 
@@ -49,14 +52,14 @@ const Page = async () => {
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Your Interviews</h2>
+        <h2>{t("home.yourInterviews")}</h2>
 
         <div className="interviews-section">
           {hasPastInterviews ? (
             userInterviews?.map((interview) => (
               <InterviewCard
                 key={interview.id}
-                userId={user?.id}
+                userId={user?.id!}
                 interviewId={interview.id}
                 role={interview.role}
                 type={interview.type}
@@ -65,20 +68,20 @@ const Page = async () => {
               />
             ))
           ) : (
-            <p>You haven&apos;t taken any interviews yet</p>
+            <p>{t("home.noInterviews")}</p>
           )}
         </div>
       </section>
 
       <section className="flex flex-col gap-6 mt-8">
-        <h2>Take Interviews</h2>
+        <h2>{t("home.takeInterviews")}</h2>
 
         <div className="interviews-section">
           {hasUpcomingInterviews ? (
             allInterview?.map((interview) => (
               <InterviewCard
                 key={interview.id}
-                userId={user?.id}
+                userId={user?.id!}
                 interviewId={interview.id}
                 role={interview.role}
                 type={interview.type}
@@ -87,7 +90,7 @@ const Page = async () => {
               />
             ))
           ) : (
-            <p>There are no interviews available</p>
+            <p>{t("home.noAvailableInterviews")}</p>
           )}
         </div>
       </section>

@@ -10,15 +10,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 
-const Feedback = async ({ params }: RouteParams) => {
-  const { id } = await params;
+const Feedback = async ({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>;
+}) => {
+  const { id, locale } = await params;
   const user = await getCurrentUser();
   if (!user) {
-    redirect("/sign-in");
+    redirect(`/${locale}/sign-in`);
   }
 
   const interview = await getInterviewById(id);
-  if (!interview) redirect("/");
+  if (!interview) redirect(`/${locale}`);
 
   const feedback = await getFeedbackByInterviewId({
     interviewId: id,
@@ -97,7 +101,7 @@ const Feedback = async ({ params }: RouteParams) => {
 
       <div className="buttons">
         <Button className="btn-secondary flex-1">
-          <Link href="/" className="flex w-full justify-center">
+          <Link href={`/${locale}`} className="flex w-full justify-center">
             <p className="text-sm font-semibold text-primary-200 text-center">
               Back to dashboard
             </p>
@@ -106,7 +110,7 @@ const Feedback = async ({ params }: RouteParams) => {
 
         <Button className="btn-primary flex-1">
           <Link
-            href={`/interview/${id}`}
+            href={`/${locale}/interview/${id}`}
             className="flex w-full justify-center"
           >
             <p className="text-sm font-semibold text-black text-center">

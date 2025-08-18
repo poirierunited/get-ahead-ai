@@ -1,0 +1,111 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit"
+  },
+  "navigation": {
+    "home": "Home",
+    "interviews": "Interviews",
+    "profile": "Profile",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out"
+  },
+  "home": {
+    "title": "Get Interview-Ready with AI-Powered Practice & Feedback",
+    "subtitle": "Practice real interview questions & get instant feedback",
+    "startInterview": "Start an Interview",
+    "yourInterviews": "Your Interviews",
+    "noInterviews": "You haven't taken any interviews yet",
+    "takeInterviews": "Take Interviews",
+    "noAvailableInterviews": "There are no interviews available"
+  },
+  "interview": {
+    "title": "Interview Generation",
+    "start": "Start Interview",
+    "end": "End Interview",
+    "connecting": "Connecting...",
+    "active": "Interview in Progress",
+    "finished": "Interview Finished",
+    "call": "Call",
+    "disconnect": "Disconnect",
+    "notTakenYet": "You haven't taken this interview yet. Take it now to improve your skills.",
+    "checkFeedback": "Check Feedback",
+    "viewInterview": "View Interview"
+  },
+  "feedback": {
+    "communicationSkills": "Communication Skills",
+    "technicalKnowledge": "Technical Knowledge",
+    "problemSolving": "Problem Solving",
+    "culturalFit": "Cultural Fit",
+    "confidenceClarity": "Confidence and Clarity",
+    "strengths": "Strengths",
+    "areasForImprovement": "Areas for Improvement",
+    "finalAssessment": "Final Assessment",
+    "totalScore": "Total Score"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "signInTitle": "Welcome back",
+    "signUpTitle": "Create your account",
+    "forgotPassword": "Forgot your password?",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "name": "Name",
+    "namePlaceholder": "Your Name",
+    "emailPlaceholder": "Your email address",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createAccount": "Create an Account",
+    "practiceInterviews": "Practice job interviews with AI",
+    "accountCreatedSuccess": "Account created successfully. Please sign in.",
+    "signInFailed": "Sign in Failed. Please try again.",
+    "signedInSuccess": "Signed in successfully."
+  },
+  "ai": {
+    "interviewer": "AI Interviewer",
+    "firstMessage": "Hello! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
+    "systemPrompt": "You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.",
+    "interviewGuidelines": "Interview Guidelines:",
+    "followQuestions": "Follow the structured question flow:",
+    "engageNaturally": "Engage naturally & react appropriately:",
+    "listenActively": "Listen actively to responses and acknowledge them before moving forward.",
+    "askFollowUp": "Ask brief follow-up questions if a response is vague or requires more detail.",
+    "keepConversationFlowing": "Keep the conversation flowing smoothly while maintaining control.",
+    "beProfessional": "Be professional, yet warm and welcoming:",
+    "useOfficialLanguage": "Use official yet friendly language.",
+    "keepResponsesConcise": "Keep responses concise and to the point (like in a real voice interview).",
+    "avoidRoboticPhrasing": "Avoid robotic phrasing—sound natural and conversational.",
+    "answerQuestionsProfessionally": "Answer the candidate's questions professionally:",
+    "ifAskedAboutRole": "If asked about the role, company, or expectations, provide a clear and relevant answer.",
+    "ifUnsureRedirect": "If unsure, redirect the candidate to HR for more details.",
+    "concludeProperly": "Conclude the interview properly:",
+    "thankCandidate": "Thank the candidate for their time.",
+    "informCompanyReachOut": "Inform them that the company will reach out soon with feedback.",
+    "endPolitely": "End the conversation on a polite and positive note.",
+    "beProfessionalPolite": "Be sure to be professional and polite.",
+    "keepResponsesShort": "Keep all your responses short and simple. Use official language, but be kind and welcoming.",
+    "voiceConversation": "This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long."
+  },
+  "api": {
+    "generateInterview": {
+      "prompt": "Prepare questions for a job interview. The job role is {role}. The job experience level is {level}. The tech stack used in the job is: {techstack}. The focus between behavioural and technical questions should lean towards: {type}. The amount of questions required is: {amount}. Please return only the questions, without any additional text. The questions are going to be read by a voice assistant so do not use \"/\" or \"*\" or any other special characters which might break the voice assistant. Return the questions formatted like this: [\"Question 1\", \"Question 2\", \"Question 3\"] Thank you! <3",
+      "systemPrompt": "You are an AI assistant that generates interview questions. Generate questions in {language} language."
+    },
+    "generateFeedback": {
+      "prompt": "You are an AI interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Be thorough and detailed in your analysis. Don't be lenient with the candidate. If there are mistakes or areas for improvement, point them out. Transcript: {transcript} Please score the candidate from 0 to 100 in the following areas. Do not add categories other than the ones provided: - **Communication Skills**: Clarity, articulation, structured responses. - **Technical Knowledge**: Understanding of key concepts for the role. - **Problem-Solving**: Ability to analyze problems and propose solutions. - **Cultural & Role Fit**: Alignment with company values and job role. - **Confidence & Clarity**: Confidence in responses, engagement, and clarity.",
+      "systemPrompt": "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Please provide feedback in {language} language."
+    }
+  }
+}

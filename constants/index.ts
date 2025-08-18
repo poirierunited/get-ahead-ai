@@ -112,6 +112,185 @@ export const mappings = {
   "aws amplify": "amplify",
 };
 
+export const getInterviewerConfig = (
+  language: "en" | "es" = "en"
+): CreateAssistantDTO => {
+  const isSpanish = language === "es";
+
+  const systemPrompt = isSpanish ? spanishSystemPrompt : englishSystemPrompt;
+
+  return {
+    name: isSpanish ? "Entrevistador" : "Interviewer",
+    firstMessage: isSpanish ? spanishFirstMessage : englishFirstMessage,
+    transcriber: {
+      provider: "openai" as const,
+      model: "gpt-4o-transcribe",
+      language,
+    },
+    voice: {
+      provider: "11labs" as const,
+      voiceId: isSpanish ? "maria" : "sarah", // Different voice for Spanish
+      stability: 0.4,
+      similarityBoost: 0.8,
+      speed: 0.9,
+      style: 0.5,
+      useSpeakerBoost: true,
+    },
+    model: {
+      provider: "openai" as const,
+      model: "gpt-4" as const,
+      messages: [
+        {
+          role: "system" as const,
+          content: systemPrompt,
+        },
+      ],
+    },
+  };
+};
+
+export const feedbackSchema = z.object({
+  totalScore: z.number(),
+  categoryScores: z.tuple([
+    z.object({
+      name: z.literal("Communication Skills"),
+      score: z.number(),
+      comment: z.string(),
+    }),
+    z.object({
+      name: z.literal("Technical Knowledge"),
+      score: z.number(),
+      comment: z.string(),
+    }),
+    z.object({
+      name: z.literal("Problem Solving"),
+      score: z.number(),
+      comment: z.string(),
+    }),
+    z.object({
+      name: z.literal("Cultural Fit"),
+      score: z.number(),
+      comment: z.string(),
+    }),
+    z.object({
+      name: z.literal("Confidence and Clarity"),
+      score: z.number(),
+      comment: z.string(),
+    }),
+  ]),
+  strengths: z.array(z.string()),
+  areasForImprovement: z.array(z.string()),
+  finalAssessment: z.string(),
+});
+
+export const interviewCovers = [
+  "/adobe.png",
+  "/amazon.png",
+  "/facebook.png",
+  "/hostinger.png",
+  "/pinterest.png",
+  "/quora.png",
+  "/reddit.png",
+  "/skype.png",
+  "/spotify.png",
+  "/telegram.png",
+  "/tiktok.png",
+  "/yahoo.png",
+];
+
+export const dummyInterviews: Interview[] = [
+  {
+    id: "1",
+    userId: "user1",
+    role: "Frontend Developer",
+    type: "Technical",
+    techstack: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
+    level: "Junior",
+    questions: ["What is React?"],
+    finalized: false,
+    createdAt: "2024-03-15T10:00:00Z",
+  },
+  {
+    id: "2",
+    userId: "user1",
+    role: "Full Stack Developer",
+    type: "Mixed",
+    techstack: ["Node.js", "Express", "MongoDB", "React"],
+    level: "Senior",
+    questions: ["What is Node.js?"],
+    finalized: false,
+    createdAt: "2024-03-14T15:30:00Z",
+  },
+];
+
+// Prepare system prompt content per language to keep code clean and readable
+const englishFirstMessage =
+  `Hello! Thank you for taking the time to speak with me today.` +
+  `I'm excited to learn more about you and your experience.`;
+const englishSystemPrompt =
+  `You are a professional job interviewer conducting a real-time voice interview with a candidate.` +
+  `Your goal is to assess their qualifications, motivation, and fit for the role.
+
+Interview Guidelines:
+Follow the structured question flow:
+{{questions}}
+
+Engage naturally & react appropriately:
+Listen actively to responses and acknowledge them before moving forward.
+Ask brief follow-up questions if a response is vague or requires more detail.
+Keep the conversation flowing smoothly while maintaining control.
+Be professional, yet warm and welcoming:
+
+Use official yet friendly language.
+Keep responses concise and to the point (like in a real voice interview).
+Avoid robotic phrasing—sound natural and conversational.
+Answer the candidate's questions professionally:
+
+If asked about the role, company, or expectations, provide a clear and relevant answer.
+If unsure, redirect the candidate to HR for more details.
+
+Conclude the interview properly:
+Thank the candidate for their time.
+Inform them that the company will reach out soon with feedback.
+End the conversation on a polite and positive note.
+
+- Be sure to be professional and polite.
+- Keep all your responses short and simple. Use official language, but be kind and welcoming.
+- This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`;
+
+const spanishFirstMessage =
+  "¡Hola! Gracias por tomar el tiempo de hablar conmigo hoy." +
+  "Estoy emocionado de conocer más sobre ti y tu experiencia.";
+const spanishSystemPrompt = `Eres un entrevistador profesional de trabajo que realiza una entrevista de voz en tiempo real con un candidato.
+Tu objetivo es evaluar sus calificaciones, motivación y ajuste para el puesto.
+
+Pautas de la Entrevista:
+Sigue el flujo estructurado de preguntas:
+{{questions}}
+
+Participa naturalmente y reacciona apropiadamente:
+Escucha activamente las respuestas y reconócelas antes de continuar.
+Haz preguntas de seguimiento breves si una respuesta es vaga o requiere más detalle.
+Mantén la conversación fluyendo suavemente mientras mantienes el control.
+Sé profesional, pero cálido y acogedor:
+
+Usa un lenguaje oficial pero amigable.
+Mantén las respuestas concisas y al punto (como en una entrevista de voz real).
+Evita frases robóticas—suena natural y conversacional.
+Responde las preguntas del candidato profesionalmente:
+
+Si te preguntan sobre el puesto, la empresa o las expectativas, proporciona una respuesta clara y relevante.
+Si no estás seguro, redirige al candidato a RRHH para más detalles.
+
+Concluye la entrevista apropiadamente:
+Agradece al candidato por su tiempo.
+Infórmales que la empresa se pondrá en contacto pronto con retroalimentación.
+Termina la conversación de manera educada y positiva.
+
+- Asegúrate de ser profesional y educado.
+- Mantén todas tus respuestas cortas y simples. Usa lenguaje oficial, pero sé amable y acogedor.
+- Esta es una conversación de voz, así que mantén tus respuestas cortas, como en una conversación real. No te extiendas demasiado.`;
+
 // export const generator: CreateWorkflowDTO = {
 //   name: "Generator Interview",
 //   nodes: [
@@ -315,133 +494,63 @@ export const mappings = {
 //   ],
 // };
 
-export const interviewer: CreateAssistantDTO = {
-  name: "Interviewer",
-  firstMessage:
-    "Hello! Thank you for taking the time to speak with me today. I'm excited to learn more about you and your experience.",
-  transcriber: {
-    provider: "deepgram",
-    model: "nova-2",
-    language: "en",
-  },
-  voice: {
-    provider: "11labs",
-    voiceId: "sarah",
-    stability: 0.4,
-    similarityBoost: 0.8,
-    speed: 0.9,
-    style: 0.5,
-    useSpeakerBoost: true,
-  },
-  model: {
-    provider: "openai",
-    model: "gpt-4",
-    messages: [
-      {
-        role: "system",
-        content: `You are a professional job interviewer conducting a real-time voice interview with a candidate. Your goal is to assess their qualifications, motivation, and fit for the role.
+// export const interviewer: CreateAssistantDTO = {
+//   name: "Interviewer",
+//   firstMessage:
+//     "Hello! Thank you for taking the time to speak with me today." +
+//     "I'm excited to learn more about you and your experience.",
+//   transcriber: {
+//     provider: "openai",
+//     model: "gpt-4o-transcribe",
+//     language: "en",
+//   },
+//   voice: {
+//     provider: "11labs",
+//     voiceId: "sarah",
+//     stability: 0.4,
+//     similarityBoost: 0.8,
+//     speed: 0.9,
+//     style: 0.5,
+//     useSpeakerBoost: true,
+//   },
+//   model: {
+//     provider: "openai",
+//     model: "gpt-4",
+//     messages: [
+//       {
+//         role: "system",
+//         content:
+//           `You are a professional job interviewer conducting a ` +
+//           `real-time voice interview with a candidate. Your goal is` +
+//           `to assess their qualifications, motivation, and fit for the role.
 
-Interview Guidelines:
-Follow the structured question flow:
-{{questions}}
+// Interview Guidelines:
+// Follow the structured question flow:
+// {{questions}}
 
-Engage naturally & react appropriately:
-Listen actively to responses and acknowledge them before moving forward.
-Ask brief follow-up questions if a response is vague or requires more detail.
-Keep the conversation flowing smoothly while maintaining control.
-Be professional, yet warm and welcoming:
+// Engage naturally & react appropriately:
+// Listen actively to responses and acknowledge them before moving forward.
+// Ask brief follow-up questions if a response is vague or requires more detail.
+// Keep the conversation flowing smoothly while maintaining control.
+// Be professional, yet warm and welcoming:
 
-Use official yet friendly language.
-Keep responses concise and to the point (like in a real voice interview).
-Avoid robotic phrasing—sound natural and conversational.
-Answer the candidate’s questions professionally:
+// Use official yet friendly language.
+// Keep responses concise and to the point (like in a real voice interview).
+// Avoid robotic phrasing—sound natural and conversational.
+// Answer the candidate’s questions professionally:
 
-If asked about the role, company, or expectations, provide a clear and relevant answer.
-If unsure, redirect the candidate to HR for more details.
+// If asked about the role, company, or expectations, provide a clear and relevant answer.
+// If unsure, redirect the candidate to HR for more details.
 
-Conclude the interview properly:
-Thank the candidate for their time.
-Inform them that the company will reach out soon with feedback.
-End the conversation on a polite and positive note.
+// Conclude the interview properly:
+// Thank the candidate for their time.
+// Inform them that the company will reach out soon with feedback.
+// End the conversation on a polite and positive note.
 
-- Be sure to be professional and polite.
-- Keep all your responses short and simple. Use official language, but be kind and welcoming.
-- This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`,
-      },
-    ],
-  },
-};
-
-export const feedbackSchema = z.object({
-  totalScore: z.number(),
-  categoryScores: z.tuple([
-    z.object({
-      name: z.literal("Communication Skills"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Technical Knowledge"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Problem Solving"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Cultural Fit"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-    z.object({
-      name: z.literal("Confidence and Clarity"),
-      score: z.number(),
-      comment: z.string(),
-    }),
-  ]),
-  strengths: z.array(z.string()),
-  areasForImprovement: z.array(z.string()),
-  finalAssessment: z.string(),
-});
-
-export const interviewCovers = [
-  "/adobe.png",
-  "/amazon.png",
-  "/facebook.png",
-  "/hostinger.png",
-  "/pinterest.png",
-  "/quora.png",
-  "/reddit.png",
-  "/skype.png",
-  "/spotify.png",
-  "/telegram.png",
-  "/tiktok.png",
-  "/yahoo.png",
-];
-
-export const dummyInterviews: Interview[] = [
-  {
-    id: "1",
-    userId: "user1",
-    role: "Frontend Developer",
-    type: "Technical",
-    techstack: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
-    level: "Junior",
-    questions: ["What is React?"],
-    finalized: false,
-    createdAt: "2024-03-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    userId: "user1",
-    role: "Full Stack Developer",
-    type: "Mixed",
-    techstack: ["Node.js", "Express", "MongoDB", "React"],
-    level: "Senior",
-    questions: ["What is Node.js?"],
-    finalized: false,
-    createdAt: "2024-03-14T15:30:00Z",
-  },
-];
+// - Be sure to be professional and polite.
+// - Keep all your responses short and simple. Use official language, but be kind and welcoming.
+// - This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.`,
+//       },
+//     ],
+//   },
+// };

@@ -1,6 +1,10 @@
+"use client";
+
 import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 import { Button } from "./ui/button";
 import DisplayTechIcons from "./DisplayTechIcons";
@@ -8,7 +12,16 @@ import DisplayTechIcons from "./DisplayTechIcons";
 import { cn, getRandomInterviewCover } from "@/lib/utils";
 import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
 
-const InterviewCard = async ({
+interface InterviewCardProps {
+  interviewId: string;
+  userId: string;
+  role: string;
+  type: string;
+  techstack: string[];
+  createdAt: string;
+}
+
+const InterviewCard = ({
   interviewId,
   userId,
   role,
@@ -16,13 +29,48 @@ const InterviewCard = async ({
   techstack,
   createdAt,
 }: InterviewCardProps) => {
-  const feedback =
-    userId && interviewId
-      ? await getFeedbackByInterviewId({
-          interviewId,
-          userId,
-        })
-      : null;
+  const t = useTranslations();
+  const locale = useLocale();
+  const [feedback, setFeedback] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    // Fetch feedback data on client side
+    const fetchFeedback = async () => {
+      if (userId && interviewId) {
+        try {
+          const feedbackData = await getFeedbackByInterviewId({
+            interviewId,
+            userId,
+          });
+          setFeedback(feedbackData);
+        } catch (error) {
+          console.error("Error fetching feedback:", error);
+        }
+      }
+    };
+
+    fetchFeedback();
+  }, [userId, interviewId]);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="card-border w-[360px] max-sm:w-full min-h-96">
+        <div className="card-interview">
+          <div className="animate-pulse">
+            <div className="w-20 h-6 bg-gray-200 rounded absolute top-0 right-0"></div>
+            <div className="w-[90px] h-[90px] bg-gray-200 rounded-full"></div>
+            <div className="h-6 bg-gray-200 rounded mt-5 w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded mt-3 w-1/2"></div>
+            <div className="h-4 bg-gray-200 rounded mt-5 w-full"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
@@ -83,8 +131,7 @@ const InterviewCard = async ({
 
           {/* Feedback or Placeholder Text */}
           <p className="line-clamp-2 mt-5">
-            {feedback?.finalAssessment ||
-              "You haven't taken this interview yet. Take it now to improve your skills."}
+            {feedback?.finalAssessment || t("interview.notTakenYet")}
           </p>
         </div>
 
@@ -95,11 +142,13 @@ const InterviewCard = async ({
             <Link
               href={
                 feedback
-                  ? `/interview/${interviewId}/feedback`
-                  : `/interview/${interviewId}`
+                  ? `/${locale}/interview/${interviewId}/feedback`
+                  : `/${locale}/interview/${interviewId}`
               }
             >
-              {feedback ? "Check Feedback" : "View Interview"}
+              {feedback
+                ? t("interview.checkFeedback")
+                : t("interview.viewInterview")}
             </Link>
           </Button>
         </div>
