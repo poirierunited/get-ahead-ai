@@ -139,18 +139,23 @@ const Agent = ({
     setCallStatus(CallStatus.CONNECTING);
 
     if (type === "generate") {
-      await vapi.start(
-        undefined,
-        undefined,
-        undefined,
-        process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
-        {
-          variableValues: {
-            username: userName,
-            userid: userId,
-          },
-        }
-      );
+      const workflowId =
+        locale === "es"
+          ? process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_ES
+          : process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_EN;
+
+      if (!workflowId) {
+        console.error("Missing workflow ID for locale:", locale);
+        setCallStatus(CallStatus.INACTIVE);
+        return;
+      }
+
+      await vapi.start(undefined, undefined, undefined, workflowId, {
+        variableValues: {
+          username: userName,
+          userid: userId,
+        },
+      });
     } else {
       let formattedQuestions = "";
       if (questions) {
@@ -159,7 +164,9 @@ const Agent = ({
           .join("\n");
       }
 
-      const interviewerConfig = getInterviewerConfig(locale);
+      // Normalize locale to supported set
+      const lang = (locale === "es" ? "es" : "en") as "en" | "es";
+      const interviewerConfig = getInterviewerConfig(lang);
       await vapi.start(interviewerConfig, {
         variableValues: {
           questions: formattedQuestions,

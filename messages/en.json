@@ -29,6 +29,7 @@
     "noAvailableInterviews": "There are no interviews available"
   },
   "interview": {
+    "title": "Interview Generation",
     "start": "Start Interview",
     "end": "End Interview",
     "connecting": "Connecting...",
