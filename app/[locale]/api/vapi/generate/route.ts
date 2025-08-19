@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { getMessages } from "next-intl/server";
+import { getRandomInterviewCover } from "@/lib/utils";
+import { db } from "@/firebase/admin";
 
 export async function POST(request: NextRequest) {
   try {
-    const { role, level, techstack, type, amount } = await request.json();
+    const { role, level, techstack, type, amount, userid } =
+      await request.json();
 
     // Get the locale from the URL path
     const pathname = request.nextUrl.pathname;
@@ -28,11 +31,32 @@ export async function POST(request: NextRequest) {
       ),
     });
 
-    return NextResponse.json({ questions });
+    const interview = {
+      role: role,
+      type: type,
+      level: level,
+      techstack: techstack.split(","),
+      questions: JSON.parse(questions),
+      userId: userid,
+      finalized: true,
+      coverImage: getRandomInterviewCover(),
+      createdAt: new Date().toISOString(),
+    };
+
+    await db.collection("interviews").add(interview);
+
+    return NextResponse.json(
+      {
+        success: true,
+        questions: interview.questions,
+        interview: interview,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error generating questions:", error);
     return NextResponse.json(
-      { error: "Failed to generate questions" },
+      { success: false, error: "Failed to generate questions" },
       { status: 500 }
     );
   }

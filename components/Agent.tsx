@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
-import { getInterviewerConfig } from "@/constants";
+import { getInterviewerConfig, getTechInterviewWorkflow } from "@/constants";
 import { createFeedback } from "@/lib/actions/general.action";
 import { useParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -139,23 +139,30 @@ const Agent = ({
     setCallStatus(CallStatus.CONNECTING);
 
     if (type === "generate") {
-      const workflowId =
-        locale === "es"
-          ? process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_ES
-          : process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_EN;
+      // const workflowId =
+      //   locale === "es"
+      //     ? process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_ES
+      //     : process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_EN;
 
-      if (!workflowId) {
-        console.error("Missing workflow ID for locale:", locale);
-        setCallStatus(CallStatus.INACTIVE);
-        return;
-      }
+      // if (!workflowId) {
+      //   console.error("Missing workflow ID for locale:", locale);
+      //   setCallStatus(CallStatus.INACTIVE);
+      //   return;
+      // }
 
-      await vapi.start(undefined, undefined, undefined, workflowId, {
-        variableValues: {
-          username: userName,
-          userid: userId,
-        },
-      });
+      await vapi.start(
+        undefined,
+        undefined,
+        undefined,
+        getTechInterviewWorkflow(locale as "en" | "es"),
+        {
+          variableValues: {
+            username: userName,
+            userid: userId,
+            language: locale,
+          },
+        }
+      );
     } else {
       let formattedQuestions = "";
       if (questions) {
@@ -213,6 +220,7 @@ const Agent = ({
         </div>
       </div>
 
+      {/* Messages container */}
       {messages.length > 0 && (
         <div className="transcript-border">
           <div className="transcript">
