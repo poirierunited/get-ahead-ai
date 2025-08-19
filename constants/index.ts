@@ -554,3 +554,341 @@ Termina la conversación de manera educada y positiva.
 //     ],
 //   },
 // };
+
+export const getTechInterviewWorkflow = (
+  locale: "en" | "es"
+): CreateWorkflowDTO => {
+  const isSpanish = locale === "es";
+
+  const globalPrompt = isSpanish
+    ? "Eres un coach de entrevistas amable y profesional cuyo objetivo es ayudar a los usuarios a prepararse para entrevistas reales de forma segura, amistosa y realista.\n\nTu función principal es simular entrevistas haciendo preguntas relevantes, reflexivas y desafiantes adaptadas al puesto objetivo del usuario, su nivel de experiencia, el tipo de entrevista (técnica, conductual o mixta) y su stack tecnológico.\n\nSiempre mantén un tono: amistoso y alentador, respetuoso y profesional, y de apoyo incluso al hacer preguntas difíciles.\n\nPreséntate brevemente y explica tu rol como coach de entrevistas con IA. Recopila la información necesaria (puesto, tipo de entrevista, nivel de experiencia, tecnologías, número de preguntas) de forma clara y conversacional.\n\nDurante la entrevista: haz una pregunta a la vez, permite tiempo para responder, reconoce sin juzgar y ofrece comentarios o preguntas de seguimiento breves cuando corresponda. Al final, agradece el tiempo del usuario y anímale a seguir practicando para mejorar sus posibilidades de éxito en entrevistas reales."
+    : "You are a kind and professional interview coach whose goal is to help users prepare for real-life job interviews in a safe, friendly, and realistic environment.\n\nYour main role is to simulate interviews by asking relevant, thoughtful, and challenging questions tailored to the user's target role, level of experience, interview type (technical, behavioral, or mixed), and tech stack.\n\nAlways maintain a tone that is:\n\nFriendly and encouraging\n\nRespectful and professional\n\nSupportive, even when asking difficult questions\n\nBegin by briefly introducing yourself and explain your role as an AI-powered interview coach. Collect all the necessary information (role, interview type, experience level, technologies, number of questions) in a clear and conversational manner.\n\nOnce the interview begins:\n\nAsk one question at a time.\n\nAllow the user time to respond.\n\nAcknowledge their answers without judging.\n\nOptionally offer brief constructive feedback or follow-up questions.\n\nAt the end of the session, thank the user for their time and encourage them to continue practicing to improve their chances of succeeding in real interviews.";
+
+  const introPrompt = isSpanish
+    ? "Saluda amablemente al usuario. Menciona su nombre si está disponible: " +
+      "{{username}}. Luego explica que harás algunas preguntas para generar una entrevista personalizada."
+    : "Greet the user kindly! " +
+      "Mention their name if available: {{username}}. " +
+      "Then explain that you'll ask some questions to generate a personalized interview.";
+
+  const introFirstMessage = isSpanish
+    ? "¡Hola {{username}}! Vamos a preparar tu entrevista. " +
+      "Te haré algunas preguntas y generaré una entrevista perfecta para ti. " +
+      "¿Estás listo/a?"
+    : "Hey there {{username}}! Let's prepare your interview. " +
+      "I'll ask you a few questions and generate a perfect interview just for you. " +
+      "Are you ready?";
+
+  const promptQ1 = isSpanish
+    ? "Haz la siguiente pregunta sin prisa:\n1. ¿Para qué puesto te estás preparando?"
+    : "Ask the user the following questions without rushing:\n1. What role are you preparing for?";
+  const promptQ2 = isSpanish
+    ? "Haz la siguiente pregunta sin prisa:\n2. ¿Quieres una entrevista técnica, conductual o mixta?"
+    : "Ask the user the following questions without rushing:\n\n2. Do you want a technical, behavioral, or mixed interview?";
+  const promptQ3 = isSpanish
+    ? "Haz la siguiente pregunta sin prisa:\n3. ¿Cuál es tu nivel de experiencia (por ejemplo, junior, mid, senior)?"
+    : "Ask the user the following questions without rushing:\n3. What's your experience level (e.g., junior, mid, senior)?";
+  const promptQ4 = isSpanish
+    ? "Haz la siguiente pregunta sin prisa:\n4. ¿En qué tecnologías o herramientas debo enfocarme?"
+    : "Ask the user the following questions without rushing:\n4. What technologies or tools should I focus on?";
+  const promptQ5 = isSpanish
+    ? "Haz la siguiente pregunta sin prisa:\n5. ¿Cuántas preguntas debo generar para ti?"
+    : "Ask the user the following questions without rushing:\n5. How many questions should I generate for you?";
+
+  const apiRequestStartMessage = isSpanish
+    ? "Por favor espera un momento mientras genero tu entrevista. " +
+      "Gracias por la llamada!"
+    : "Please hold on while I generate your interview. " +
+      "Thank you for the call!";
+
+  const apiRequestCompleteMessage = isSpanish
+    ? "La solicitud se ha enviado y tu entrevista ha sido generada. " +
+      "Gracias por la llamada!\n¡Adiós!"
+    : "The request has been sent and your interview had been generated. Thank you for the call!\nBye!";
+
+  const apiRequestFailedMessage = isSpanish
+    ? "Oops! Parece que algo salió mal al enviar los datos a la app. " +
+      "Por favor intenta nuevamente."
+    : "Oops! Looks like something went wrong when sending the data to the app! " +
+      "Please try again.";
+
+  const hangupMessage = isSpanish
+    ? "Todo ha sido generado. " +
+      "Te redirigiré a la página de inicio ahora, gracias por la llamada!"
+    : "Everything has been generated. " +
+      "I'll redirect you to dashboard now, thanks for the call!";
+
+  const edgeConditionYes = isSpanish
+    ? "si el usuario dijo sí"
+    : "if the user said yes";
+
+  const interviewTypes = isSpanish
+    ? ["técnica", "conductual", "mixta"]
+    : ["technical", "behavioral", "mixed"];
+
+  return {
+    name: "tech-interview",
+    globalPrompt,
+    nodes: [
+      {
+        name: "introduction",
+        type: "conversation",
+        isStart: true,
+        prompt: introPrompt,
+        transcriber: {
+          provider: "openai",
+          model: "gpt-4o-transcribe",
+          language: isSpanish ? "es" : "en",
+        },
+        variableExtractionPlan: {
+          output: [],
+        },
+        messagePlan: {
+          firstMessage: introFirstMessage,
+        },
+        toolIds: [],
+      },
+      {
+        name: "conversation_1754262862356",
+        type: "conversation",
+        prompt: promptQ1,
+        transcriber: {
+          provider: "openai",
+          model: "gpt-4o-transcribe",
+          language: isSpanish ? "es" : "en",
+        },
+        variableExtractionPlan: {
+          output: [
+            {
+              enum: [],
+              type: "string",
+              title: "role",
+              description: "The job role the user wants to prepare for.",
+            },
+          ],
+        },
+        messagePlan: { firstMessage: "" },
+        toolIds: [],
+      },
+      {
+        name: "getType",
+        type: "conversation",
+        prompt: promptQ2,
+        transcriber: {
+          provider: "openai",
+          model: "gpt-4o-transcribe",
+          language: isSpanish ? "es" : "en",
+        },
+        variableExtractionPlan: {
+          output: [
+            {
+              enum: interviewTypes,
+              type: "string",
+              title: "type",
+              description: "The type of interview desired.",
+            },
+          ],
+        },
+        messagePlan: { firstMessage: "" },
+        toolIds: [],
+      },
+      {
+        name: "getExperience",
+        type: "conversation",
+        prompt: promptQ3,
+        transcriber: {
+          provider: "openai",
+          model: "gpt-4o-transcribe",
+          language: isSpanish ? "es" : "en",
+        },
+        variableExtractionPlan: {
+          output: [
+            {
+              enum: [],
+              type: "string",
+              title: "level",
+              description: "The user's experience level.",
+            },
+          ],
+        },
+        messagePlan: { firstMessage: "" },
+        toolIds: [],
+      },
+      {
+        name: "getTech",
+        type: "conversation",
+        prompt: promptQ4,
+        transcriber: {
+          provider: "openai",
+          model: "gpt-4o-transcribe",
+          language: isSpanish ? "es" : "en",
+        },
+        variableExtractionPlan: {
+          output: [
+            {
+              enum: [],
+              type: "string",
+              title: "techstack",
+              description: "Technologies or tools to be covered.",
+            },
+          ],
+        },
+        messagePlan: { firstMessage: "" },
+        toolIds: [],
+      },
+      {
+        name: "getNumQuestions",
+        type: "conversation",
+        prompt: promptQ5,
+        transcriber: {
+          provider: "openai",
+          model: "gpt-4o-transcribe",
+          language: isSpanish ? "es" : "en",
+        },
+        variableExtractionPlan: {
+          output: [
+            {
+              enum: [],
+              type: "number",
+              title: "amount",
+              description: "Number of questions to generate.",
+            },
+          ],
+        },
+        messagePlan: { firstMessage: "" },
+        toolIds: [],
+      },
+      {
+        name: "apiRequest",
+        type: "tool",
+        tool: {
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/api/vapi/generate`,
+          body: {
+            type: "object",
+            required: [
+              "type",
+              "role",
+              "level",
+              "techstack",
+              "amount",
+              "userid",
+            ],
+            properties: {
+              role: { type: "string", default: "{{role}}", description: "" },
+              type: {
+                enum: ["technical", "behavioral", "mixed"],
+                type: "string",
+                default: "{{type}}",
+                description: "",
+              },
+              level: { type: "string", default: "{{level}}", description: "" },
+              amount: {
+                type: "number",
+                default: "{{amount}}",
+                description: "",
+              },
+              userid: {
+                type: "string",
+                default: "{{userid}}",
+                description: "",
+              },
+              techstack: {
+                type: "string",
+                default: "{{techstack}}",
+                description: "",
+              },
+            },
+          },
+          name: "generateUserQuestions",
+          type: "apiRequest",
+          method: "POST",
+          function: {
+            name: "api_request_tool",
+            parameters: { type: "object", required: [], properties: {} },
+            description: "API request tool",
+          },
+          messages: [
+            {
+              type: "request-start",
+              content: apiRequestStartMessage,
+              blocking: true,
+            },
+            {
+              role: "assistant",
+              type: "request-complete",
+              content: apiRequestCompleteMessage,
+              endCallAfterSpokenEnabled: true,
+            },
+            {
+              type: "request-failed",
+              content: apiRequestFailedMessage,
+              endCallAfterSpokenEnabled: true,
+            },
+          ],
+          variableExtractionPlan: {
+            schema: { type: "object", required: [], properties: {} },
+            aliases: [],
+          },
+        },
+      },
+      {
+        name: "hangUp",
+        type: "tool",
+        metadata: {
+          position: { x: -487.18438795281793, y: -557.433987787144 },
+        },
+        tool: {
+          type: "endCall",
+          function: {
+            name: "untitled_tool",
+            parameters: { type: "object", required: [], properties: {} },
+          },
+          messages: [
+            {
+              type: "request-start",
+              content: hangupMessage,
+              blocking: true,
+            },
+          ],
+        },
+      },
+    ],
+    edges: [
+      {
+        from: "introduction",
+        to: "conversation_1754262862356",
+        condition: { type: "ai", prompt: edgeConditionYes },
+      },
+      {
+        from: "conversation_1754262862356",
+        to: "getType",
+        condition: { type: "ai", prompt: "" },
+      },
+      {
+        from: "getType",
+        to: "getExperience",
+        condition: { type: "ai", prompt: "" },
+      },
+      {
+        from: "getExperience",
+        to: "getTech",
+        condition: { type: "ai", prompt: "" },
+      },
+      {
+        from: "getTech",
+        to: "getNumQuestions",
+        condition: { type: "ai", prompt: "" },
+      },
+      {
+        from: "getNumQuestions",
+        to: "apiRequest",
+        condition: { type: "ai", prompt: "" },
+      },
+      {
+        from: "apiRequest",
+        to: "hangUp",
+        condition: { type: "ai", prompt: "" },
+      },
+    ],
+  } as unknown as CreateWorkflowDTO;
+};
