@@ -1,6 +1,8 @@
 "use client";
 
 import dayjs from "dayjs";
+import "dayjs/locale/es";
+import "dayjs/locale/en";
 import Link from "next/link";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -87,13 +89,13 @@ const InterviewCard = ({
 
   const typeLabel = t(`interview.types.${typeKey}`);
 
-  const formattedDate = dayjs(
-    feedback?.createdAt || createdAt || Date.now()
-  ).format("MMM D, YYYY");
+  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now())
+    .locale(locale)
+    .format("MMM D, YYYY");
 
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96">
-      <div className="card-interview">
+      <div className="card-interview flex flex-col">
         <div>
           {/* Type Badge */}
           <div
@@ -146,8 +148,8 @@ const InterviewCard = ({
           </p>
         </div>
 
-        <div className="flex flex-row justify-end">
-          <Button className="btn-primary">
+        <div className="mt-6">
+          <Button className="btn-primary w-full">
             <Link
               href={
                 feedback
