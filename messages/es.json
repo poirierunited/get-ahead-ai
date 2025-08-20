@@ -24,7 +24,8 @@
   "home": {
     "title": "Prepárate para Entrevistas con IA: Práctica y Retroalimentación",
     "subtitle": "Practica preguntas reales de entrevista y obtén retroalimentación instantánea",
-    "startInterview": "Comenzar Entrevista",
+    "createInterview": "Crear una nueva entrevista",
+    "createFirstInterview": "Crea tu primera entrevista",
     "yourInterviews": "Tus Entrevistas",
     "noInterviews": "Aún no has tomado ninguna entrevista",
     "takeInterviews": "Otras Entrevistas que te pueden interesar",
@@ -41,7 +42,12 @@
     "disconnect": "Desconectar",
     "notTakenYet": "Aún no has tomado esta entrevista. Tómala ahora para mejorar tus habilidades.",
     "checkFeedback": "Ver Retroalimentación",
-    "viewInterview": "Ver Entrevista"
+    "viewInterview": "Ver Entrevista",
+    "types": {
+      "behavioral": "Conductual",
+      "mixed": "Mixta",
+      "technical": "Técnica"
+    }
   },
   "feedback": {
     "title": "Retroalimentación de la entrevista",

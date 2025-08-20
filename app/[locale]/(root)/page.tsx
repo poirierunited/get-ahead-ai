@@ -37,7 +37,9 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
 
           <Button asChild className="btn-primary max-sm:w-full">
             <Link href={`/${locale}/interview`}>
-              {t("home.startInterview")}
+              {hasPastInterviews
+                ? t("home.createInterview")
+                : t("home.createFirstInterview")}
             </Link>
           </Button>
         </div>

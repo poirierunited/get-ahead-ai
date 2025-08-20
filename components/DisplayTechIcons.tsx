@@ -85,7 +85,7 @@ const DisplayTechIcons = ({ techStack }: TechIconProps) => {
         ))}
 
         {remainingCount > 0 && (
-          <div className="relative group bg-dark-300 rounded-full flex items-center justify-center border border-white/20 z-20 w-4 h-4">
+          <div className="relative group bg-dark-300 rounded-full flex items-center justify-center border border-white/20 z-20 w-4 h-4 transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default">
             <span className="tech-tooltip">
               {remainingTechs.map((tech) => tech.original).join(", ")}
             </span>

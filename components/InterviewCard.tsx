@@ -72,14 +72,20 @@ const InterviewCard = ({
     );
   }
 
-  const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
+  const typeKey = /mix/gi.test(type)
+    ? "mixed"
+    : /behav/gi.test(type)
+    ? "behavioral"
+    : "technical";
 
   const badgeColor =
     {
-      Behavioral: "bg-light-400",
-      Mixed: "bg-light-600",
-      Technical: "bg-light-800",
-    }[normalizedType] || "bg-light-600";
+      behavioral: "bg-light-400",
+      mixed: "bg-light-600",
+      technical: "bg-light-800",
+    }[typeKey] || "bg-light-600";
+
+  const typeLabel = t(`interview.types.${typeKey}`);
 
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
@@ -96,7 +102,7 @@ const InterviewCard = ({
               badgeColor
             )}
           >
-            <p className="badge-text ">{normalizedType}</p>
+            <p className="badge-text ">{typeLabel}</p>
           </div>
 
           {/* Cover Image */}
