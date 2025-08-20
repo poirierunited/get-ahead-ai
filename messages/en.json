@@ -17,7 +17,9 @@
     "profile": "Profile",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "backToDashboard": "Back to Dashboard",
+    "retakeInterview": "Retake Interview"
   },
   "home": {
     "title": "Get Interview-Ready with AI-Powered Practice & Feedback",
@@ -25,7 +27,7 @@
     "startInterview": "Start an Interview",
     "yourInterviews": "Your Interviews",
     "noInterviews": "You haven't taken any interviews yet",
-    "takeInterviews": "Take Interviews",
+    "takeInterviews": "Other Interviews that might interest you",
     "noAvailableInterviews": "There are no interviews available"
   },
   "interview": {
@@ -42,6 +44,9 @@
     "viewInterview": "View Interview"
   },
   "feedback": {
+    "title": "Feedback on the Interview",
+    "overallImpression": "Overall Impression",
+    "breakdown": "Breakdown of the Interview",
     "communicationSkills": "Communication Skills",
     "technicalKnowledge": "Technical Knowledge",
     "problemSolving": "Problem Solving",

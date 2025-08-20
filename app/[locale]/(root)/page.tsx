@@ -22,7 +22,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
   }
   const [userInterviews, allInterview] = await Promise.all([
     getInterviewsByUserId(user?.id!),
-    getLatestInterviews({ userId: user?.id! }),
+    getLatestInterviews({ params: { userId: user?.id!, limit: 20 } }),
   ]);
 
   const hasPastInterviews = userInterviews?.length! > 0;

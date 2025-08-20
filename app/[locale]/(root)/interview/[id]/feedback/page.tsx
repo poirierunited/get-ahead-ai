@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import {
   getFeedbackByInterviewId,
@@ -17,6 +18,7 @@ const Feedback = async ({
 }) => {
   const { id, locale } = await params;
   const user = await getCurrentUser();
+  const t = await getTranslations({ locale });
   if (!user) {
     redirect(`/${locale}/sign-in`);
   }
@@ -33,8 +35,8 @@ const Feedback = async ({
     <section className="section-feedback">
       <div className="flex flex-row justify-center">
         <h1 className="text-4xl font-semibold">
-          Feedback on the Interview -{" "}
-          <span className="capitalize">{interview.role}</span> Interview
+          {t("feedback.title")} -{" "}
+          <span className="capitalize">{interview.role}</span>
         </h1>
       </div>
 
@@ -44,7 +46,7 @@ const Feedback = async ({
           <div className="flex flex-row gap-2 items-center">
             <Image src="/star.svg" width={22} height={22} alt="star" />
             <p>
-              Overall Impression:{" "}
+              {t("feedback.overallImpression")}:{" "}
               <span className="text-primary-200 font-bold">
                 {feedback?.totalScore}
               </span>
@@ -70,7 +72,7 @@ const Feedback = async ({
 
       {/* Interview Breakdown */}
       <div className="flex flex-col gap-4">
-        <h2>Breakdown of the Interview:</h2>
+        <h2>{t("feedback.breakdown")}:</h2>
         {feedback?.categoryScores?.map((category, index) => (
           <div key={index}>
             <p className="font-bold">
@@ -82,7 +84,7 @@ const Feedback = async ({
       </div>
 
       <div className="flex flex-col gap-3">
-        <h3>Strengths</h3>
+        <h3>{t("feedback.strengths")}</h3>
         <ul>
           {feedback?.strengths?.map((strength, index) => (
             <li key={index}>{strength}</li>
@@ -91,7 +93,7 @@ const Feedback = async ({
       </div>
 
       <div className="flex flex-col gap-3">
-        <h3>Areas for Improvement</h3>
+        <h3>{t("feedback.areasForImprovement")}</h3>
         <ul>
           {feedback?.areasForImprovement?.map((area, index) => (
             <li key={index}>{area}</li>
@@ -103,7 +105,7 @@ const Feedback = async ({
         <Button className="btn-secondary flex-1">
           <Link href={`/${locale}`} className="flex w-full justify-center">
             <p className="text-sm font-semibold text-primary-200 text-center">
-              Back to dashboard
+              {t("navigation.backToDashboard")}
             </p>
           </Link>
         </Button>
@@ -114,7 +116,7 @@ const Feedback = async ({
             className="flex w-full justify-center"
           >
             <p className="text-sm font-semibold text-black text-center">
-              Retake Interview
+              {t("navigation.retakeInterview")}
             </p>
           </Link>
         </Button>

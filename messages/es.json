@@ -17,7 +17,9 @@
     "profile": "Perfil",
     "signIn": "Iniciar Sesión",
     "signUp": "Registrarse",
-    "signOut": "Cerrar Sesión"
+    "signOut": "Cerrar Sesión",
+    "backToDashboard": "Volver al Dashboard",
+    "retakeInterview": "Repetir Entrevista"
   },
   "home": {
     "title": "Prepárate para Entrevistas con IA: Práctica y Retroalimentación",
@@ -25,7 +27,7 @@
     "startInterview": "Comenzar Entrevista",
     "yourInterviews": "Tus Entrevistas",
     "noInterviews": "Aún no has tomado ninguna entrevista",
-    "takeInterviews": "Tomar Entrevistas",
+    "takeInterviews": "Otras Entrevistas que te pueden interesar",
     "noAvailableInterviews": "No hay entrevistas disponibles"
   },
   "interview": {
@@ -42,6 +44,9 @@
     "viewInterview": "Ver Entrevista"
   },
   "feedback": {
+    "title": "Retroalimentación de la entrevista",
+    "overallImpression": "Puntuación General",
+    "breakdown": "Desglose de la Entrevista",
     "communicationSkills": "Habilidades de Comunicación",
     "technicalKnowledge": "Conocimiento Técnico",
     "problemSolving": "Resolución de Problemas",

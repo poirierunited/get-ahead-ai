@@ -120,16 +120,16 @@ export const getInterviewerConfig = (
   const systemPrompt = isSpanish ? spanishSystemPrompt : englishSystemPrompt;
 
   return {
-    name: isSpanish ? "Entrevistador" : "Interviewer",
+    name: "Interviewer",
     firstMessage: isSpanish ? spanishFirstMessage : englishFirstMessage,
     transcriber: {
-      provider: "openai" as const,
-      model: "gpt-4o-transcribe",
+      provider: "deepgram",
+      model: "nova-2",
       language,
     },
     voice: {
-      provider: "11labs" as const,
-      voiceId: isSpanish ? "maria" : "sarah", // Different voice for Spanish
+      provider: "11labs",
+      voiceId: "sarah",
       stability: 0.4,
       similarityBoost: 0.8,
       speed: 0.9,
@@ -137,11 +137,11 @@ export const getInterviewerConfig = (
       useSpeakerBoost: true,
     },
     model: {
-      provider: "openai" as const,
-      model: "gpt-4" as const,
+      provider: "openai",
+      model: "gpt-4",
       messages: [
         {
-          role: "system" as const,
+          role: "system",
           content: systemPrompt,
         },
       ],
