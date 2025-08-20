@@ -282,7 +282,7 @@
   }
 
   .tech-tooltip {
-    @apply absolute bottom-full mb-1 hidden group-hover:flex px-2 py-1 text-xs text-white bg-gray-700 rounded-md shadow-md;
+    @apply absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 hidden group-hover:flex px-2 py-1 text-xs text-white bg-gray-700 rounded-md shadow-md whitespace-nowrap z-10;
   }
 
   .card-interview {

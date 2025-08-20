@@ -1,75 +1,101 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
-
-import { cn, getTechLogos } from "@/lib/utils";
+import { cn, normalizeTechName } from "@/lib/utils";
 
 interface TechIconProps {
   techStack: string[];
 }
 
+// Predefined color palette for tech tags (inspired by Reddit's tag colors)
+const tagColors = [
+  "bg-blue-500",
+  "bg-green-500",
+  "bg-purple-500",
+  "bg-pink-500",
+  "bg-indigo-500",
+  "bg-teal-500",
+  "bg-orange-500",
+  "bg-red-500",
+  "bg-yellow-500",
+  "bg-emerald-500",
+  "bg-cyan-500",
+  "bg-rose-500",
+  "bg-violet-500",
+  "bg-amber-500",
+  "bg-lime-500",
+];
+
 const DisplayTechIcons = ({ techStack }: TechIconProps) => {
-  const [techIcons, setTechIcons] = useState<
-    Array<{ tech: string; url: string }>
-  >([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-
-    const fetchTechIcons = async () => {
-      try {
-        const icons = await getTechLogos(techStack);
-        setTechIcons(icons);
-      } catch (error) {
-        console.error("Error fetching tech icons:", error);
-      }
-    };
-
-    fetchTechIcons();
-  }, [techStack]);
+  }, []);
 
   // Prevent hydration mismatch
   if (!mounted) {
     return (
-      <div className="flex flex-row">
-        {[1, 2, 3].map((index) => (
-          <div
-            key={index}
-            className={cn(
-              "relative group bg-dark-300 rounded-full p-2 flex flex-center w-9 h-9 animate-pulse",
-              index >= 1 && "-ml-3"
-            )}
-          >
-            <div className="w-5 h-5 bg-gray-200 rounded"></div>
-          </div>
-        ))}
+      <div className="flex justify-center">
+        <div className="flex -space-x-1">
+          {[1, 2].map((index) => (
+            <div
+              key={index}
+              className="h-4 w-12 bg-gray-200 rounded-full animate-pulse"
+            />
+          ))}
+          <div className="w-4 h-4 bg-gray-200 rounded-full animate-pulse" />
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="flex flex-row">
-      {techIcons.slice(0, 3).map(({ tech, url }, index) => (
-        <div
-          key={tech}
-          className={cn(
-            "relative group bg-dark-300 rounded-full p-2 flex flex-center",
-            index >= 1 && "-ml-3"
-          )}
-        >
-          <span className="tech-tooltip">{tech}</span>
+  // Process tech stack to get normalized names and limit to first 6 characters
+  const processedTechs = techStack.map((tech, index) => {
+    const normalized = normalizeTechName(tech);
+    return {
+      original: tech,
+      normalized: normalized || tech,
+      display: (normalized || tech).slice(0, 6).toUpperCase(),
+      color: tagColors[index % tagColors.length], // Cycle through colors
+    };
+  });
 
-          <Image
-            src={url}
-            alt={tech}
-            width={100}
-            height={100}
-            className="size-5"
-          />
-        </div>
-      ))}
+  const visibleTechs = processedTechs.slice(0, 2);
+  const remainingCount = Math.max(0, processedTechs.length - 2);
+  const remainingTechs = processedTechs.slice(2);
+
+  return (
+    <div className="flex justify-center items-center">
+      <div className="flex -space-x-1">
+        {visibleTechs.map(({ original, display, color }) => (
+          <div
+            key={original}
+            className={cn(
+              "relative group px-2 py-0 rounded-full text-white text-[9px] font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default border border-white/20 z-10 flex items-center justify-center min-w-[2rem] h-4",
+              color
+            )}
+          >
+            <span className="tech-tooltip">{original}</span>
+
+            <span className="leading-none flex items-center justify-center">
+              {display}
+            </span>
+          </div>
+        ))}
+
+        {remainingCount > 0 && (
+          <div className="relative group bg-dark-300 rounded-full flex items-center justify-center border border-white/20 z-20 w-4 h-4">
+            <span className="tech-tooltip">
+              {remainingTechs.map((tech) => tech.original).join(", ")}
+            </span>
+
+            <span className="text-[9px] font-medium text-white leading-none flex items-center justify-center">
+              +{remainingCount}
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
