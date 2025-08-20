@@ -38,7 +38,7 @@ const DisplayTechIcons = ({ techStack }: TechIconProps) => {
     return (
       <div className="flex justify-center">
         <div className="flex -space-x-1">
-          {[1, 2].map((index) => (
+          {[1, 2, 3].map((index) => (
             <div
               key={index}
               className="h-4 w-12 bg-gray-200 rounded-full animate-pulse"
@@ -61,9 +61,9 @@ const DisplayTechIcons = ({ techStack }: TechIconProps) => {
     };
   });
 
-  const visibleTechs = processedTechs.slice(0, 2);
-  const remainingCount = Math.max(0, processedTechs.length - 2);
-  const remainingTechs = processedTechs.slice(2);
+  const visibleTechs = processedTechs.slice(0, 3);
+  const remainingCount = Math.max(0, processedTechs.length - 3);
+  const remainingTechs = processedTechs.slice(3);
 
   return (
     <div className="flex justify-center items-center">

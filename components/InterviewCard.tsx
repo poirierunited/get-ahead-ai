@@ -108,8 +108,13 @@ const InterviewCard = ({
             className="rounded-full object-fit size-[90px]"
           />
 
+          {/* Tech Stack Pills */}
+          <div className="mt-4 flex justify-start">
+            <DisplayTechIcons techStack={techstack} />
+          </div>
+
           {/* Interview Role */}
-          <h3 className="mt-5 capitalize">{role} Interview</h3>
+          <h3 className="mt-3 capitalize">{role} Interview</h3>
 
           {/* Date & Score */}
           <div className="flex flex-row gap-5 mt-3">
@@ -135,9 +140,7 @@ const InterviewCard = ({
           </p>
         </div>
 
-        <div className="flex flex-row justify-between">
-          <DisplayTechIcons techStack={techstack} />
-
+        <div className="flex flex-row justify-end">
           <Button className="btn-primary">
             <Link
               href={
