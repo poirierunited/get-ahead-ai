@@ -76,7 +76,8 @@ const Feedback = async ({
         {feedback?.categoryScores?.map((category, index) => (
           <div key={index}>
             <p className="font-bold">
-              {index + 1}. {category.name} ({category.score}/100)
+              {index + 1}. {t(`feedback.categories.${category.name}`)} (
+              {category.score}/100)
             </p>
             <p>{category.comment}</p>
           </div>

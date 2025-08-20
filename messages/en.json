@@ -55,7 +55,14 @@
     "strengths": "Strengths",
     "areasForImprovement": "Areas for Improvement",
     "finalAssessment": "Final Assessment",
-    "totalScore": "Total Score"
+    "totalScore": "Total Score",
+    "categories": {
+      "communication": "Communication Skills",
+      "technical": "Technical Knowledge",
+      "problemSolving": "Problem Solving",
+      "culturalFit": "Cultural Fit",
+      "confidenceClarity": "Confidence and Clarity"
+    }
   },
   "auth": {
     "email": "Email",

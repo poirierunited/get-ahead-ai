@@ -55,7 +55,14 @@
     "strengths": "Fortalezas",
     "areasForImprovement": "Áreas de Mejora",
     "finalAssessment": "Evaluación Final",
-    "totalScore": "Puntuación Total"
+    "totalScore": "Puntuación Total",
+    "categories": {
+      "communication": "Habilidades de Comunicación",
+      "technical": "Conocimiento Técnico",
+      "problemSolving": "Resolución de Problemas",
+      "culturalFit": "Ajuste Cultural",
+      "confidenceClarity": "Confianza y Claridad"
+    }
   },
   "auth": {
     "email": "Correo Electrónico",
