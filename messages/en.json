@@ -17,15 +17,18 @@
     "profile": "Profile",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "backToDashboard": "Back to Dashboard",
+    "retakeInterview": "Retake Interview"
   },
   "home": {
     "title": "Get Interview-Ready with AI-Powered Practice & Feedback",
     "subtitle": "Practice real interview questions & get instant feedback",
-    "startInterview": "Start an Interview",
+    "createInterview": "Create a new interview",
+    "createFirstInterview": "Create your first interview",
     "yourInterviews": "Your Interviews",
     "noInterviews": "You haven't taken any interviews yet",
-    "takeInterviews": "Take Interviews",
+    "takeInterviews": "Other Interviews that might interest you",
     "noAvailableInterviews": "There are no interviews available"
   },
   "interview": {
@@ -39,9 +42,17 @@
     "disconnect": "Disconnect",
     "notTakenYet": "You haven't taken this interview yet. Take it now to improve your skills.",
     "checkFeedback": "Check Feedback",
-    "viewInterview": "View Interview"
+    "viewInterview": "View Interview",
+    "types": {
+      "behavioral": "Behavioral",
+      "mixed": "Mixed",
+      "technical": "Technical"
+    }
   },
   "feedback": {
+    "title": "Feedback on the Interview",
+    "overallImpression": "Overall Impression",
+    "breakdown": "Breakdown of the Interview",
     "communicationSkills": "Communication Skills",
     "technicalKnowledge": "Technical Knowledge",
     "problemSolving": "Problem Solving",
@@ -50,7 +61,14 @@
     "strengths": "Strengths",
     "areasForImprovement": "Areas for Improvement",
     "finalAssessment": "Final Assessment",
-    "totalScore": "Total Score"
+    "totalScore": "Total Score",
+    "categories": {
+      "communication": "Communication Skills",
+      "technical": "Technical Knowledge",
+      "problemSolving": "Problem Solving",
+      "culturalFit": "Cultural Fit",
+      "confidenceClarity": "Confidence and Clarity"
+    }
   },
   "auth": {
     "email": "Email",

@@ -1,6 +1,8 @@
 "use client";
 
 import dayjs from "dayjs";
+import "dayjs/locale/es";
+import "dayjs/locale/en";
 import Link from "next/link";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -72,22 +74,28 @@ const InterviewCard = ({
     );
   }
 
-  const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
+  const typeKey = /mix/gi.test(type)
+    ? "mixed"
+    : /behav/gi.test(type)
+    ? "behavioral"
+    : "technical";
 
   const badgeColor =
     {
-      Behavioral: "bg-light-400",
-      Mixed: "bg-light-600",
-      Technical: "bg-light-800",
-    }[normalizedType] || "bg-light-600";
+      behavioral: "bg-light-400",
+      mixed: "bg-light-600",
+      technical: "bg-light-800",
+    }[typeKey] || "bg-light-600";
 
-  const formattedDate = dayjs(
-    feedback?.createdAt || createdAt || Date.now()
-  ).format("MMM D, YYYY");
+  const typeLabel = t(`interview.types.${typeKey}`);
+
+  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now())
+    .locale(locale)
+    .format("MMM D, YYYY");
 
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96">
-      <div className="card-interview">
+      <div className="card-interview flex flex-col">
         <div>
           {/* Type Badge */}
           <div
@@ -96,7 +104,7 @@ const InterviewCard = ({
               badgeColor
             )}
           >
-            <p className="badge-text ">{normalizedType}</p>
+            <p className="badge-text ">{typeLabel}</p>
           </div>
 
           {/* Cover Image */}
@@ -108,8 +116,13 @@ const InterviewCard = ({
             className="rounded-full object-fit size-[90px]"
           />
 
+          {/* Tech Stack Pills */}
+          <div className="mt-4 flex justify-start">
+            <DisplayTechIcons techStack={techstack} />
+          </div>
+
           {/* Interview Role */}
-          <h3 className="mt-5 capitalize">{role} Interview</h3>
+          <h3 className="mt-3 capitalize">{role} Interview</h3>
 
           {/* Date & Score */}
           <div className="flex flex-row gap-5 mt-3">
@@ -135,10 +148,8 @@ const InterviewCard = ({
           </p>
         </div>
 
-        <div className="flex flex-row justify-between">
-          <DisplayTechIcons techStack={techstack} />
-
-          <Button className="btn-primary">
+        <div className="mt-6">
+          <Button className="btn-primary w-full">
             <Link
               href={
                 feedback

@@ -17,15 +17,18 @@
     "profile": "Perfil",
     "signIn": "Iniciar Sesión",
     "signUp": "Registrarse",
-    "signOut": "Cerrar Sesión"
+    "signOut": "Cerrar Sesión",
+    "backToDashboard": "Volver al Dashboard",
+    "retakeInterview": "Repetir Entrevista"
   },
   "home": {
     "title": "Prepárate para Entrevistas con IA: Práctica y Retroalimentación",
     "subtitle": "Practica preguntas reales de entrevista y obtén retroalimentación instantánea",
-    "startInterview": "Comenzar Entrevista",
+    "createInterview": "Crear una nueva entrevista",
+    "createFirstInterview": "Crea tu primera entrevista",
     "yourInterviews": "Tus Entrevistas",
     "noInterviews": "Aún no has tomado ninguna entrevista",
-    "takeInterviews": "Tomar Entrevistas",
+    "takeInterviews": "Otras Entrevistas que te pueden interesar",
     "noAvailableInterviews": "No hay entrevistas disponibles"
   },
   "interview": {
@@ -39,9 +42,17 @@
     "disconnect": "Desconectar",
     "notTakenYet": "Aún no has tomado esta entrevista. Tómala ahora para mejorar tus habilidades.",
     "checkFeedback": "Ver Retroalimentación",
-    "viewInterview": "Ver Entrevista"
+    "viewInterview": "Ver Entrevista",
+    "types": {
+      "behavioral": "Conductual",
+      "mixed": "Mixta",
+      "technical": "Técnica"
+    }
   },
   "feedback": {
+    "title": "Retroalimentación de la entrevista",
+    "overallImpression": "Puntuación General",
+    "breakdown": "Desglose de la Entrevista",
     "communicationSkills": "Habilidades de Comunicación",
     "technicalKnowledge": "Conocimiento Técnico",
     "problemSolving": "Resolución de Problemas",
@@ -50,7 +61,14 @@
     "strengths": "Fortalezas",
     "areasForImprovement": "Áreas de Mejora",
     "finalAssessment": "Evaluación Final",
-    "totalScore": "Puntuación Total"
+    "totalScore": "Puntuación Total",
+    "categories": {
+      "communication": "Habilidades de Comunicación",
+      "technical": "Conocimiento Técnico",
+      "problemSolving": "Resolución de Problemas",
+      "culturalFit": "Ajuste Cultural",
+      "confidenceClarity": "Confianza y Claridad"
+    }
   },
   "auth": {
     "email": "Correo Electrónico",

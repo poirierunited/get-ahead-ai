@@ -139,17 +139,6 @@ const Agent = ({
     setCallStatus(CallStatus.CONNECTING);
 
     if (type === "generate") {
-      // const workflowId =
-      //   locale === "es"
-      //     ? process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_ES
-      //     : process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID_EN;
-
-      // if (!workflowId) {
-      //   console.error("Missing workflow ID for locale:", locale);
-      //   setCallStatus(CallStatus.INACTIVE);
-      //   return;
-      // }
-
       await vapi.start(
         undefined,
         undefined,
