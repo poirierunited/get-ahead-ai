@@ -82,10 +82,10 @@ const InterviewCard = ({
 
   const badgeColor =
     {
-      behavioral: 'bg-light-400',
-      mixed: 'bg-light-600',
-      technical: 'bg-light-800',
-    }[typeKey] || 'bg-light-600';
+      behavioral: 'badge-behavioral',
+      mixed: 'badge-mixed',
+      technical: 'badge-technical',
+    }[typeKey] || 'badge-mixed';
 
   const typeLabel = t(`interview.types.${typeKey}`);
 

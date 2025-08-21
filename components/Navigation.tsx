@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { LanguageSelector } from './LanguageSelector';
+import { ThemeToggle } from './ThemeToggle';
 import { useEffect, useState } from 'react';
 
 export function Navigation() {
@@ -22,7 +23,10 @@ export function Navigation() {
           <Image src='/logo.svg' alt='MockMate Logo' width={38} height={32} />
           <h2 className='text-primary-100'>Project Sarah</h2>
         </div>
-        <div className='w-20 h-8 bg-gray-200 rounded animate-pulse'></div>
+        <div className='flex items-center gap-3'>
+          <div className='w-10 h-10 bg-gray-200 rounded-full animate-pulse' />
+          <div className='w-20 h-8 bg-gray-200 rounded animate-pulse' />
+        </div>
       </nav>
     );
   }
@@ -33,7 +37,10 @@ export function Navigation() {
         <Image src='/logo.svg' alt='MockMate Logo' width={38} height={32} />
         <h2 className='text-primary-100'>Project Sarah</h2>
       </Link>
-      <LanguageSelector />
+      <div className='flex items-center gap-3'>
+        <ThemeToggle />
+        <LanguageSelector />
+      </div>
     </nav>
   );
 }

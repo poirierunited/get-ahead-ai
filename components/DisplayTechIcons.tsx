@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { cn, normalizeTechName } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import { cn, normalizeTechName } from '@/lib/utils';
 
 interface TechIconProps {
   techStack: string[];
@@ -9,21 +9,21 @@ interface TechIconProps {
 
 // Predefined color palette for tech tags (inspired by Reddit's tag colors)
 const tagColors = [
-  "bg-blue-500",
-  "bg-green-500",
-  "bg-purple-500",
-  "bg-pink-500",
-  "bg-indigo-500",
-  "bg-teal-500",
-  "bg-orange-500",
-  "bg-red-500",
-  "bg-yellow-500",
-  "bg-emerald-500",
-  "bg-cyan-500",
-  "bg-rose-500",
-  "bg-violet-500",
-  "bg-amber-500",
-  "bg-lime-500",
+  'bg-blue-500',
+  'bg-green-500',
+  'bg-purple-500',
+  'bg-pink-500',
+  'bg-indigo-500',
+  'bg-teal-500',
+  'bg-orange-500',
+  'bg-red-500',
+  'bg-yellow-500',
+  'bg-emerald-500',
+  'bg-cyan-500',
+  'bg-rose-500',
+  'bg-violet-500',
+  'bg-amber-500',
+  'bg-lime-500',
 ];
 
 const DisplayTechIcons = ({ techStack }: TechIconProps) => {
@@ -36,15 +36,15 @@ const DisplayTechIcons = ({ techStack }: TechIconProps) => {
   // Prevent hydration mismatch
   if (!mounted) {
     return (
-      <div className="flex justify-center">
-        <div className="flex -space-x-1">
+      <div className='flex justify-center'>
+        <div className='flex -space-x-1'>
           {[1, 2, 3].map((index) => (
             <div
               key={index}
-              className="h-4 w-12 bg-gray-200 rounded-full animate-pulse"
+              className='h-4 w-12 bg-gray-200 rounded-full animate-pulse'
             />
           ))}
-          <div className="w-4 h-4 bg-gray-200 rounded-full animate-pulse" />
+          <div className='w-4 h-4 bg-gray-200 rounded-full animate-pulse' />
         </div>
       </div>
     );
@@ -66,31 +66,31 @@ const DisplayTechIcons = ({ techStack }: TechIconProps) => {
   const remainingTechs = processedTechs.slice(3);
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex -space-x-1">
+    <div className='flex justify-center items-center'>
+      <div className='flex -space-x-1'>
         {visibleTechs.map(({ original, display, color }) => (
           <div
             key={original}
             className={cn(
-              "relative group px-2 py-0 rounded-full text-white text-[9px] font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default border border-white/20 z-10 flex items-center justify-center min-w-[2rem] h-4",
+              'relative group px-2 py-0 rounded-full text-white text-[9px] font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default border border-white/20 dark:border-white/20 z-10 flex items-center justify-center min-w-[2rem] h-4',
               color
             )}
           >
-            <span className="tech-tooltip">{original}</span>
+            <span className='tech-tooltip'>{original}</span>
 
-            <span className="leading-none flex items-center justify-center">
+            <span className='leading-none flex items-center justify-center'>
               {display}
             </span>
           </div>
         ))}
 
         {remainingCount > 0 && (
-          <div className="relative group bg-dark-300 rounded-full flex items-center justify-center border border-white/20 z-20 w-4 h-4 transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default">
-            <span className="tech-tooltip">
-              {remainingTechs.map((tech) => tech.original).join(", ")}
+          <div className='relative group tech-count-circle rounded-full flex items-center justify-center border border-light-400/20 dark:border-white/20 z-20 w-4 h-4 transition-all duration-200 hover:scale-105 hover:shadow-lg cursor-default'>
+            <span className='tech-tooltip'>
+              {remainingTechs.map((tech) => tech.original).join(', ')}
             </span>
 
-            <span className="text-[9px] font-medium text-white leading-none flex items-center justify-center">
+            <span className='text-[9px] font-medium leading-none flex items-center justify-center'>
               +{remainingCount}
             </span>
           </div>
