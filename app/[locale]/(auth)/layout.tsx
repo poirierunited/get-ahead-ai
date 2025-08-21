@@ -21,8 +21,8 @@ const AuthLayout = async ({
   return (
     <div className='auth-layout'>
       <div className='absolute top-4 right-4 flex items-center gap-3'>
-        <ThemeToggle />
         <LanguageSelector />
+        <ThemeToggle />
       </div>
       {children}
     </div>

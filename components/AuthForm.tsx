@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import Link from 'next/link';
-import Image from 'next/image';
 import { toast } from 'sonner';
+import { DynamicLogo } from './DynamicLogo';
 import { auth } from '@/firebase/client';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -112,8 +112,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       <div className='flex flex-col gap-6 card py-14 px-10'>
         <div className='flex flex-row gap-3 justify-center items-center group'>
           <div className='logo-container'>
-            <Image
-              src='/ai-woman.png'
+            <DynamicLogo
               alt='logo'
               width={38}
               height={32}
