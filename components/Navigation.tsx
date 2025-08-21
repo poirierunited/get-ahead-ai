@@ -6,6 +6,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { ThemeToggle } from './ThemeToggle';
 import { DynamicLogo } from './DynamicLogo';
 import { useEffect, useState } from 'react';
+import { SignOutButton } from './SignOutButton';
 
 export function Navigation() {
   const locale = useLocale();
@@ -54,6 +55,7 @@ export function Navigation() {
       <div className='flex items-center gap-3'>
         <LanguageSelector />
         <ThemeToggle />
+        <SignOutButton />
       </div>
     </nav>
   );
