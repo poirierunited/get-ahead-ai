@@ -1,16 +1,16 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Image from "next/image";
-import { dummyInterviews } from "@/constants";
-import InterviewCard from "@/components/InterviewCard";
-import { getCurrentUser } from "@/lib/actions/auth.action";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Image from 'next/image';
+import { dummyInterviews } from '@/constants';
+import InterviewCard from '@/components/InterviewCard';
+import { getCurrentUser } from '@/lib/actions/auth.action';
 import {
   getInterviewsByUserId,
   getLatestInterviews,
-} from "@/lib/actions/general.action";
-import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+} from '@/lib/actions/general.action';
+import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
 const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = await params;
@@ -30,33 +30,33 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
 
   return (
     <>
-      <section className="card-cta">
-        <div className="flex flex-col gap-6 max-w-lg">
-          <h2>{t("home.title")}</h2>
-          <p className="text-lg">{t("home.subtitle")}</p>
+      <section className='card-cta'>
+        <div className='flex flex-col gap-6 max-w-lg'>
+          <h2>{t('home.title')}</h2>
+          <p className='text-lg'>{t('home.subtitle')}</p>
 
-          <Button asChild className="btn-primary max-sm:w-full">
+          <Button asChild className='btn-primary max-sm:w-full'>
             <Link href={`/${locale}/interview`}>
               {hasPastInterviews
-                ? t("home.createInterview")
-                : t("home.createFirstInterview")}
+                ? t('home.createInterview')
+                : t('home.createFirstInterview')}
             </Link>
           </Button>
         </div>
 
         <Image
-          src="/robot.png"
-          alt="robo-dude"
+          src='/hr-woman.png'
+          alt='robo-dude'
           width={400}
           height={400}
-          className="max-sm:hidden"
+          className='max-sm:hidden'
         />
       </section>
 
-      <section className="flex flex-col gap-6 mt-8">
-        <h2>{t("home.yourInterviews")}</h2>
+      <section className='flex flex-col gap-6 mt-8'>
+        <h2>{t('home.yourInterviews')}</h2>
 
-        <div className="interviews-section">
+        <div className='interviews-section'>
           {hasPastInterviews ? (
             userInterviews?.map((interview) => (
               <InterviewCard
@@ -70,15 +70,15 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
               />
             ))
           ) : (
-            <p>{t("home.noInterviews")}</p>
+            <p>{t('home.noInterviews')}</p>
           )}
         </div>
       </section>
 
-      <section className="flex flex-col gap-6 mt-8">
-        <h2>{t("home.takeInterviews")}</h2>
+      <section className='flex flex-col gap-6 mt-8'>
+        <h2>{t('home.takeInterviews')}</h2>
 
-        <div className="interviews-section">
+        <div className='interviews-section'>
           {hasUpcomingInterviews ? (
             allInterview?.map((interview) => (
               <InterviewCard
@@ -92,7 +92,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
               />
             ))
           ) : (
-            <p>{t("home.noAvailableInterviews")}</p>
+            <p>{t('home.noAvailableInterviews')}</p>
           )}
         </div>
       </section>

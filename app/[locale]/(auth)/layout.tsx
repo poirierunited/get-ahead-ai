@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
-import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
-import { isAuthenticated } from "@/lib/actions/auth.action";
-import { Navigation } from "@/components/Navigation";
-import { LanguageSelector } from "@/components/LanguageSelector";
+import { isAuthenticated } from '@/lib/actions/auth.action';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const AuthLayout = async ({
   children,
@@ -19,9 +19,10 @@ const AuthLayout = async ({
   if (isUserAuthenticated) redirect(`/${locale}`);
 
   return (
-    <div className="auth-layout">
-      <div className="absolute top-4 right-4">
+    <div className='auth-layout'>
+      <div className='absolute top-4 right-4 flex items-center gap-3'>
         <LanguageSelector />
+        <ThemeToggle />
       </div>
       {children}
     </div>
