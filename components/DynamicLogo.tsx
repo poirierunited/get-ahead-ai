@@ -37,7 +37,7 @@ export function DynamicLogo({
       alt={alt}
       width={width}
       height={height}
-      className={className}
+      className={`object-cover ${className}`}
     />
   );
 }

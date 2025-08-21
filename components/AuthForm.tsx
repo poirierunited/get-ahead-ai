@@ -114,7 +114,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           <div className='logo-container'>
             <DynamicLogo
               alt='logo'
-              width={38}
+              width={32}
               height={32}
               className='transition-transform duration-200 group-hover:scale-105'
             />

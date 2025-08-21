@@ -23,7 +23,7 @@ export function Navigation() {
           <div className='logo-container'>
             <DynamicLogo
               alt='Sarah Logo'
-              width={38}
+              width={32}
               height={32}
               className='transition-transform duration-200 group-hover:scale-105'
             />
@@ -44,7 +44,7 @@ export function Navigation() {
         <div className='logo-container'>
           <DynamicLogo
             alt='Sarah Logo'
-            width={38}
+            width={32}
             height={32}
             className='transition-transform duration-200 group-hover:scale-105'
           />

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { DynamicLogo } from './DynamicLogo';
 
 import { cn } from '@/lib/utils';
 import { vapi } from '@/lib/vapi.sdk';
@@ -182,9 +183,8 @@ const Agent = ({
         {/* AI Interviewer Card */}
         <div className='card-interviewer'>
           <div className='avatar'>
-            <Image
-              src='/ai-woman.png'
-              alt='profile-image'
+            <DynamicLogo
+              alt='AI Interviewer'
               width={65}
               height={54}
               className='object-cover'
