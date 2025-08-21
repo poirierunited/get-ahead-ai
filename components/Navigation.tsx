@@ -19,9 +19,17 @@ export function Navigation() {
   if (!mounted) {
     return (
       <nav className='flex items-center justify-between p-4'>
-        <div className='flex items-center gap-2'>
-          <Image src='/logo.svg' alt='MockMate Logo' width={38} height={32} />
-          <h2 className='text-primary-100'>Project Sarah</h2>
+        <div className='flex items-center gap-3 group'>
+          <div className='logo-container'>
+            <Image
+              src='/ai-woman.png'
+              alt='Sarah Logo'
+              width={38}
+              height={32}
+              className='transition-transform duration-200 group-hover:scale-105'
+            />
+          </div>
+          <h2 className='header-title'>Project Sarah</h2>
         </div>
         <div className='flex items-center gap-3'>
           <div className='w-10 h-10 bg-gray-200 rounded-full animate-pulse' />
@@ -33,9 +41,17 @@ export function Navigation() {
 
   return (
     <nav className='flex items-center justify-between p-4'>
-      <Link href={`/${locale}`} className='flex items-center gap-2'>
-        <Image src='/logo.svg' alt='MockMate Logo' width={38} height={32} />
-        <h2 className='text-primary-100'>Project Sarah</h2>
+      <Link href={`/${locale}`} className='flex items-center gap-3 group'>
+        <div className='logo-container'>
+          <Image
+            src='/ai-woman.png'
+            alt='Sarah Logo'
+            width={38}
+            height={32}
+            className='transition-transform duration-200 group-hover:scale-105'
+          />
+        </div>
+        <h2 className='header-title'>Project Sarah</h2>
       </Link>
       <div className='flex items-center gap-3'>
         <ThemeToggle />

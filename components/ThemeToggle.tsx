@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className='w-10 h-10 bg-light-100 rounded-full animate-pulse' />
+      <div className='w-10 h-10 bg-light-100 dark:bg-dark-200 rounded-full animate-pulse' />
     );
   }
 
@@ -26,26 +26,50 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className='relative w-10 h-10 bg-light-100 hover:bg-light-200 dark:bg-dark-200 dark:hover:bg-dark-300 rounded-full flex items-center justify-center transition-all duration-200 shadow-sm border border-light-400/20 dark:border-white/10 group'
+      className='relative w-10 h-10 bg-white dark:bg-dark-dark-200 hover:bg-light-100 dark:hover:bg-dark-dark-300 rounded-full flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg dark:shadow-none border border-light-400/30 dark:border-white/10 group overflow-hidden'
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      <Sun
-        className={`w-5 h-5 transition-all duration-200 ${
+      {/* Background gradient for active state */}
+      <div
+        className={`absolute inset-0 rounded-full transition-all duration-300 ${
           theme === 'light'
-            ? 'text-yellow-500 scale-100 rotate-0'
-            : 'text-light-400 scale-0 -rotate-90'
-        }`}
-      />
-      <Moon
-        className={`absolute w-5 h-5 transition-all duration-200 ${
-          theme === 'dark'
-            ? 'text-blue-400 scale-100 rotate-0'
-            : 'text-light-400 scale-0 rotate-90'
+            ? 'bg-gradient-to-br from-yellow-50 to-orange-50'
+            : 'bg-gradient-to-br from-slate-700/20 to-slate-800/20'
         }`}
       />
 
-      {/* Ripple effect */}
-      <span className='absolute inset-0 rounded-full bg-primary-100/0 group-hover:bg-primary-100/10 transition-all duration-200' />
+      {/* Sun icon */}
+      <Sun
+        className={`relative w-5 h-5 transition-all duration-300 ${
+          theme === 'light'
+            ? 'text-yellow-500 scale-110 drop-shadow-sm'
+            : 'text-light-400 scale-0 -rotate-90 opacity-0'
+        }`}
+      />
+
+      {/* Moon icon */}
+      <Moon
+        className={`absolute w-5 h-5 transition-all duration-300 ${
+          theme === 'dark'
+            ? 'text-slate-300 scale-110 drop-shadow-sm'
+            : 'text-light-400 scale-0 rotate-90 opacity-0'
+        }`}
+      />
+
+      {/* Subtle ring effect on hover */}
+      <div className='absolute inset-0 rounded-full ring-2 ring-transparent group-hover:ring-primary-100/30 dark:group-hover:ring-slate-400/20 transition-all duration-300' />
+
+      {/* Active state pulse effect */}
+      <div
+        className={`absolute inset-0 rounded-full transition-all duration-300 ${
+          theme === 'light'
+            ? 'bg-yellow-400/20 scale-0 group-hover:scale-100'
+            : 'bg-slate-400/15 scale-0 group-hover:scale-100'
+        }`}
+      />
+
+      {/* Ripple effect on click */}
+      <span className='absolute inset-0 rounded-full bg-primary-100/0 group-active:bg-primary-100/20 dark:group-active:bg-slate-400/20 transition-all duration-200' />
     </button>
   );
 }
