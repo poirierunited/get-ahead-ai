@@ -13,7 +13,7 @@ const monaSans = Mona_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Project Sarah',
+  title: 'Project Clara',
   description:
     'Plataforma de preparación para mercado laboral impulsado por Inteligencia Artificial',
 };
