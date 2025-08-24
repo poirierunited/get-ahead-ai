@@ -119,7 +119,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
               className='transition-transform duration-200 group-hover:scale-105'
             />
           </div>
-          <h2 className='header-title'>Project Sarah</h2>
+          <h2 className='header-title'>Project Clara</h2>
         </div>
 
         <h3>{t('auth.practiceInterviews')}</h3>

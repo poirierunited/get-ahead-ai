@@ -29,7 +29,7 @@ export function Navigation() {
               className='transition-transform duration-200 group-hover:scale-105'
             />
           </div>
-          <h2 className='header-title'>Project Sarah</h2>
+          <h2 className='header-title'>Project Clara</h2>
         </div>
         <div className='flex items-center gap-3'>
           <div className='w-20 h-8 bg-gray-200 rounded animate-pulse' />
@@ -50,7 +50,7 @@ export function Navigation() {
             className='transition-transform duration-200 group-hover:scale-105'
           />
         </div>
-        <h2 className='header-title'>Project Sarah</h2>
+        <h2 className='header-title'>Project Clara</h2>
       </Link>
       <div className='flex items-center gap-3'>
         <LanguageSelector />
