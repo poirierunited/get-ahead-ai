@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (isRateLimited(request)) throw new TooManyRequestsError();
 
     const body = await request.json();
-    const { role, level, techstack, type, amount, userid } =
+    const { title, role, level, techstack, type, amount, userid } =
       generateInterviewSchema.parse(body);
 
     if (!userid || userid.trim().length === 0) {
@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
 
     const { interview, questions, documentId } =
       await generateAndStoreInterview({
+        title,
         role,
         level,
         techstack,

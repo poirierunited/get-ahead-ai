@@ -11,6 +11,9 @@
     "next": "Siguiente",
     "submit": "Enviar"
   },
+  "interviewDetails": {
+    "interview": "Entrevista"
+  },
   "navigation": {
     "home": "Inicio",
     "interviews": "Entrevistas",
@@ -125,5 +128,25 @@
       "prompt": "Eres un entrevistador de IA analizando una entrevista simulada. Tu tarea es evaluar al candidato basándote en categorías estructuradas. Sé exhaustivo y detallado en tu análisis. No seas indulgente con el candidato. Si hay errores o áreas de mejora, señálalas. Transcripción: {transcript} Por favor puntúa al candidato de 0 a 100 en las siguientes áreas. No agregues categorías distintas a las proporcionadas: - **Habilidades de Comunicación**: Claridad, articulación, respuestas estructuradas. - **Conocimiento Técnico**: Comprensión de conceptos clave para el puesto. - **Resolución de Problemas**: Capacidad de analizar problemas y proponer soluciones. - **Ajuste Cultural y de Puesto**: Alineación con valores de la empresa y rol del trabajo. - **Confianza y Claridad**: Confianza en las respuestas, compromiso y claridad.",
       "systemPrompt": "Eres un entrevistador profesional analizando una entrevista simulada. Tu tarea es evaluar al candidato basándote en categorías estructuradas. Por favor proporciona retroalimentación en idioma {language}."
     }
+  },
+  "interviewForm": {
+    "title": "Título de la entrevista",
+    "titlePlaceholder": "Ej: Entrevista Frontend en ACME",
+    "role": "Puesto",
+    "rolePlaceholder": "Ej: Desarrollador Frontend",
+    "level": "Nivel",
+    "levelPlaceholder": "Ej: Semi Senior",
+    "techstack": "Stack tecnológico (separado por comas)",
+    "techstackPlaceholder": "React, TypeScript",
+    "type": "Tipo (técnico, comportamental, mixto)",
+    "typePlaceholder": "Selecciona tipo",
+    "typeTechnical": "Técnico",
+    "typeBehavioral": "Comportamental",
+    "typeMixed": "Mixto",
+    "amount": "Cantidad de preguntas (máx 5)",
+    "submit": "Aceptar",
+    "submitting": "Generando...",
+    "success": "La entrevista fue generada exitosamente.",
+    "error": "No se pudo generar la entrevista."
   }
 }

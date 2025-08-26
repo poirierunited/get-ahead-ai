@@ -10,6 +10,7 @@ import { BadRequestError } from '@/lib/errors';
 // import { logger } from '@/lib/logger';
 
 interface GenerateInterviewServiceParams {
+  title: string;
   role: string;
   level: string;
   techstack: string; // comma-separated
@@ -35,6 +36,7 @@ export async function generateAndStoreInterview(
   params: GenerateInterviewServiceParams
 ): Promise<GenerateInterviewServiceResult> {
   const {
+    title,
     role,
     level,
     techstack,
@@ -75,6 +77,7 @@ export async function generateAndStoreInterview(
   }
 
   const entity: InterviewEntity = {
+    title,
     role,
     type,
     level,

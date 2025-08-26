@@ -1,4 +1,5 @@
 export interface GenerateInterviewRequest {
+  title: string;
   role: string;
   level: string;
   techstack: string; // comma-separated list from client
@@ -16,6 +17,7 @@ export interface InterviewQuestionObject {
 export type InterviewQuestion = string | InterviewQuestionObject;
 
 export interface InterviewEntity {
+  title: string;
   role: string;
   type: string;
   level: string;
