@@ -10,6 +10,7 @@ import {
 } from '@/lib/actions/general.action';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import DisplayTechIcons from '@/components/DisplayTechIcons';
+import { getTranslations } from 'next-intl/server';
 
 const InterviewDetails = async ({
   params,
@@ -17,6 +18,7 @@ const InterviewDetails = async ({
   params: Promise<{ id: string; locale: string }>;
 }) => {
   const { id, locale } = await params;
+  const t = await getTranslations({ locale });
 
   const user = await getCurrentUser();
   if (!user) {
@@ -43,13 +45,33 @@ const InterviewDetails = async ({
               height={40}
               className='rounded-full object-cover size-[40px]'
             />
-            <h3 className='capitalize'>{interview.role} Interview</h3>
+            <h3 className='capitalize'>
+              {interview.role} {t('interviewDetails.interview')}
+            </h3>
           </div>
 
           <DisplayTechIcons techStack={interview.techstack} />
         </div>
 
-        <p className='interview-type-badge h-fit'>{interview.type}</p>
+        {(() => {
+          const type = String(interview.type || '').toLowerCase();
+          const typeKey = /mix/gi.test(type)
+            ? 'mixed'
+            : /behav/gi.test(type)
+            ? 'behavioral'
+            : 'technical';
+          const badgeColor =
+            {
+              behavioral: 'badge-behavioral',
+              mixed: 'badge-mixed',
+              technical: 'badge-technical',
+            }[typeKey] || 'badge-mixed';
+          return (
+            <div className={`w-fit px-4 py-2 rounded-md ${badgeColor}`}>
+              <p className='badge-text'>{t(`interview.types.${typeKey}`)}</p>
+            </div>
+          );
+        })()}
       </div>
 
       <Agent
