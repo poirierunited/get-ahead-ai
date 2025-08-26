@@ -23,7 +23,7 @@ export function Navigation() {
         <div className='flex items-center gap-3 group'>
           <div className='logo-container'>
             <DynamicLogo
-              alt='Sarah Logo'
+              alt='Clara Logo'
               width={32}
               height={32}
               className='transition-transform duration-200 group-hover:scale-105'
@@ -44,7 +44,7 @@ export function Navigation() {
       <Link href={`/${locale}`} className='flex items-center gap-3 group'>
         <div className='logo-container'>
           <DynamicLogo
-            alt='Sarah Logo'
+            alt='Clara Logo'
             width={32}
             height={32}
             className='transition-transform duration-200 group-hover:scale-105'

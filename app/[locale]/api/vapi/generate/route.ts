@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getMessages } from 'next-intl/server';
 import { getRandomInterviewCover } from '@/lib/utils';
 import { generateInterviewSchema } from '@/lib/schemas/interview';
-import { getUserIdFromRequest } from '@/lib/auth/server';
 import { isRateLimited } from '@/lib/rate-limit';
-import { toHttpResponse, TooManyRequestsError } from '@/lib/errors';
+import {
+  toHttpResponse,
+  TooManyRequestsError,
+  BadRequestError,
+} from '@/lib/errors';
 import { generateAndStoreInterview } from '@/lib/services/interview';
 import { logger } from '@/lib/logger';
 
@@ -16,6 +19,10 @@ export async function POST(request: NextRequest) {
     const { role, level, techstack, type, amount, userid } =
       generateInterviewSchema.parse(body);
 
+    if (!userid || userid.trim().length === 0) {
+      throw new BadRequestError('userid is required');
+    }
+
     // Get the locale from the URL path
     const pathname = request.nextUrl.pathname;
     const locale = pathname.split('/')[1]; // Extract locale from /[locale]/api/...
@@ -23,26 +30,24 @@ export async function POST(request: NextRequest) {
     // Get messages for the current locale
     const messages = await getMessages({ locale });
 
-    const derivedUserId = (await getUserIdFromRequest(request)) ?? userid;
-    const finalUserId = derivedUserId ?? 'unknown';
-
-    const { interview, questions } = await generateAndStoreInterview({
-      role,
-      level,
-      techstack,
-      type,
-      amount,
-      userId: finalUserId,
-      promptTemplate: messages.api.generateInterview.prompt,
-      systemTemplate: messages.api.generateInterview.systemPrompt,
-      language: locale === 'es' ? 'Spanish' : 'English',
-    });
+    const { interview, questions, documentId } =
+      await generateAndStoreInterview({
+        role,
+        level,
+        techstack,
+        type,
+        amount,
+        userId: userid,
+        promptTemplate: messages.api.generateInterview.prompt,
+        systemTemplate: messages.api.generateInterview.systemPrompt,
+        language: locale === 'es' ? 'Spanish' : 'English',
+      });
 
     // enrich interview with cover image (UI concern) before responding
     interview.coverImage = getRandomInterviewCover();
 
     logger.info('generate_interview_success', {
-      userId: finalUserId,
+      userId: userid,
       questionsCount: Array.isArray(questions) ? questions.length : 0,
     });
 
@@ -51,6 +56,7 @@ export async function POST(request: NextRequest) {
         success: true,
         questions: questions,
         interview: interview,
+        documentId: documentId,
       },
       { status: 200 }
     );

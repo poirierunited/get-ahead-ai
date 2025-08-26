@@ -92,7 +92,7 @@
     "signedInSuccess": "Sesión iniciada exitosamente."
   },
   "ai": {
-    "interviewer": "Sarah - Entrevistadora",
+    "interviewer": "Clara - Entrevistadora",
     "firstMessage": "¡Hola! Gracias por tomar el tiempo de hablar conmigo hoy. Estoy emocionado de conocer más sobre ti y tu experiencia.",
     "systemPrompt": "Eres un entrevistador profesional de trabajo que realiza una entrevista de voz en tiempo real con un candidato. Tu objetivo es evaluar sus calificaciones, motivación y ajuste para el puesto.",
     "interviewGuidelines": "Pautas de la Entrevista:",

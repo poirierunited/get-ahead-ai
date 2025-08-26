@@ -14,7 +14,7 @@ interface DynamicLogoProps {
 export function DynamicLogo({
   width = 38,
   height = 32,
-  alt = 'Sarah Logo',
+  alt = 'Clara Logo',
   className = '',
 }: DynamicLogoProps) {
   const [mounted, setMounted] = useState(false);
