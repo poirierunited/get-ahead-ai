@@ -15,6 +15,7 @@ interface Feedback {
 
 interface Interview {
   id: string;
+  title: string;
   role: string;
   level: string;
   questions: string[];
@@ -54,7 +55,7 @@ interface AgentProps {
   userId?: string;
   interviewId?: string;
   feedbackId?: string;
-  type: "generate" | "interview";
+  type: 'generate' | 'interview';
   questions?: string[];
   profileImage?: string;
 }
@@ -86,7 +87,7 @@ interface SignUpParams {
   password: string;
 }
 
-type FormType = "sign-in" | "sign-up";
+type FormType = 'sign-in' | 'sign-up';
 
 interface InterviewFormProps {
   interviewId: string;
