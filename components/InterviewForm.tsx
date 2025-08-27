@@ -50,7 +50,7 @@ export function InterviewForm({ locale, userId }: InterviewFormProps) {
   const onSubmit = async (values: FormValues) => {
     setSubmitting(true);
     try {
-      const res = await fetch(`/${locale}/api/vapi/generate`, {
+      const res = await fetch(`/${locale}/api/interviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),

@@ -23,11 +23,9 @@ export async function POST(request: NextRequest) {
       throw new BadRequestError('userid is required');
     }
 
-    // Get the locale from the URL path
     const pathname = request.nextUrl.pathname;
-    const locale = pathname.split('/')[1]; // Extract locale from /[locale]/api/...
+    const locale = pathname.split('/')[1];
 
-    // Get messages for the current locale
     const messages = await getMessages({ locale });
 
     const { interview, questions, documentId } =
@@ -44,7 +42,6 @@ export async function POST(request: NextRequest) {
         language: locale === 'es' ? 'Spanish' : 'English',
       });
 
-    // enrich interview with cover image (UI concern) before responding
     interview.coverImage = getRandomInterviewCover();
 
     logger.info('generate_interview_success', {
@@ -74,6 +71,6 @@ export async function GET(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const locale = pathname.split('/')[1];
   return NextResponse.json({
-    message: 'Endpoint working, language: ' + locale,
+    message: 'Interviews endpoint working, language: ' + locale,
   });
 }
