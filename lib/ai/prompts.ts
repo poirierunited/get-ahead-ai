@@ -7,6 +7,7 @@ interface GeneratePromptParams {
   techstack: string;
   type: string;
   amount: number;
+  jobDescription?: string;
 }
 
 /**
@@ -16,13 +17,18 @@ interface GeneratePromptParams {
 export function buildGenerateInterviewPrompt(
   params: GeneratePromptParams
 ): string {
-  const { template, role, level, techstack, type, amount } = params;
-  return template
+  const { template, role, level, techstack, type, amount, jobDescription } =
+    params;
+  const base = template
     .replace('{role}', role)
     .replace('{level}', level)
     .replace('{techstack}', techstack)
     .replace('{type}', type)
     .replace('{amount}', String(amount));
+  if (jobDescription && jobDescription.trim().length > 0) {
+    return `${base} Use this job description to tailor questions: ${jobDescription}`;
+  }
+  return base;
 }
 
 /**

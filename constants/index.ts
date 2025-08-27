@@ -533,6 +533,12 @@ export const getTechInterviewWorkflow = (
                 default: '{{techstack}}',
                 description: '',
               },
+              jobDescription: {
+                type: 'string',
+                default: '{{jobDescription}}',
+                description:
+                  'Optional job post description to tailor interview',
+              },
             },
           },
           name: 'generateUserQuestions',

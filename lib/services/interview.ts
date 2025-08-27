@@ -16,6 +16,7 @@ interface GenerateInterviewServiceParams {
   techstack: string; // comma-separated
   type: string;
   amount: number;
+  jobDescription?: string;
   userId: string;
   promptTemplate: string;
   systemTemplate: string;
@@ -42,6 +43,7 @@ export async function generateAndStoreInterview(
     techstack,
     type,
     amount,
+    jobDescription,
     userId,
     promptTemplate,
     systemTemplate,
@@ -55,6 +57,7 @@ export async function generateAndStoreInterview(
     techstack,
     type,
     amount,
+    jobDescription,
   });
 
   const system = buildSystemPrompt(systemTemplate, language);

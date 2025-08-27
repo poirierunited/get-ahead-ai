@@ -138,6 +138,8 @@
     "levelPlaceholder": "Ej: Semi Senior",
     "techstack": "Stack tecnológico (separado por comas)",
     "techstackPlaceholder": "React, TypeScript",
+    "jobDescription": "Descripción de la oferta (opcional)",
+    "jobDescriptionPlaceholder": "Pega la descripción del puesto para personalizar la entrevista",
     "type": "Tipo (técnico, comportamental, mixto)",
     "typePlaceholder": "Selecciona tipo",
     "typeTechnical": "Técnico",

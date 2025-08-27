@@ -138,6 +138,8 @@
     "levelPlaceholder": "e.g. Mid",
     "techstack": "Tech stack (comma-separated)",
     "techstackPlaceholder": "React, TypeScript",
+    "jobDescription": "Job post description (optional)",
+    "jobDescriptionPlaceholder": "Paste the job post description to tailor the interview",
     "type": "Type (technical, behavioral, mixed)",
     "typePlaceholder": "Select type",
     "typeTechnical": "Technical",

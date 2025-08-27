@@ -16,8 +16,16 @@ export async function POST(request: NextRequest) {
     if (isRateLimited(request)) throw new TooManyRequestsError();
 
     const body = await request.json();
-    const { title, role, level, techstack, type, amount, userid } =
-      generateInterviewSchema.parse(body);
+    const {
+      title,
+      role,
+      level,
+      techstack,
+      type,
+      amount,
+      userid,
+      jobDescription,
+    } = generateInterviewSchema.parse(body);
 
     if (!userid || userid.trim().length === 0) {
       throw new BadRequestError('userid is required');
@@ -36,6 +44,7 @@ export async function POST(request: NextRequest) {
         techstack,
         type,
         amount,
+        jobDescription,
         userId: userid,
         promptTemplate: messages.api.generateInterview.prompt,
         systemTemplate: messages.api.generateInterview.systemPrompt,
