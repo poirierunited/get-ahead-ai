@@ -498,7 +498,7 @@ export const getTechInterviewWorkflow = (
         name: 'apiRequest',
         type: 'tool',
         tool: {
-          url: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/api/vapi/generate`,
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/api/interviews`,
           body: {
             type: 'object',
             required: [
@@ -532,6 +532,12 @@ export const getTechInterviewWorkflow = (
                 type: 'string',
                 default: '{{techstack}}',
                 description: '',
+              },
+              jobDescription: {
+                type: 'string',
+                default: '{{jobDescription}}',
+                description:
+                  'Optional job post description to tailor interview',
               },
             },
           },

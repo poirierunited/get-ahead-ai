@@ -7,6 +7,7 @@ export const generateInterviewSchema = z.object({
   techstack: z.string().min(1, 'techstack is required'),
   type: z.enum(['technical', 'behavioral', 'mixed']),
   amount: z.coerce.number().int().min(1).max(5),
+  jobDescription: z.string().optional(),
   userid: z.string().optional(),
 });
 

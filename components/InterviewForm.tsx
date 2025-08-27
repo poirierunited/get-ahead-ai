@@ -42,6 +42,7 @@ export function InterviewForm({ locale, userId }: InterviewFormProps) {
       techstack: '',
       type: 'technical',
       amount: 1,
+      jobDescription: '',
       userid: userId,
     },
     mode: 'onSubmit',
@@ -50,7 +51,7 @@ export function InterviewForm({ locale, userId }: InterviewFormProps) {
   const onSubmit = async (values: FormValues) => {
     setSubmitting(true);
     try {
-      const res = await fetch(`/${locale}/api/vapi/generate`, {
+      const res = await fetch(`/${locale}/api/interviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
@@ -138,6 +139,26 @@ export function InterviewForm({ locale, userId }: InterviewFormProps) {
                     id='techstack'
                     placeholder={t('techstackPlaceholder')}
                     {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='jobDescription'
+            render={({ field }) => (
+              <FormItem>
+                <Label htmlFor='jobDescription'>{t('jobDescription')}</Label>
+                <FormControl>
+                  <textarea
+                    id='jobDescription'
+                    className='w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none h-28'
+                    placeholder={t('jobDescriptionPlaceholder')}
+                    value={field.value || ''}
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
