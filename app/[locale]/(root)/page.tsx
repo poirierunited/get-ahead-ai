@@ -63,6 +63,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
                 key={interview.id}
                 userId={user?.id!}
                 interviewId={interview.id}
+                title={interview.title}
                 role={interview.role}
                 type={interview.type}
                 techstack={interview.techstack}
@@ -85,6 +86,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
                 key={interview.id}
                 userId={user?.id!}
                 interviewId={interview.id}
+                title={interview.title}
                 role={interview.role}
                 type={interview.type}
                 techstack={interview.techstack}

@@ -17,6 +17,7 @@ import { getFeedbackByInterviewId } from '@/lib/actions/general.action';
 interface InterviewCardProps {
   interviewId: string;
   userId: string;
+  title: string;
   role: string;
   type: string;
   techstack: string[];
@@ -26,6 +27,7 @@ interface InterviewCardProps {
 const InterviewCard = ({
   interviewId,
   userId,
+  title,
   role,
   type,
   techstack,
@@ -121,8 +123,9 @@ const InterviewCard = ({
             <DisplayTechIcons techStack={techstack} />
           </div>
 
-          {/* Interview Role */}
-          <h3 className='mt-3 capitalize'>{role} Interview</h3>
+          {/* Interview Title and Role */}
+          <h3 className='mt-3'>{title}</h3>
+          <p className='text-sm text-muted-foreground capitalize'>{role}</p>
 
           {/* Date & Score */}
           <div className='flex flex-row gap-5 mt-3'>
