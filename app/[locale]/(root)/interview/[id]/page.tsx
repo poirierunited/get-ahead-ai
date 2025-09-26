@@ -4,10 +4,6 @@ import { redirect } from 'next/navigation';
 import Agent from '@/components/Agent';
 import { getRandomInterviewCover } from '@/lib/utils';
 
-import {
-  getFeedbackByInterviewId,
-  getInterviewById,
-} from '@/lib/actions/general.action';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import DisplayTechIcons from '@/components/DisplayTechIcons';
 import { getTranslations } from 'next-intl/server';
@@ -25,13 +21,41 @@ const InterviewDetails = async ({
     redirect(`/${locale}/sign-in`);
   }
 
-  const interview = await getInterviewById(id);
-  if (!interview) redirect(`/${locale}`);
+  // Fetch interview from API
+  let interview;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/api/interviews?id=${id}`,
+      {
+        cache: 'no-store',
+      }
+    );
+    const data = await response.json();
+    if (!data.success || !data.interview) {
+      redirect(`/${locale}`);
+    }
+    interview = data.interview;
+  } catch (error) {
+    console.error('Error fetching interview:', error);
+    redirect(`/${locale}`);
+  }
 
-  const feedback = await getFeedbackByInterviewId({
-    interviewId: id,
-    userId: user.id,
-  });
+  // Fetch feedback from API
+  let feedback = null;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/api/feedback?interviewId=${id}&userId=${user.id}`,
+      {
+        cache: 'no-store',
+      }
+    );
+    const data = await response.json();
+    if (data.success && data.feedback) {
+      feedback = data.feedback;
+    }
+  } catch (error) {
+    console.error('Error fetching feedback:', error);
+  }
 
   return (
     <>

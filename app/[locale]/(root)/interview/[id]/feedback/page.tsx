@@ -4,10 +4,6 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
-import {
-  getFeedbackByInterviewId,
-  getInterviewById,
-} from '@/lib/actions/general.action';
 import { Button } from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
@@ -24,13 +20,43 @@ const Feedback = async ({
     redirect(`/${locale}/sign-in`);
   }
 
-  const interview = await getInterviewById(id);
-  if (!interview) redirect(`/${locale}`);
+  // Fetch interview from API
+  let interview;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/api/interviews?id=${id}`,
+      {
+        cache: 'no-store',
+      }
+    );
+    const data = await response.json();
+    if (!data.success || !data.interview) {
+      redirect(`/${locale}`);
+    }
+    interview = data.interview;
+  } catch (error) {
+    console.error('Error fetching interview:', error);
+    redirect(`/${locale}`);
+  }
 
-  const feedback = await getFeedbackByInterviewId({
-    interviewId: id,
-    userId: user?.id!,
-  });
+  // Fetch feedback from API
+  let feedback = null;
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL
+      }/${locale}/api/feedback?interviewId=${id}&userId=${user?.id!}`,
+      {
+        cache: 'no-store',
+      }
+    );
+    const data = await response.json();
+    if (data.success && data.feedback) {
+      feedback = data.feedback;
+    }
+  } catch (error) {
+    console.error('Error fetching feedback:', error);
+  }
 
   return (
     <section className='section-feedback'>
@@ -74,7 +100,7 @@ const Feedback = async ({
       {/* Interview Breakdown */}
       <div className='flex flex-col gap-4'>
         <h2>{t('feedback.breakdown')}:</h2>
-        {feedback?.categoryScores?.map((category, index) => (
+        {feedback?.categoryScores?.map((category: any, index: number) => (
           <div key={index}>
             <p className='font-bold'>
               {index + 1}. {t(`feedback.categories.${category.name}`)} (
@@ -88,7 +114,7 @@ const Feedback = async ({
       <div className='flex flex-col gap-3'>
         <h3>{t('feedback.strengths')}</h3>
         <ul>
-          {feedback?.strengths?.map((strength, index) => (
+          {feedback?.strengths?.map((strength: string, index: number) => (
             <li key={index}>{strength}</li>
           ))}
         </ul>
@@ -97,7 +123,7 @@ const Feedback = async ({
       <div className='flex flex-col gap-3'>
         <h3>{t('feedback.areasForImprovement')}</h3>
         <ul>
-          {feedback?.areasForImprovement?.map((area, index) => (
+          {feedback?.areasForImprovement?.map((area: string, index: number) => (
             <li key={index}>{area}</li>
           ))}
         </ul>

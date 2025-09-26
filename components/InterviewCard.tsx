@@ -12,7 +12,6 @@ import { Button } from './ui/button';
 import DisplayTechIcons from './DisplayTechIcons';
 
 import { cn, getRandomInterviewCover } from '@/lib/utils';
-import { getFeedbackByInterviewId } from '@/lib/actions/general.action';
 
 interface InterviewCardProps {
   interviewId: string;
@@ -45,11 +44,13 @@ const InterviewCard = ({
     const fetchFeedback = async () => {
       if (userId && interviewId) {
         try {
-          const feedbackData = await getFeedbackByInterviewId({
-            interviewId,
-            userId,
-          });
-          setFeedback(feedbackData);
+          const response = await fetch(
+            `/${locale}/api/feedback?interviewId=${interviewId}&userId=${userId}`
+          );
+          const data = await response.json();
+          if (data.success && data.feedback) {
+            setFeedback(data.feedback);
+          }
         } catch (error) {
           console.error('Error fetching feedback:', error);
         }

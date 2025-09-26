@@ -4,7 +4,12 @@ import {
   buildSystemPrompt,
 } from '@/lib/ai/prompts';
 import { generateTextWithModel, models } from '@/lib/ai/client';
-import { createInterview } from '@/lib/repositories/interviews';
+import {
+  createInterview,
+  getInterviewById as repoGetInterviewById,
+  getLatestInterviews as repoGetLatestInterviews,
+  getInterviewsByUserId as repoGetInterviewsByUserId,
+} from '@/lib/repositories/interviews';
 import type { InterviewEntity, InterviewQuestion } from '@/types/interview';
 import { BadRequestError } from '@/lib/errors';
 // import { logger } from '@/lib/logger';
@@ -96,4 +101,25 @@ export async function generateAndStoreInterview(
   // logger.info('interview_persisted', { documentId });
 
   return { interview: entity, questions, documentId };
+}
+
+export async function getInterviewByIdService(id: string) {
+  return repoGetInterviewById(id);
+}
+
+/**
+ * Get latest interviews excluding user's own interviews.
+ */
+export async function getLatestInterviewsService(
+  userId: string,
+  limit: number = 20
+) {
+  return repoGetLatestInterviews(userId, limit);
+}
+
+/**
+ * Get interviews by user ID.
+ */
+export async function getInterviewsByUserIdService(userId: string) {
+  return repoGetInterviewsByUserId(userId);
 }
