@@ -93,7 +93,9 @@
     "accountCreatedSuccess": "Account created successfully. Please sign in.",
     "signInFailed": "Sign in Failed. Please try again.",
     "signedInSuccess": "Signed in successfully.",
-    "invalidEmailOrPassword": "Invalid email or password"
+    "invalidEmailOrPassword": "Invalid email or password",
+    "emailAlreadyInUse": "This email is already in use",
+    "invalidEmail": "Invalid email address"
   },
   "ai": {
     "interviewer": "Clara - Interviewer",

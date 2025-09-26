@@ -100,7 +100,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
       }
     } catch (error: any) {
       console.error('Authentication error:', error);
-      const errorMessage = handleAuthError(error);
+      const errorMessage = handleAuthError(error, t);
       toast.error(errorMessage);
     }
   };
