@@ -92,7 +92,10 @@
     "practiceInterviews": "Practica entrevistas de trabajo con IA",
     "accountCreatedSuccess": "Cuenta creada exitosamente. Por favor inicia sesión.",
     "signInFailed": "Falló el inicio de sesión. Por favor intenta de nuevo.",
-    "signedInSuccess": "Sesión iniciada exitosamente."
+    "signedInSuccess": "Sesión iniciada exitosamente.",
+    "invalidEmailOrPassword": "Correo electrónico o contraseña inválidos",
+    "emailAlreadyInUse": "Este correo electrónico ya está en uso",
+    "invalidEmail": "Dirección de correo electrónico inválida"
   },
   "ai": {
     "interviewer": "Clara - Entrevistadora",
