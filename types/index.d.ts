@@ -55,9 +55,9 @@ interface AgentProps {
   userId?: string;
   interviewId?: string;
   feedbackId?: string;
-  type: 'generate' | 'interview';
   questions?: string[];
   profileImage?: string;
+  interviewType?: 'technical' | 'behavioral' | 'mixed';
 }
 
 interface RouteParams {

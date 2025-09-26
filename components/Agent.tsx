@@ -7,7 +7,7 @@ import { DynamicLogo } from './DynamicLogo';
 
 import { cn } from '@/lib/utils';
 import { vapi } from '@/lib/vapi.sdk';
-import { getInterviewerConfig, getTechInterviewWorkflow } from '@/constants';
+import { getInterviewerConfig } from '@/constants';
 import { useParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -16,6 +16,7 @@ enum CallStatus {
   CONNECTING = 'CONNECTING',
   ACTIVE = 'ACTIVE',
   FINISHED = 'FINISHED',
+  CANCELLED = 'CANCELLED',
 }
 
 interface SavedMessage {
@@ -28,9 +29,9 @@ const Agent = ({
   userId,
   interviewId,
   feedbackId,
-  type,
   questions,
   profileImage,
+  interviewType = 'mixed',
 }: AgentProps) => {
   const router = useRouter();
   const params = useParams();
@@ -40,6 +41,9 @@ const Agent = ({
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>('');
+  const [terminationReason, setTerminationReason] = useState<string | null>(
+    null
+  );
 
   // Heuristic: a question is considered answered if there is at least one
   // meaningful user message between two assistant questions (or before the call ends).
@@ -75,17 +79,31 @@ const Agent = ({
 
   useEffect(() => {
     const onCallStart = () => {
+      console.log('Call started - setting status to ACTIVE');
       setCallStatus(CallStatus.ACTIVE);
     };
 
     const onCallEnd = () => {
+      console.log('Call ended - setting status to FINISHED');
       setCallStatus(CallStatus.FINISHED);
     };
 
     const onMessage = (message: Message) => {
+      console.log('Message received:', message);
+
       if (message.type === 'transcript' && message.transcriptType === 'final') {
         const newMessage = { role: message.role, content: message.transcript };
         setMessages((prev) => [...prev, newMessage]);
+      }
+
+      // Detect when the AI uses the end_interview_early function
+      if (
+        message.type === 'function-call' &&
+        message.functionCall?.name === 'end_interview_early'
+      ) {
+        const reason = (message.functionCall.parameters as any)?.reason;
+        setTerminationReason(reason);
+        setCallStatus(CallStatus.CANCELLED);
       }
     };
 
@@ -158,22 +176,19 @@ const Agent = ({
       }
 
       // Guard: only generate feedback when at least 50% of questions were answered
-      if (type !== 'generate') {
-        const totalQuestions = Array.isArray(questions) ? questions.length : 0;
-        const answeredCount = countAnsweredQuestions(messages);
-        const minRequired = Math.ceil(totalQuestions * 0.5);
-        const meetsThreshold =
-          totalQuestions > 0 && answeredCount >= minRequired;
+      const totalQuestions = Array.isArray(questions) ? questions.length : 0;
+      const answeredCount = countAnsweredQuestions(messages);
+      const minRequired = Math.ceil(totalQuestions * 0.5);
+      const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
 
-        if (!meetsThreshold) {
-          console.warn('Skipping feedback: below 50% answered threshold', {
-            totalQuestions,
-            answeredCount,
-            minRequired,
-          });
-          router.push(`/${locale}`);
-          return;
-        }
+      if (!meetsThreshold) {
+        console.warn('Skipping feedback: below 50% answered threshold', {
+          totalQuestions,
+          answeredCount,
+          minRequired,
+        });
+        router.push(`/${locale}`);
+        return;
       }
 
       try {
@@ -202,26 +217,34 @@ const Agent = ({
     };
 
     if (callStatus === CallStatus.FINISHED) {
-      if (type === 'generate') {
-        router.push(`/${locale}`);
-      } else {
-        const totalQuestions = Array.isArray(questions) ? questions.length : 0;
-        const answeredCount = countAnsweredQuestions(messages);
-        const minRequired = Math.ceil(totalQuestions * 0.5);
-        const meetsThreshold =
-          totalQuestions > 0 && answeredCount >= minRequired;
+      const totalQuestions = Array.isArray(questions) ? questions.length : 0;
+      const answeredCount = countAnsweredQuestions(messages);
+      const minRequired = Math.ceil(totalQuestions * 0.5);
+      const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
 
-        console.log('Feedback gate check', {
+      console.log('Feedback gate check', {
+        totalQuestions,
+        answeredCount,
+        minRequired,
+        meetsThreshold,
+      });
+
+      if (!meetsThreshold) {
+        console.warn('Skipping feedback: below 50% answered threshold', {
           totalQuestions,
           answeredCount,
           minRequired,
-          meetsThreshold,
         });
-
-        if (!meetsThreshold) return; // Do not attempt to create feedback
-
-        handleGenerateFeedback(messages);
+        router.push(`/${locale}`);
+        return;
       }
+
+      handleGenerateFeedback(messages);
+    } else if (callStatus === CallStatus.CANCELLED) {
+      // Interview was cancelled by user - do NOT generate feedback
+      console.log('Interview cancelled by user, reason:', terminationReason);
+      console.log('Skipping feedback generation for cancelled interview');
+      router.push(`/${locale}`);
     }
   }, [
     messages,
@@ -229,45 +252,29 @@ const Agent = ({
     feedbackId,
     interviewId,
     router,
-    type,
     userId,
     locale,
+    terminationReason,
   ]);
 
   const handleCall = async () => {
     setCallStatus(CallStatus.CONNECTING);
 
-    if (type === 'generate') {
-      await vapi.start(
-        undefined,
-        undefined,
-        undefined,
-        getTechInterviewWorkflow(locale as 'en' | 'es'),
-        {
-          variableValues: {
-            username: userName,
-            userid: userId,
-            language: locale,
-          },
-        }
-      );
-    } else {
-      let formattedQuestions = '';
-      if (questions) {
-        formattedQuestions = questions
-          .map((question) => `- ${question}`)
-          .join('\n');
-      }
-
-      // Normalize locale to supported set
-      const lang = (locale === 'es' ? 'es' : 'en') as 'en' | 'es';
-      const interviewerConfig = getInterviewerConfig(lang);
-      await vapi.start(interviewerConfig, {
-        variableValues: {
-          questions: formattedQuestions,
-        },
-      });
+    let formattedQuestions = '';
+    if (questions) {
+      formattedQuestions = questions
+        .map((question) => `- ${question}`)
+        .join('\n');
     }
+
+    // Normalize locale to supported set
+    const lang = (locale === 'es' ? 'es' : 'en') as 'en' | 'es';
+    const interviewerConfig = getInterviewerConfig(lang, interviewType);
+    await vapi.start(interviewerConfig, {
+      variableValues: {
+        questions: formattedQuestions,
+      },
+    });
   };
 
   const handleDisconnect = () => {
