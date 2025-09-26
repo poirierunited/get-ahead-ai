@@ -92,7 +92,8 @@
     "practiceInterviews": "Practice job interviews with AI",
     "accountCreatedSuccess": "Account created successfully. Please sign in.",
     "signInFailed": "Sign in Failed. Please try again.",
-    "signedInSuccess": "Signed in successfully."
+    "signedInSuccess": "Signed in successfully.",
+    "invalidEmailOrPassword": "Invalid email or password"
   },
   "ai": {
     "interviewer": "Clara - Interviewer",

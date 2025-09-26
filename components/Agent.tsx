@@ -42,6 +42,38 @@ const Agent = ({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState<string>('');
 
+  // Heuristic: a question is considered answered if there is at least one
+  // meaningful user message between two assistant questions (or before the call ends).
+  function countAnsweredQuestions(conversation: SavedMessage[]) {
+    let inQuestion = false; // we saw an assistant question and are awaiting user reply
+    let userReplied = false; // we saw at least one meaningful user message while inQuestion
+    let answered = 0;
+
+    const isLikelyQuestion = (text: string) => text.trim().endsWith('?');
+    const hasMeaningfulContent = (text: string) => text.trim().length > 1;
+
+    for (const message of conversation) {
+      if (message.role === 'assistant') {
+        if (isLikelyQuestion(message.content)) {
+          // Starting a new question: finalize the previous one if user replied
+          if (inQuestion && userReplied) answered += 1;
+          inQuestion = true;
+          userReplied = false;
+        }
+        // Non-question assistant messages do not change state
+      } else if (message.role === 'user') {
+        if (inQuestion && hasMeaningfulContent(message.content)) {
+          userReplied = true; // count only once until the next assistant question
+        }
+      }
+    }
+
+    // If the conversation ended while still in the same question, count it if user replied
+    if (inQuestion && userReplied) answered += 1;
+
+    return answered;
+  }
+
   useEffect(() => {
     const onCallStart = () => {
       setCallStatus(CallStatus.ACTIVE);
@@ -80,12 +112,35 @@ const Agent = ({
     vapi.on('error', onError);
 
     return () => {
+      // Ensure the ongoing call is stopped if the component unmounts
+      try {
+        vapi.stop();
+      } catch {}
       vapi.off('call-start', onCallStart);
       vapi.off('call-end', onCallEnd);
       vapi.off('message', onMessage);
       vapi.off('speech-start', onSpeechStart);
       vapi.off('speech-end', onSpeechEnd);
       vapi.off('error', onError);
+    };
+  }, []);
+
+  // Stop audio/call when user navigates away (back button, refresh, tab close)
+  useEffect(() => {
+    const stopCall = () => {
+      try {
+        vapi.stop();
+      } catch {}
+    };
+
+    window.addEventListener('beforeunload', stopCall); //  when refreshing or closing the tab/window
+    window.addEventListener('pagehide', stopCall); //  when closing the tab/window
+    window.addEventListener('popstate', stopCall); //  when navigating back or forward
+
+    return () => {
+      window.removeEventListener('beforeunload', stopCall);
+      window.removeEventListener('pagehide', stopCall);
+      window.removeEventListener('popstate', stopCall);
     };
   }, []);
 
@@ -101,6 +156,25 @@ const Agent = ({
         console.error('userId is missing');
         router.push(`/${locale}`);
         return;
+      }
+
+      // Guard: only generate feedback when at least 50% of questions were answered
+      if (type !== 'generate') {
+        const totalQuestions = Array.isArray(questions) ? questions.length : 0;
+        const answeredCount = countAnsweredQuestions(messages);
+        const minRequired = Math.ceil(totalQuestions * 0.5);
+        const meetsThreshold =
+          totalQuestions > 0 && answeredCount >= minRequired;
+
+        if (!meetsThreshold) {
+          console.warn('Skipping feedback: below 50% answered threshold', {
+            totalQuestions,
+            answeredCount,
+            minRequired,
+          });
+          router.push(`/${locale}`);
+          return;
+        }
       }
 
       const { success, feedbackId: id } = await createFeedback({
@@ -122,6 +196,21 @@ const Agent = ({
       if (type === 'generate') {
         router.push(`/${locale}`);
       } else {
+        const totalQuestions = Array.isArray(questions) ? questions.length : 0;
+        const answeredCount = countAnsweredQuestions(messages);
+        const minRequired = Math.ceil(totalQuestions * 0.5);
+        const meetsThreshold =
+          totalQuestions > 0 && answeredCount >= minRequired;
+
+        console.log('Feedback gate check', {
+          totalQuestions,
+          answeredCount,
+          minRequired,
+          meetsThreshold,
+        });
+
+        if (!meetsThreshold) return; // Do not attempt to create feedback
+
         handleGenerateFeedback(messages);
       }
     }
