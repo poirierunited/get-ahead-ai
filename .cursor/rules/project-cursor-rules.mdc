@@ -1,6 +1,6 @@
 ---
 description: Next.js + TypeScript code standards and best practices for building robust, scalable applications with modern UI/UX libraries
-globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.json", "**/*.md"]
+globs: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.json', '**/*.md']
 alwaysApply: true
 ---
 
@@ -104,11 +104,11 @@ Refactor, improve, and handle edge cases during and after implementation.
 
 ## Process
 
-1. **🔍 Deep Dive Analysis** – Understand the problem thoroughly.
-2. **🧱 Planning** – Outline architecture, use `<PLANNING>` tags if needed.
-3. **💻 Implementation** – Build the solution step-by-step, modularly.
-4. **🧼 Review & Optimize** – Refactor and optimize for performance/security.
-5. **✅ Finalization** – Ensure correctness, security, and quality.
+1. **Deep Dive Analysis** – Understand the problem thoroughly.
+2. **Planning** – Outline architecture, use `<PLANNING>` tags if needed.
+3. **Implementation** – Build the solution step-by-step, modularly.
+4. **Review & Optimize** – Refactor and optimize for performance/security.
+5. **Finalization** – Ensure correctness, security, and quality.
 
 ---
 

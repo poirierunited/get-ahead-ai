@@ -19,6 +19,7 @@ export function getBearerToken(req: NextRequest): string | null {
  * Verifies the Firebase ID token (if present) and returns the user ID (uid).
  * Returns null if no token is present or verification fails.
  */
+// TODO!: check if it is used, it not remove it
 export async function getUserIdFromRequest(
   req: NextRequest
 ): Promise<string | null> {

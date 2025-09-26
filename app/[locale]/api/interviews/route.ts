@@ -8,9 +8,15 @@ import {
   TooManyRequestsError,
   BadRequestError,
 } from '@/lib/errors';
-import { generateAndStoreInterview } from '@/lib/services/interview';
+import {
+  generateAndStoreInterview,
+  getInterviewByIdService,
+  getLatestInterviewsService,
+  getInterviewsByUserIdService,
+} from '@/lib/services/interview';
 import { logger } from '@/lib/logger';
 
+// document this function.
 export async function POST(request: NextRequest) {
   try {
     if (isRateLimited(request)) throw new TooManyRequestsError();
@@ -77,9 +83,64 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
-  const locale = pathname.split('/')[1];
-  return NextResponse.json({
-    message: 'Interviews endpoint working, language: ' + locale,
-  });
+  try {
+    const { searchParams, pathname } = request.nextUrl;
+    const id = searchParams.get('id');
+    const userId = searchParams.get('userId');
+    const limit = searchParams.get('limit');
+    const locale = pathname.split('/')[1];
+
+    // Get single interview by ID
+    if (id) {
+      if (!id) {
+        return NextResponse.json(
+          { success: false, error: 'id is required' },
+          { status: 400 }
+        );
+      }
+
+      const interview = await getInterviewByIdService(id);
+      if (!interview) {
+        return NextResponse.json(
+          { success: false, error: 'Interview not found' },
+          { status: 404 }
+        );
+      }
+
+      return NextResponse.json(
+        { success: true, interview, locale },
+        { status: 200 }
+      );
+    }
+
+    // Get latest interviews or user interviews
+    if (userId) {
+      const type = searchParams.get('type');
+
+      if (type === 'user') {
+        // Get user's own interviews
+        const interviews = await getInterviewsByUserIdService(userId);
+        return NextResponse.json(
+          { success: true, interviews, locale },
+          { status: 200 }
+        );
+      } else {
+        // Get latest interviews (excluding user's own)
+        const limitNum = limit ? parseInt(limit, 10) : 20;
+        const interviews = await getLatestInterviewsService(userId, limitNum);
+        return NextResponse.json(
+          { success: true, interviews, locale },
+          { status: 200 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'id or userId is required' },
+      { status: 400 }
+    );
+  } catch (error) {
+    const { status, body } = toHttpResponse(error);
+    return NextResponse.json(body, { status });
+  }
 }

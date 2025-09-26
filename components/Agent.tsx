@@ -8,7 +8,6 @@ import { DynamicLogo } from './DynamicLogo';
 import { cn } from '@/lib/utils';
 import { vapi } from '@/lib/vapi.sdk';
 import { getInterviewerConfig, getTechInterviewWorkflow } from '@/constants';
-import { createFeedback } from '@/lib/actions/general.action';
 import { useParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -177,18 +176,28 @@ const Agent = ({
         }
       }
 
-      const { success, feedbackId: id } = await createFeedback({
-        interviewId: interviewId!,
-        userId: userId,
-        transcript: messages,
-        language: locale,
-      });
+      try {
+        const res = await fetch(`/${locale}/api/feedback`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            interviewId: interviewId!,
+            transcript: messages,
+            userid: userId,
+          }),
+        });
 
-      if (success && id) {
+        const data = await res.json();
+        if (res.ok && data?.success && data?.feedbackId) {
+          router.push(`/${locale}/interview/${interviewId}/feedback`);
+          return;
+        }
+      } catch (err) {
+        console.error('Error saving feedback:', err);
+      }
+
+      {
         router.push(`/${locale}/interview/${interviewId}/feedback`);
-      } else {
-        console.log('Error saving feedback');
-        router.push(`/${locale}`);
       }
     };
 

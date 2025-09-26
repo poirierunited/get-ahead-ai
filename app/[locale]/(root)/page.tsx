@@ -4,10 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import InterviewCard from '@/components/InterviewCard';
 import { getCurrentUser } from '@/lib/actions/auth.action';
-import {
-  getInterviewsByUserId,
-  getLatestInterviews,
-} from '@/lib/actions/general.action';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
@@ -19,10 +15,45 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
   if (!user) {
     redirect(`/${locale}/sign-in`);
   }
-  const [userInterviews, allInterview] = await Promise.all([
-    getInterviewsByUserId(user?.id!),
-    getLatestInterviews({ params: { userId: user?.id!, limit: 20 } }),
-  ]);
+  // Fetch user interviews and latest interviews
+  let userInterviews = [];
+  let allInterview = [];
+
+  try {
+    // Fetch user's own interviews
+    const userResponse = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL
+      }/${locale}/api/interviews?userId=${user?.id!}&type=user`,
+      {
+        cache: 'no-store',
+      }
+    );
+    const userData = await userResponse.json();
+    if (userData.success && userData.interviews) {
+      userInterviews = userData.interviews;
+    }
+  } catch (error) {
+    console.error('Error fetching user interviews:', error);
+  }
+
+  try {
+    // Fetch latest interviews (excluding user's own)
+    const latestResponse = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL
+      }/${locale}/api/interviews?userId=${user?.id!}&limit=20`,
+      {
+        cache: 'no-store',
+      }
+    );
+    const latestData = await latestResponse.json();
+    if (latestData.success && latestData.interviews) {
+      allInterview = latestData.interviews;
+    }
+  } catch (error) {
+    console.error('Error fetching latest interviews:', error);
+  }
 
   const hasPastInterviews = userInterviews?.length! > 0;
   const hasUpcomingInterviews = allInterview?.length! > 0;
@@ -57,7 +88,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
 
         <div className='interviews-section'>
           {hasPastInterviews ? (
-            userInterviews?.map((interview) => (
+            userInterviews?.map((interview: any) => (
               <InterviewCard
                 key={interview.id}
                 userId={user?.id!}
@@ -80,7 +111,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
 
         <div className='interviews-section'>
           {hasUpcomingInterviews ? (
-            allInterview?.map((interview) => (
+            allInterview?.map((interview: any) => (
               <InterviewCard
                 key={interview.id}
                 userId={user?.id!}
