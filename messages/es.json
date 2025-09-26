@@ -50,7 +50,9 @@
       "behavioral": "Conductual",
       "mixed": "Mixta",
       "technical": "Técnica"
-    }
+    },
+    "question": "pregunta",
+    "questions": "preguntas"
   },
   "feedback": {
     "title": "Retroalimentación de la entrevista",

@@ -98,6 +98,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
                 type={interview.type}
                 techstack={interview.techstack}
                 createdAt={interview.createdAt}
+                questionsCount={interview.questions?.length || 0}
               />
             ))
           ) : (
@@ -121,6 +122,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
                 type={interview.type}
                 techstack={interview.techstack}
                 createdAt={interview.createdAt}
+                questionsCount={interview.questions?.length || 0}
               />
             ))
           ) : (

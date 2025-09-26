@@ -50,7 +50,9 @@
       "behavioral": "Behavioral",
       "mixed": "Mixed",
       "technical": "Technical"
-    }
+    },
+    "question": "question",
+    "questions": "questions"
   },
   "feedback": {
     "title": "Feedback on the Interview",

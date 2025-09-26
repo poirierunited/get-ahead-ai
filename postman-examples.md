@@ -1,13 +1,16 @@
 # API Testing Examples
 
-## Generate Interview Questions
+## Interviews API
 
-### Basic Request (with userid in body)
+### Generate Interview Questions
+
+#### Basic Request (with userid in body)
 
 ```bash
-curl -X POST http://localhost:3000/en/api/vapi/generate \
+curl -X POST http://localhost:3000/en/api/interviews \
   -H "Content-Type: application/json" \
   -d '{
+    "title": "Frontend Engineer Interview",
     "role": "Frontend Engineer",
     "level": "Senior",
     "techstack": "React,TypeScript,Next.js",
@@ -17,27 +20,13 @@ curl -X POST http://localhost:3000/en/api/vapi/generate \
   }'
 ```
 
-### With Firebase Auth Token
+#### Spanish Locale
 
 ```bash
-curl -X POST http://localhost:3000/en/api/vapi/generate \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_FIREBASE_ID_TOKEN" \
-  -d '{
-    "role": "Backend Engineer",
-    "level": "Mid-level",
-    "techstack": "Node.js,Express,MongoDB",
-    "type": "behavioral",
-    "amount": 3
-  }'
-```
-
-### Spanish Locale
-
-```bash
-curl -X POST http://localhost:3000/es/api/vapi/generate \
+curl -X POST http://localhost:3000/es/api/interviews \
   -H "Content-Type: application/json" \
   -d '{
+    "title": "Entrevista Full Stack",
     "role": "Full Stack Developer",
     "level": "Junior",
     "techstack": "JavaScript,React,Node.js",
@@ -47,12 +36,13 @@ curl -X POST http://localhost:3000/es/api/vapi/generate \
   }'
 ```
 
-### Invalid Request (should return 400)
+#### Invalid Request (should return 400)
 
 ```bash
-curl -X POST http://localhost:3000/en/api/vapi/generate \
+curl -X POST http://localhost:3000/en/api/interviews \
   -H "Content-Type: application/json" \
   -d '{
+    "title": "",
     "role": "",
     "level": "Senior",
     "techstack": "React",
@@ -61,14 +51,58 @@ curl -X POST http://localhost:3000/en/api/vapi/generate \
   }'
 ```
 
+### Get Interview by ID
+
+```bash
+curl -X GET "http://localhost:3000/en/api/interviews?id=INTERVIEW_ID"
+```
+
+### Get User's Interviews
+
+```bash
+curl -X GET "http://localhost:3000/en/api/interviews?userId=USER_ID&type=user"
+```
+
+### Get Latest Interviews (excluding user's own)
+
+```bash
+curl -X GET "http://localhost:3000/en/api/interviews?userId=USER_ID&limit=20"
+```
+
+## Feedback API
+
+### Generate Feedback
+
+```bash
+curl -X POST http://localhost:3000/en/api/feedback \
+  -H "Content-Type: application/json" \
+  -d '{
+    "interviewId": "INTERVIEW_ID",
+    "userid": "USER_ID",
+    "transcript": [
+      { "role": "assistant", "content": "Tell me about yourself?" },
+      { "role": "user", "content": "I am a frontend developer with 3 years of experience..." },
+      { "role": "assistant", "content": "What is the virtual DOM?" },
+      { "role": "user", "content": "It is a lightweight representation of the DOM..." }
+    ]
+  }'
+```
+
+### Get Feedback by Interview ID
+
+```bash
+curl -X GET "http://localhost:3000/en/api/feedback?interviewId=INTERVIEW_ID&userId=USER_ID"
+```
+
 ### Test Rate Limiting
 
 ```bash
 # Run this multiple times quickly to trigger rate limiting (429)
 for i in {1..10}; do
-  curl -X POST http://localhost:3000/en/api/vapi/generate \
+  curl -X POST http://localhost:3000/en/api/interviews \
     -H "Content-Type: application/json" \
     -d '{
+      "title": "Test Interview",
       "role": "Test Role",
       "level": "Senior",
       "techstack": "Test",
@@ -78,12 +112,6 @@ for i in {1..10}; do
     }'
   echo "Request $i completed"
 done
-```
-
-## Health Check
-
-```bash
-curl -X GET http://localhost:3000/en/api/vapi/generate
 ```
 
 ## Postman Import
@@ -112,14 +140,14 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"role\": \"Frontend Engineer\",\n  \"level\": \"Senior\",\n  \"techstack\": \"React,TypeScript,Next.js\",\n  \"type\": \"technical\",\n  \"amount\": 5,\n  \"userid\": \"test-user-123\"\n}"
+          "raw": "{\n  \"title\": \"Frontend Engineer Interview\",\n  \"role\": \"Frontend Engineer\",\n  \"level\": \"Senior\",\n  \"techstack\": \"React,TypeScript,Next.js\",\n  \"type\": \"technical\",\n  \"amount\": 5,\n  \"userid\": \"test-user-123\"\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/en/api/vapi/generate",
+          "raw": "http://localhost:3000/en/api/interviews",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["en", "api", "vapi", "generate"]
+          "path": ["en", "api", "interviews"]
         }
       }
     },
@@ -135,19 +163,84 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"role\": \"Desarrollador Full Stack\",\n  \"level\": \"Junior\",\n  \"techstack\": \"JavaScript,React,Node.js\",\n  \"type\": \"technical\",\n  \"amount\": 4,\n  \"userid\": \"test-user-es\"\n}"
+          "raw": "{\n  \"title\": \"Entrevista Full Stack\",\n  \"role\": \"Desarrollador Full Stack\",\n  \"level\": \"Junior\",\n  \"techstack\": \"JavaScript,React,Node.js\",\n  \"type\": \"technical\",\n  \"amount\": 4,\n  \"userid\": \"test-user-es\"\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/es/api/vapi/generate",
+          "raw": "http://localhost:3000/es/api/interviews",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["es", "api", "vapi", "generate"]
+          "path": ["es", "api", "interviews"]
         }
       }
     },
     {
-      "name": "Generate Interview - Invalid",
+      "name": "Get Interview by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/en/api/interviews?id=INTERVIEW_ID",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["en", "api", "interviews"],
+          "query": [
+            {
+              "key": "id",
+              "value": "INTERVIEW_ID"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get User Interviews",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/en/api/interviews?userId=USER_ID&type=user",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["en", "api", "interviews"],
+          "query": [
+            {
+              "key": "userId",
+              "value": "USER_ID"
+            },
+            {
+              "key": "type",
+              "value": "user"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Latest Interviews",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/en/api/interviews?userId=USER_ID&limit=20",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["en", "api", "interviews"],
+          "query": [
+            {
+              "key": "userId",
+              "value": "USER_ID"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Generate Feedback",
       "request": {
         "method": "POST",
         "header": [
@@ -158,27 +251,37 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"role\": \"\",\n  \"level\": \"Senior\",\n  \"techstack\": \"React\",\n  \"type\": \"technical\",\n  \"amount\": 100\n}"
+          "raw": "{\n  \"interviewId\": \"INTERVIEW_ID\",\n  \"userid\": \"USER_ID\",\n  \"transcript\": [\n    { \"role\": \"assistant\", \"content\": \"Tell me about yourself?\" },\n    { \"role\": \"user\", \"content\": \"I am a frontend developer with 3 years of experience...\" }\n  ]\n}"
         },
         "url": {
-          "raw": "http://localhost:3000/en/api/vapi/generate",
+          "raw": "http://localhost:3000/en/api/feedback",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["en", "api", "vapi", "generate"]
+          "path": ["en", "api", "feedback"]
         }
       }
     },
     {
-      "name": "Health Check",
+      "name": "Get Feedback",
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:3000/en/api/vapi/generate",
+          "raw": "http://localhost:3000/en/api/feedback?interviewId=INTERVIEW_ID&userId=USER_ID",
           "protocol": "http",
           "host": ["localhost"],
           "port": "3000",
-          "path": ["en", "api", "vapi", "generate"]
+          "path": ["en", "api", "feedback"],
+          "query": [
+            {
+              "key": "interviewId",
+              "value": "INTERVIEW_ID"
+            },
+            {
+              "key": "userId",
+              "value": "USER_ID"
+            }
+          ]
         }
       }
     }
@@ -188,7 +291,7 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
 
 ## Expected Responses
 
-### Success Response (200)
+### Generate Interview Success (200)
 
 ```json
 {
@@ -199,6 +302,7 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
     "How would you optimize a React application for performance?"
   ],
   "interview": {
+    "title": "Frontend Engineer Interview",
     "role": "Frontend Engineer",
     "type": "technical",
     "level": "Senior",
@@ -207,6 +311,87 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
     "userId": "test-user-123",
     "finalized": true,
     "coverImage": "path/to/cover.png",
+    "createdAt": "2024-01-15T10:30:00.000Z"
+  },
+  "documentId": "generated-interview-id"
+}
+```
+
+### Get Interview Success (200)
+
+```json
+{
+  "success": true,
+  "interview": {
+    "id": "interview-id",
+    "title": "Frontend Engineer Interview",
+    "role": "Frontend Engineer",
+    "type": "technical",
+    "level": "Senior",
+    "techstack": ["React", "TypeScript", "Next.js"],
+    "questions": [...],
+    "userId": "test-user-123",
+    "finalized": true,
+    "coverImage": "path/to/cover.png",
+    "createdAt": "2024-01-15T10:30:00.000Z"
+  },
+  "locale": "en"
+}
+```
+
+### Get Interviews List Success (200)
+
+```json
+{
+  "success": true,
+  "interviews": [
+    {
+      "id": "interview-1",
+      "title": "Frontend Engineer Interview",
+      "role": "Frontend Engineer",
+      "type": "technical",
+      "level": "Senior",
+      "techstack": ["React", "TypeScript", "Next.js"],
+      "questions": [...],
+      "userId": "test-user-123",
+      "finalized": true,
+      "coverImage": "path/to/cover.png",
+      "createdAt": "2024-01-15T10:30:00.000Z"
+    }
+  ],
+  "locale": "en"
+}
+```
+
+### Generate Feedback Success (200)
+
+```json
+{
+  "success": true,
+  "feedbackId": "generated-feedback-id"
+}
+```
+
+### Get Feedback Success (200)
+
+```json
+{
+  "success": true,
+  "feedback": {
+    "id": "feedback-id",
+    "interviewId": "interview-id",
+    "userId": "user-id",
+    "totalScore": 85,
+    "categoryScores": [
+      {
+        "name": "communication",
+        "score": 90,
+        "comment": "Excellent communication skills..."
+      }
+    ],
+    "strengths": ["Strong technical knowledge", "Clear explanations"],
+    "areasForImprovement": ["More specific examples", "Better time management"],
+    "finalAssessment": "Overall strong performance...",
     "createdAt": "2024-01-15T10:30:00.000Z"
   }
 }
@@ -217,7 +402,17 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
 ```json
 {
   "success": false,
-  "error": "Invalid request body"
+  "error": "Invalid request body",
+  "message": "title: title is required; amount: Number must be less than or equal to 5"
+}
+```
+
+### Not Found Error (404)
+
+```json
+{
+  "success": false,
+  "error": "Interview not found"
 }
 ```
 
@@ -235,7 +430,8 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
 ```json
 {
   "success": false,
-  "error": "Failed to generate questions"
+  "error": "Internal Server Error",
+  "message": "Error details..."
 }
 ```
 
@@ -246,13 +442,28 @@ curl -X GET http://localhost:3000/en/api/vapi/generate
 3. **Test validation** with the invalid request
 4. **Test rate limiting** by running multiple requests quickly
 5. **Test different locales** (en/es) to verify i18n
-6. **Optional**: Test with Firebase auth token if you have one
+6. **Test all endpoints** to verify the new architecture
+
+## API Endpoints Summary
+
+### Interviews API (`/[locale]/api/interviews`)
+
+- `POST` - Generate interview questions
+- `GET ?id=...` - Get interview by ID
+- `GET ?userId=...&type=user` - Get user's interviews
+- `GET ?userId=...&limit=...` - Get latest interviews
+
+### Feedback API (`/[locale]/api/feedback`)
+
+- `POST` - Generate feedback from transcript
+- `GET ?interviewId=...&userId=...` - Get feedback by interview ID
 
 The API now includes:
 
-- ✅ Input validation with Zod
+- ✅ RESTful architecture with proper HTTP methods
+- ✅ Input validation with Zod schemas
 - ✅ Rate limiting (5 requests per minute per IP)
-- ✅ Server-side auth derivation (optional)
-- ✅ Proper error handling
-- ✅ Co-located unit tests
-- ✅ JSDoc documentation
+- ✅ Proper error handling and status codes
+- ✅ Multi-language support (en/es)
+- ✅ Clean separation of concerns (UI → API → Service → Repository)
+- ✅ Comprehensive documentation

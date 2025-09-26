@@ -21,6 +21,7 @@ interface InterviewCardProps {
   type: string;
   techstack: string[];
   createdAt: string;
+  questionsCount?: number;
 }
 
 const InterviewCard = ({
@@ -31,6 +32,7 @@ const InterviewCard = ({
   type,
   techstack,
   createdAt,
+  questionsCount,
 }: InterviewCardProps) => {
   const t = useTranslations();
   const locale = useLocale();
@@ -128,8 +130,8 @@ const InterviewCard = ({
           <h3 className='mt-3'>{title}</h3>
           <p className='text-sm text-muted-foreground capitalize'>{role}</p>
 
-          {/* Date & Score */}
-          <div className='flex flex-row gap-5 mt-3'>
+          {/* Date, Questions Count & Score */}
+          <div className='flex flex-row gap-4 mt-3 flex-wrap'>
             <div className='flex flex-row gap-2'>
               <Image
                 src='/calendar.svg'
@@ -139,6 +141,18 @@ const InterviewCard = ({
               />
               <p>{formattedDate}</p>
             </div>
+
+            {questionsCount && (
+              <div className='flex flex-row gap-2 items-center'>
+                <Image src='/file.svg' width={22} height={22} alt='questions' />
+                <p>
+                  {questionsCount}{' '}
+                  {questionsCount === 1
+                    ? t('interview.question')
+                    : t('interview.questions')}
+                </p>
+              </div>
+            )}
 
             <div className='flex flex-row gap-2 items-center'>
               <Image src='/star.svg' width={22} height={22} alt='star' />

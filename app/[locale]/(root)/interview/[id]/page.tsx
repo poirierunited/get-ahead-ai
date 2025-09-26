@@ -102,9 +102,9 @@ const InterviewDetails = async ({
         userName={user.name}
         userId={user.id}
         interviewId={id}
-        type='interview'
         questions={interview.questions}
         feedbackId={feedback?.id}
+        interviewType={interview.type as 'technical' | 'behavioral' | 'mixed'}
       />
     </>
   );
