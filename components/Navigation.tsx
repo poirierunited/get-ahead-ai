@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
-import { LanguageSelector } from './LanguageSelector';
 import { ThemeToggle } from './ThemeToggle';
 import { DynamicLogo } from './DynamicLogo';
 import { useEffect, useState } from 'react';
@@ -53,7 +52,6 @@ export function Navigation() {
         <h2 className='header-title'>Project Clara</h2>
       </Link>
       <div className='flex items-center gap-3'>
-        <LanguageSelector />
         <ThemeToggle />
         <SignOutButton />
       </div>
