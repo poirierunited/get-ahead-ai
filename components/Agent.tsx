@@ -17,6 +17,7 @@ enum CallStatus {
   ACTIVE = 'ACTIVE',
   FINISHED = 'FINISHED',
   CANCELLED = 'CANCELLED',
+  GENERATING_FEEDBACK = 'GENERATING_FEEDBACK',
 }
 
 interface SavedMessage {
@@ -191,6 +192,9 @@ const Agent = ({
         return;
       }
 
+      // Set status to generating feedback before making the API call
+      setCallStatus(CallStatus.GENERATING_FEEDBACK);
+
       try {
         const res = await fetch(`/${locale}/api/feedback`, {
           method: 'POST',
@@ -333,11 +337,17 @@ const Agent = ({
 
       <div className='w-full flex justify-center'>
         {callStatus !== CallStatus.ACTIVE ? (
-          <button className='relative btn-call' onClick={() => handleCall()}>
+          <button
+            className='relative btn-call'
+            onClick={() => handleCall()}
+            disabled={callStatus === CallStatus.GENERATING_FEEDBACK}
+          >
             <span
               className={cn(
                 'absolute animate-ping rounded-full opacity-75',
-                callStatus !== CallStatus.CONNECTING && 'hidden'
+                callStatus !== CallStatus.CONNECTING &&
+                  callStatus !== CallStatus.GENERATING_FEEDBACK &&
+                  'hidden'
               )}
             />
 
@@ -345,6 +355,8 @@ const Agent = ({
               {callStatus === CallStatus.INACTIVE ||
               callStatus === CallStatus.FINISHED
                 ? t('interview.call')
+                : callStatus === CallStatus.GENERATING_FEEDBACK
+                ? t('interview.generatingFeedback')
                 : '. . .'}
             </span>
           </button>

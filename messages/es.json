@@ -41,6 +41,7 @@
     "connecting": "Conectando...",
     "active": "Entrevista en Progreso",
     "finished": "Entrevista Finalizada",
+    "generatingFeedback": "Generando Retroalimentación...",
     "call": "Llamar",
     "disconnect": "Desconectar",
     "notTakenYet": "Aún no has tomado esta entrevista. Tómala ahora para mejorar tus habilidades.",
