@@ -30,7 +30,8 @@ export async function getInterviewById(
 }
 
 /**
- * Fetch feedback by interview ID and user ID.
+ * Fetch the most recent feedback by interview ID and user ID.
+ * Optimized for list/card views where only the latest feedback is needed.
  */
 export async function getFeedbackByInterviewId(
   interviewId: string,
@@ -40,6 +41,7 @@ export async function getFeedbackByInterviewId(
     .collection('feedback')
     .where('interviewId', '==', interviewId)
     .where('userId', '==', userId)
+    .orderBy('createdAt', 'desc')
     .limit(1)
     .get();
 
@@ -47,6 +49,28 @@ export async function getFeedbackByInterviewId(
 
   const feedbackDoc = querySnapshot.docs[0];
   return { id: feedbackDoc.id, ...feedbackDoc.data() } as Feedback;
+}
+
+/**
+ * Fetch all feedbacks by interview ID and user ID, ordered by creation date (newest first).
+ */
+export async function getAllFeedbacksByInterviewId(
+  interviewId: string,
+  userId: string
+): Promise<Feedback[]> {
+  const querySnapshot = await db
+    .collection('feedback')
+    .where('interviewId', '==', interviewId)
+    .where('userId', '==', userId)
+    .orderBy('createdAt', 'desc')
+    .get();
+
+  if (querySnapshot.empty) return [];
+
+  return querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Feedback[];
 }
 
 /**

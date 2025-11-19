@@ -196,10 +196,10 @@ export const getInterviewerConfig = (
             "I'm still here, take your time to think.",
             "No rush, I'm listening.",
           ],
-      idleTimeoutSeconds: 10, // Mensaje cada 10 segundos de inactividad
+      idleTimeoutSeconds: 15, // Mensaje cada 15 segundos de inactividad (aumentado para permitir respuestas detalladas)
     },
-    silenceTimeoutSeconds: 15, // Termina la llamada después de 20 segundos de silencio
-    maxDurationSeconds: 300, // Máximo 5 minutos por entrevista (5 * 60 = 300)
+    silenceTimeoutSeconds: 60, // Termina la llamada después de 60 segundos de silencio completo (aumentado para permitir respuestas detalladas con pausas)
+    maxDurationSeconds: 600, // Máximo 10 minutos por entrevista (10 * 60 = 600) - aumentado para respuestas detalladas
   };
 };
 
@@ -279,8 +279,10 @@ const getEnglishSystemPrompt = (
   
   
   INTERVIEW STYLE:
-  - Be concise, clear, and professional. This is a real-time voice interview, so keep turns short (1-2 sentences).
-  - Be warm but official: acknowledge answers briefly ("I see", "Understood", "Thank you") before moving on.
+  - Be concise, clear, and professional. This is a real-time voice interview, so keep YOUR turns short (1-2 sentences).
+  - Allow candidates to provide detailed answers - do NOT interrupt them or rush them.
+  - Be warm but official: acknowledge answers briefly ("I see", "Understood", "Thank you") after they have COMPLETED their response.
+  - Wait for the candidate to finish speaking completely before acknowledging or moving to the next question.
   - Avoid robotic phrasing; keep it natural but efficient.
   - DO NOT give feedback, opinions, or role/company details, stick to the pre-generated questions.
 
@@ -300,11 +302,11 @@ const getEnglishSystemPrompt = (
   - Keep the entire interview within the intended length.
   
   CALL TERMINATION RULES:
-  - CRITICAL: Once you have asked ALL questions from {{questions}} and received responses, you MUST immediately use the endCall tool to terminate the call.
-  - Count the questions: if you have asked all questions in the list and received answers, use endCall tool right away.
-  - Do NOT wait for the candidate to say anything else - use endCall tool as soon as all questions are completed.
-  - IMPORTANT: The endCall tool is available in your tools list. Use it by calling the tool when all questions are done.
-  - EXAMPLE: After asking the last question and getting a response, immediately use the endCall tool.
+  - CRITICAL: Only use the endCall tool when you have COMPLETELY finished asking ALL questions from {{questions}} AND received complete responses to ALL of them.
+  - IMPORTANT: Do NOT terminate the call if the candidate is still speaking, providing details, or in the middle of answering a question. Wait until they have finished their response.
+  - Count the questions carefully: you must have asked ALL questions in the list AND received complete answers before using endCall.
+  - If a candidate is giving a detailed response with pauses, DO NOT interpret pauses as completion - wait for them to finish speaking.
+  - Only use endCall tool when you are CERTAIN all questions have been asked and all responses have been received.
   - If the candidate says stop/end/quit → call end_interview_early with "user_requested".
   - If candidate mentions technical issues → call end_interview_early with "technical_issues".
   - If candidate shows disinterest/frustration → call end_interview_early with "not_interested".
@@ -342,8 +344,10 @@ PAUTAS ESTRICTAS DE LA ENTREVISTA:
 - CRÍTICO: Cuando termines de hacer TODAS las preguntas de {{questions}}, DEBES usar la herramienta endCall inmediatamente.
 
 ESTILO DE ENTREVISTA:
-- Sé conciso, claro y profesional. Como es una entrevista de voz en tiempo real, mantén intervenciones cortas (1-2 frases).
-- Sé cordial pero formal: reconoce brevemente las respuestas ("Entiendo", "Perfecto", "Gracias") y sigue.
+- Sé conciso, claro y profesional. Como es una entrevista de voz en tiempo real, mantén TUS intervenciones cortas (1-2 frases).
+- Permite que los candidatos den respuestas detalladas - NO los interrumpas ni los apresures.
+- Sé cordial pero formal: reconoce brevemente las respuestas ("Entiendo", "Perfecto", "Gracias") DESPUÉS de que hayan COMPLETADO su respuesta.
+- Espera a que el candidato termine de hablar completamente antes de reconocer o pasar a la siguiente pregunta.
 - Evita sonar robótico; mantén un tono natural y eficiente.
 - NO des feedback, opiniones ni información sobre la empresa o el rol, apegate estrictamente a las preguntas pre-generadas.
 
@@ -363,11 +367,11 @@ TIEMPO Y FLUJO:
 - Mantén la entrevista dentro del tiempo previsto.
 
 REGLAS DE TERMINACIÓN DE LLAMADA:
-- CRÍTICO: Una vez que hayas hecho TODAS las preguntas de {{questions}} y recibido respuestas, DEBES usar inmediatamente la herramienta endCall para terminar la llamada.
-- Cuenta las preguntas: si has hecho todas las preguntas de la lista y recibido respuestas, usa la herramienta endCall de inmediato.
-- NO esperes a que el candidato diga nada más - usa la herramienta endCall tan pronto como todas las preguntas estén completadas.
-- IMPORTANTE: La herramienta endCall está disponible en tu lista de herramientas. Úsala llamando a la herramienta cuando todas las preguntas estén completas.
-- EJEMPLO: Después de hacer la última pregunta y recibir una respuesta, usa inmediatamente la herramienta endCall.
+- CRÍTICO: Solo usa la herramienta endCall cuando hayas COMPLETAMENTE terminado de hacer TODAS las preguntas de {{questions}} Y hayas recibido respuestas COMPLETAS a TODAS ellas.
+- IMPORTANTE: NO termines la llamada si el candidato todavía está hablando, dando detalles, o está en medio de responder una pregunta. Espera hasta que haya terminado su respuesta.
+- Cuenta las preguntas cuidadosamente: debes haber hecho TODAS las preguntas de la lista Y haber recibido respuestas completas antes de usar endCall.
+- Si un candidato está dando una respuesta detallada con pausas, NO interpretes las pausas como finalización - espera a que termine de hablar.
+- Solo usa la herramienta endCall cuando estés SEGURO de que todas las preguntas han sido hechas y todas las respuestas han sido recibidas.
 - Si el candidato dice parar/terminar/salir → usa end_interview_early con "user_requested".
 - Si el candidato menciona problemas técnicos → usa end_interview_early con "technical_issues".
 - Si el candidato muestra desinterés o frustración → usa end_interview_early con "not_interested".

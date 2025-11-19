@@ -74,7 +74,13 @@
       "problemSolving": "Problem Solving",
       "culturalFit": "Cultural Fit",
       "confidenceClarity": "Confidence and Clarity"
-    }
+    },
+    "attempt": "Attempt",
+    "latest": "Latest",
+    "more": "more",
+    "allFeedbacks": "All Feedback Attempts",
+    "noFeedbacks": "No feedback available yet. Complete an interview to see your feedback here.",
+    "backToHistory": "Back to Feedback History"
   },
   "auth": {
     "email": "Email",

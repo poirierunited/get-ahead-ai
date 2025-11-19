@@ -15,44 +15,45 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
   if (!user) {
     redirect(`/${locale}/sign-in`);
   }
-  // Fetch user interviews and latest interviews
+  // Fetch user interviews and latest interviews in parallel
   let userInterviews = [];
   let allInterview = [];
 
+  // Use Promise.all to fetch both in parallel and avoid duplicate requests
   try {
-    // Fetch user's own interviews
-    const userResponse = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_BASE_URL
-      }/${locale}/api/interviews?userId=${user?.id!}&type=user`,
-      {
-        cache: 'no-store',
-      }
-    );
-    const userData = await userResponse.json();
+    const [userResponse, latestResponse] = await Promise.all([
+      fetch(
+        `${
+          process.env.NEXT_PUBLIC_BASE_URL
+        }/${locale}/api/interviews?userId=${user?.id!}&type=user`,
+        {
+          cache: 'no-store',
+        }
+      ),
+      fetch(
+        `${
+          process.env.NEXT_PUBLIC_BASE_URL
+        }/${locale}/api/interviews?userId=${user?.id!}&limit=20`,
+        {
+          cache: 'no-store',
+        }
+      ),
+    ]);
+
+    const [userData, latestData] = await Promise.all([
+      userResponse.json(),
+      latestResponse.json(),
+    ]);
+
     if (userData.success && userData.interviews) {
       userInterviews = userData.interviews;
     }
-  } catch (error) {
-    console.error('Error fetching user interviews:', error);
-  }
 
-  try {
-    // Fetch latest interviews (excluding user's own)
-    const latestResponse = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_BASE_URL
-      }/${locale}/api/interviews?userId=${user?.id!}&limit=20`,
-      {
-        cache: 'no-store',
-      }
-    );
-    const latestData = await latestResponse.json();
     if (latestData.success && latestData.interviews) {
       allInterview = latestData.interviews;
     }
   } catch (error) {
-    console.error('Error fetching latest interviews:', error);
+    console.error('Error fetching interviews:', error);
   }
 
   const hasPastInterviews = userInterviews?.length! > 0;

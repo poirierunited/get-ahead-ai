@@ -25,7 +25,7 @@
     "retakeInterview": "Repetir Entrevista"
   },
   "home": {
-    "title": "Prepárate para Entrevistas con IA: Práctica y Retroalimentación",
+    "title": "Prepárate para Entrevistas con IA: Practica y recibe retroalimentación",
     "subtitle": "Practica preguntas reales de entrevista y obtén retroalimentación instantánea",
     "createInterview": "Crear una nueva entrevista",
     "createFirstInterview": "Crea tu primera entrevista",
@@ -74,7 +74,13 @@
       "problemSolving": "Resolución de Problemas",
       "culturalFit": "Ajuste Cultural",
       "confidenceClarity": "Confianza y Claridad"
-    }
+    },
+    "attempt": "Intento",
+    "latest": "Más Reciente",
+    "more": "más",
+    "allFeedbacks": "Todos los Intentos de Retroalimentación",
+    "noFeedbacks": "Aún no hay retroalimentación disponible. Completa una entrevista para ver tu retroalimentación aquí.",
+    "backToHistory": "Volver al Historial de Retroalimentación"
   },
   "auth": {
     "email": "Correo Electrónico",

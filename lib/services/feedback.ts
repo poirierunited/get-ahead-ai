@@ -6,7 +6,10 @@ import { google } from '@ai-sdk/google';
 import { feedbackSchema as feedbackZod } from '@/constants';
 import { savedMessageSchema } from '@/lib/schemas/feedback';
 import { BadRequestError } from '@/lib/errors';
-import { getFeedbackByInterviewId as repoGetFeedbackByInterviewId } from '@/lib/repositories/interviews';
+import {
+  getFeedbackByInterviewId as repoGetFeedbackByInterviewId,
+  getAllFeedbacksByInterviewId as repoGetAllFeedbacksByInterviewId,
+} from '@/lib/repositories/interviews';
 
 interface GenerateFeedbackServiceParams {
   interviewId: string;
@@ -71,11 +74,22 @@ export async function generateAndStoreFeedbackService(
 }
 
 /**
- * Get feedback by interview ID and user ID.
+ * Get the most recent feedback by interview ID and user ID.
+ * Optimized for list/card views where only the latest score is needed.
  */
 export async function getFeedbackByInterviewIdService(
   interviewId: string,
   userId: string
 ) {
   return repoGetFeedbackByInterviewId(interviewId, userId);
+}
+
+/**
+ * Get all feedbacks by interview ID and user ID, ordered by creation date (newest first).
+ */
+export async function getAllFeedbacksByInterviewIdService(
+  interviewId: string,
+  userId: string
+): Promise<Feedback[]> {
+  return repoGetAllFeedbacksByInterviewId(interviewId, userId);
 }

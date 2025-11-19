@@ -1,10 +1,9 @@
-import dayjs from 'dayjs';
 import Link from 'next/link';
-import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 import { Button } from '@/components/ui/button';
+import { FeedbackCard } from '@/components/FeedbackCard';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 
@@ -39,8 +38,8 @@ const Feedback = async ({
     redirect(`/${locale}`);
   }
 
-  // Fetch feedback from API
-  let feedback = null;
+  // Fetch all feedbacks from API
+  let feedbacks: Feedback[] = [];
   try {
     const response = await fetch(
       `${
@@ -51,85 +50,74 @@ const Feedback = async ({
       }
     );
     const data = await response.json();
-    if (data.success && data.feedback) {
-      feedback = data.feedback;
+    console.log('Feedback API response:', {
+      success: data.success,
+      feedbacks: data.feedbacks,
+      count: data.count,
+    });
+    if (data.success && data.feedbacks && Array.isArray(data.feedbacks)) {
+      feedbacks = data.feedbacks;
+      console.log('Feedbacks loaded:', feedbacks.length);
+    } else {
+      console.warn('No feedbacks found or invalid response:', data);
     }
   } catch (error) {
-    console.error('Error fetching feedback:', error);
+    console.error('Error fetching feedbacks:', error);
   }
 
   return (
     <section className='section-feedback'>
-      <div className='flex flex-row justify-center'>
+      <div className='flex flex-row justify-center mb-6'>
         <h1 className='text-4xl font-semibold'>
           {t('feedback.title')} -{' '}
           <span className='capitalize'>{interview.role}</span>
         </h1>
       </div>
 
-      <div className='flex flex-row justify-center '>
-        <div className='flex flex-row gap-5'>
-          {/* Overall Impression */}
-          <div className='flex flex-row gap-2 items-center'>
-            <Image src='/star.svg' width={22} height={22} alt='star' />
-            <p>
-              {t('feedback.overallImpression')}:{' '}
-              <span className='text-primary-200 font-bold'>
-                {feedback?.totalScore}
-              </span>
-              /100
-            </p>
-          </div>
-
-          {/* Date */}
-          <div className='flex flex-row gap-2'>
-            <Image src='/calendar.svg' width={22} height={22} alt='calendar' />
-            <p>
-              {feedback?.createdAt
-                ? dayjs(feedback.createdAt).format('MMM D, YYYY h:mm A')
-                : 'N/A'}
-            </p>
-          </div>
+      {feedbacks.length === 0 ? (
+        <div className='flex flex-col items-center justify-center py-12 text-center'>
+          <p className='text-lg text-gray-500 mb-4'>
+            {t('feedback.noFeedbacks')}
+          </p>
+          <Button className='btn-primary'>
+            <Link
+              href={`/${locale}/interview/${id}`}
+              className='flex items-center justify-center gap-2'
+            >
+              <RotateCcw className='h-4 w-4' />
+              {t('navigation.retakeInterview')}
+            </Link>
+          </Button>
         </div>
-      </div>
-
-      <hr />
-
-      <p>{feedback?.finalAssessment}</p>
-
-      {/* Interview Breakdown */}
-      <div className='flex flex-col gap-4'>
-        <h2>{t('feedback.breakdown')}:</h2>
-        {feedback?.categoryScores?.map((category: any, index: number) => (
-          <div key={index}>
-            <p className='font-bold'>
-              {index + 1}. {t(`feedback.categories.${category.name}`)} (
-              {category.score}/100)
+      ) : (
+        <>
+          <div className='mb-6'>
+            <h2 className='text-2xl font-semibold mb-2'>
+              {t('feedback.allFeedbacks')}
+            </h2>
+            <p className='text-gray-600'>
+              {feedbacks.length}{' '}
+              {feedbacks.length === 1
+                ? t('feedback.attempt')
+                : t('feedback.attempt') + 's'}
             </p>
-            <p>{category.comment}</p>
           </div>
-        ))}
-      </div>
 
-      <div className='flex flex-col gap-3'>
-        <h3>{t('feedback.strengths')}</h3>
-        <ul>
-          {feedback?.strengths?.map((strength: string, index: number) => (
-            <li key={index}>{strength}</li>
-          ))}
-        </ul>
-      </div>
+          <div className='flex flex-col gap-6'>
+            {feedbacks.map((feedback, index) => (
+              <FeedbackCard
+                key={feedback.id}
+                feedback={feedback}
+                index={index}
+                isLatest={index === 0}
+                interviewId={id}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
-      <div className='flex flex-col gap-3'>
-        <h3>{t('feedback.areasForImprovement')}</h3>
-        <ul>
-          {feedback?.areasForImprovement?.map((area: string, index: number) => (
-            <li key={index}>{area}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className='buttons'>
+      <div className='buttons mt-8'>
         <Button className='btn-secondary flex-1'>
           <Link
             href={`/${locale}`}

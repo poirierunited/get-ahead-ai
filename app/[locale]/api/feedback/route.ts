@@ -10,6 +10,7 @@ import { generateFeedbackSchema } from '@/lib/schemas/feedback';
 import {
   generateAndStoreFeedbackService,
   getFeedbackByInterviewIdService,
+  getAllFeedbacksByInterviewIdService,
 } from '@/lib/services/feedback';
 import { logger } from '@/lib/logger';
 
@@ -65,6 +66,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl;
     const interviewId = searchParams.get('interviewId');
     const userId = searchParams.get('userId');
+    const latest = searchParams.get('latest') === 'true';
 
     if (!interviewId || !userId) {
       return NextResponse.json(
@@ -73,9 +75,29 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const feedback = await getFeedbackByInterviewIdService(interviewId, userId);
+    // If latest=true, return only the most recent feedback (optimized for cards/list views)
+    if (latest) {
+      const feedback = await getFeedbackByInterviewIdService(
+        interviewId,
+        userId
+      );
 
-    return NextResponse.json({ success: true, feedback }, { status: 200 });
+      return NextResponse.json(
+        { success: true, feedback, latest: true },
+        { status: 200 }
+      );
+    }
+
+    // Otherwise, return all feedbacks (for detail pages)
+    const feedbacks = await getAllFeedbacksByInterviewIdService(
+      interviewId,
+      userId
+    );
+
+    return NextResponse.json(
+      { success: true, feedbacks, count: feedbacks.length },
+      { status: 200 }
+    );
   } catch (error) {
     if (error instanceof Error) {
       logger.error('get_feedback_error', { message: error.message });
