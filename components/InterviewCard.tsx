@@ -6,7 +6,7 @@ import 'dayjs/locale/en';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { Button } from './ui/button';
 import DisplayTechIcons from './DisplayTechIcons';
@@ -38,29 +38,36 @@ const InterviewCard = ({
   const locale = useLocale();
   const [feedback, setFeedback] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
+  const hasFetchedRef = useRef(false); // Prevent duplicate requests in React Strict Mode
 
   useEffect(() => {
     setMounted(true);
 
-    // Fetch feedback data on client side
+    // Fetch only the latest feedback for the card (optimized query)
+    // Use ref to prevent duplicate requests in React Strict Mode (development)
+    if (hasFetchedRef.current) return;
+
     const fetchFeedback = async () => {
-      if (userId && interviewId) {
+      if (userId && interviewId && !hasFetchedRef.current) {
+        hasFetchedRef.current = true; // Mark as fetched before making request
         try {
           const response = await fetch(
-            `/${locale}/api/feedback?interviewId=${interviewId}&userId=${userId}`
+            `/${locale}/api/feedback?interviewId=${interviewId}&userId=${userId}&latest=true`
           );
           const data = await response.json();
+          // API returns single feedback when latest=true
           if (data.success && data.feedback) {
             setFeedback(data.feedback);
           }
         } catch (error) {
           console.error('Error fetching feedback:', error);
+          hasFetchedRef.current = false; // Reset on error to allow retry
         }
       }
     };
 
     fetchFeedback();
-  }, [userId, interviewId]);
+  }, [userId, interviewId, locale]);
 
   // Prevent hydration mismatch
   if (!mounted) {
