@@ -41,6 +41,7 @@ const FeedbackDetail = async ({
 
   // Fetch all feedbacks to find the specific one
   let feedback: Feedback | null = null;
+  let totalAttempts = 0;
   try {
     const response = await fetch(
       `${
@@ -52,7 +53,9 @@ const FeedbackDetail = async ({
     );
     const data = await response.json();
     if (data.success && data.feedbacks && Array.isArray(data.feedbacks)) {
-      feedback = data.feedbacks.find((f: Feedback) => f.id === feedbackId) || null;
+      const feedbacks = data.feedbacks;
+      totalAttempts = feedbacks.length;
+      feedback = feedbacks.find((f: Feedback) => f.id === feedbackId) || null;
     }
   } catch (error) {
     console.error('Error fetching feedbacks:', error);
@@ -72,6 +75,15 @@ const FeedbackDetail = async ({
         </h1>
       </div>
 
+      <div className='flex flex-row justify-center mb-2'>
+        <p className='text-lg text-gray-600 dark:text-gray-300'>
+          <span className='font-semibold'>
+            {t('feedback.attempt')} {feedback.attemptNumber}
+          </span>{' '}
+          {t('feedback.of')} {totalAttempts}
+        </p>
+      </div>
+
       <div className='flex flex-row justify-center mb-6'>
         <div className='flex flex-row gap-5'>
           {/* Overall Impression */}
@@ -89,9 +101,7 @@ const FeedbackDetail = async ({
           {/* Date */}
           <div className='flex flex-row gap-2'>
             <Image src='/calendar.svg' width={22} height={22} alt='calendar' />
-            <p>
-              {dayjs(feedback.createdAt).format('MMM D, YYYY h:mm A')}
-            </p>
+            <p>{dayjs(feedback.createdAt).format('MMM D, YYYY h:mm A')}</p>
           </div>
         </div>
       </div>
@@ -109,7 +119,9 @@ const FeedbackDetail = async ({
               {index + 1}. {t(`feedback.categories.${category.name}`)} (
               {category.score}/100)
             </p>
-            <p className='text-gray-700'>{category.comment}</p>
+            <p className='text-gray-700 dark:text-gray-300'>
+              {category.comment}
+            </p>
           </div>
         ))}
       </div>
@@ -118,7 +130,9 @@ const FeedbackDetail = async ({
         <h3 className='text-xl font-semibold'>{t('feedback.strengths')}</h3>
         <ul className='list-disc list-inside space-y-2'>
           {feedback.strengths?.map((strength: string, index: number) => (
-            <li key={index} className='text-gray-700'>{strength}</li>
+            <li key={index} className='text-gray-700 dark:text-gray-300'>
+              {strength}
+            </li>
           ))}
         </ul>
       </div>
@@ -129,7 +143,9 @@ const FeedbackDetail = async ({
         </h3>
         <ul className='list-disc list-inside space-y-2'>
           {feedback.areasForImprovement?.map((area: string, index: number) => (
-            <li key={index} className='text-gray-700'>{area}</li>
+            <li key={index} className='text-gray-700 dark:text-gray-300'>
+              {area}
+            </li>
           ))}
         </ul>
       </div>
@@ -160,4 +176,3 @@ const FeedbackDetail = async ({
 };
 
 export default FeedbackDetail;
-

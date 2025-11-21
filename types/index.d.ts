@@ -1,6 +1,8 @@
 interface Feedback {
   id: string;
   interviewId: string;
+  userId: string;
+  attemptNumber: number;
   totalScore: number;
   categoryScores: Array<{
     name: string;

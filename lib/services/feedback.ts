@@ -42,6 +42,13 @@ export async function generateAndStoreFeedbackService(
   if (!userId) throw new BadRequestError('userid is required');
   if (!interviewId) throw new BadRequestError('interviewId is required');
 
+  // Calculate attempt number by counting existing feedbacks for this interview and user
+  const existingFeedbacks = await repoGetAllFeedbacksByInterviewId(
+    interviewId,
+    userId
+  );
+  const attemptNumber = existingFeedbacks.length + 1;
+
   const formattedTranscript = transcript
     .map((s) => `- ${s.role}: ${s.content}\n`)
     .join('');
@@ -59,6 +66,7 @@ export async function generateAndStoreFeedbackService(
   const feedback = {
     interviewId,
     userId,
+    attemptNumber,
     totalScore: object.totalScore,
     categoryScores: object.categoryScores,
     strengths: object.strengths,

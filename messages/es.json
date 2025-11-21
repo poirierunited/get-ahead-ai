@@ -56,7 +56,7 @@
     "questions": "preguntas"
   },
   "feedback": {
-    "title": "Retroalimentación de la entrevista",
+    "title": "Feedback de la entrevista",
     "overallImpression": "Puntuación General",
     "breakdown": "Desglose de la Entrevista",
     "communicationSkills": "Habilidades de Comunicación",
@@ -80,7 +80,9 @@
     "more": "más",
     "allFeedbacks": "Todos los Intentos de Retroalimentación",
     "noFeedbacks": "Aún no hay retroalimentación disponible. Completa una entrevista para ver tu retroalimentación aquí.",
-    "backToHistory": "Volver al Historial de Retroalimentación"
+    "backToHistory": "Volver al Historial de Retroalimentación",
+    "totalAttemptsDone": "Total de Intentos Hechos",
+    "of": "de"
   },
   "auth": {
     "email": "Correo Electrónico",

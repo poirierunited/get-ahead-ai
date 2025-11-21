@@ -80,7 +80,9 @@
     "more": "more",
     "allFeedbacks": "All Feedback Attempts",
     "noFeedbacks": "No feedback available yet. Complete an interview to see your feedback here.",
-    "backToHistory": "Back to Feedback History"
+    "backToHistory": "Back to Feedback History",
+    "totalAttemptsDone": "Total Attempts Done",
+    "of": "of"
   },
   "auth": {
     "email": "Email",
