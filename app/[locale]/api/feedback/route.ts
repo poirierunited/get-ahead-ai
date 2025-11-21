@@ -43,8 +43,6 @@ export async function POST(request: NextRequest) {
       language,
     });
 
-    logger.info('generate_feedback_success', { userId: userid, interviewId });
-
     return NextResponse.json(
       {
         success: true,

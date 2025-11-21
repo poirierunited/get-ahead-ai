@@ -58,11 +58,11 @@ export function FeedbackCard({
         <div className='flex flex-row items-center justify-between'>
           <div className='flex flex-row items-center gap-3'>
             <div className='flex items-center justify-center w-10 h-10 rounded-full bg-primary-200/20 text-primary-200 font-bold'>
-              #{index + 1}
+              #{feedback.attemptNumber}
             </div>
             <div>
               <p className='font-semibold text-lg'>
-                {t('feedback.attempt')} {index + 1}
+                {t('feedback.attempt')} {feedback.attemptNumber}
               </p>
               <div className='flex flex-row items-center gap-2 text-sm text-gray-500'>
                 <Image

@@ -49,12 +49,9 @@ const Feedback = async ({
         cache: 'no-store',
       }
     );
+
     const data = await response.json();
-    console.log('Feedback API response:', {
-      success: data.success,
-      feedbacks: data.feedbacks,
-      count: data.count,
-    });
+
     if (data.success && data.feedbacks && Array.isArray(data.feedbacks)) {
       feedbacks = data.feedbacks;
       console.log('Feedbacks loaded:', feedbacks.length);
@@ -96,6 +93,7 @@ const Feedback = async ({
               {t('feedback.allFeedbacks')}
             </h2>
             <p className='text-gray-600'>
+              <b>{t('feedback.totalAttemptsDone')}: </b>
               {feedbacks.length}{' '}
               {feedbacks.length === 1
                 ? t('feedback.attempt')
