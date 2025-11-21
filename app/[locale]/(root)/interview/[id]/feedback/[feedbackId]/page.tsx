@@ -76,7 +76,7 @@ const FeedbackDetail = async ({
       </div>
 
       <div className='flex flex-row justify-center mb-2'>
-        <p className='text-lg text-gray-600'>
+        <p className='text-lg text-gray-600 dark:text-gray-300'>
           <span className='font-semibold'>
             {t('feedback.attempt')} {feedback.attemptNumber}
           </span>{' '}
@@ -119,7 +119,9 @@ const FeedbackDetail = async ({
               {index + 1}. {t(`feedback.categories.${category.name}`)} (
               {category.score}/100)
             </p>
-            <p className='text-gray-700'>{category.comment}</p>
+            <p className='text-gray-700 dark:text-gray-300'>
+              {category.comment}
+            </p>
           </div>
         ))}
       </div>
@@ -128,7 +130,7 @@ const FeedbackDetail = async ({
         <h3 className='text-xl font-semibold'>{t('feedback.strengths')}</h3>
         <ul className='list-disc list-inside space-y-2'>
           {feedback.strengths?.map((strength: string, index: number) => (
-            <li key={index} className='text-gray-700'>
+            <li key={index} className='text-gray-700 dark:text-gray-300'>
               {strength}
             </li>
           ))}
@@ -141,7 +143,7 @@ const FeedbackDetail = async ({
         </h3>
         <ul className='list-disc list-inside space-y-2'>
           {feedback.areasForImprovement?.map((area: string, index: number) => (
-            <li key={index} className='text-gray-700'>
+            <li key={index} className='text-gray-700 dark:text-gray-300'>
               {area}
             </li>
           ))}

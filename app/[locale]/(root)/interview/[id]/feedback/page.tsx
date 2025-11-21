@@ -92,7 +92,7 @@ const Feedback = async ({
             <h2 className='text-2xl font-semibold mb-2'>
               {t('feedback.allFeedbacks')}
             </h2>
-            <p className='text-gray-600'>
+            <p className='text-gray-600 dark:text-gray-300'>
               <b>{t('feedback.totalAttemptsDone')}: </b>
               {feedbacks.length}{' '}
               {feedbacks.length === 1

@@ -34,9 +34,9 @@
   --color-dark-light-400: #6870a6;
   --color-dark-light-600: #4f557d;
   --color-dark-light-800: #24273a;
-  --color-dark-dark-100: #020408;
-  --color-dark-dark-200: #27282f;
-  --color-dark-dark-300: #242633;
+  --color-dark-dark-100: #1c1c1e;
+  --color-dark-dark-200: #2c2c2e;
+  --color-dark-dark-300: #3a3a3c;
 
   --font-mona-sans: 'Mona Sans', sans-serif;
 }
@@ -77,11 +77,11 @@
 }
 
 .dark {
-  --background: oklch(0.15 0.005 90);
+  --background: oklch(0.22 0.005 90);
   --foreground: oklch(0.95 0.005 90);
-  --card: oklch(0.22 0.005 90);
+  --card: oklch(0.25 0.005 90);
   --card-foreground: oklch(0.95 0.005 90);
-  --popover: oklch(0.22 0.005 90);
+  --popover: oklch(0.25 0.005 90);
   --popover-foreground: oklch(0.95 0.005 90);
   --primary: oklch(0.55 0.15 200);
   --primary-foreground: oklch(0.22 0.005 90);
@@ -174,7 +174,7 @@
 
 @layer components {
   .btn-call {
-    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white dark:text-dark-dark-100 transition-colors duration-150 bg-success-100 dark:bg-dark-primary-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 dark:active:bg-dark-primary-200 hover:bg-success-200 dark:hover:bg-dark-primary-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
+    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white dark:text-white transition-colors duration-150 bg-success-100 dark:bg-dark-primary-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 dark:active:bg-dark-primary-200 hover:bg-success-200 dark:hover:bg-dark-primary-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
 
     .span {
       @apply bg-success-100 dark:bg-dark-primary-100 h-[85%] w-[65%];
@@ -182,17 +182,25 @@
   }
 
   .btn-disconnect {
-    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white dark:text-dark-dark-100 transition-colors duration-150 bg-destructive-100 dark:bg-dark-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 dark:active:bg-dark-destructive-200 hover:bg-destructive-200 dark:hover:bg-dark-destructive-200 min-w-28;
+    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white dark:text-white transition-colors duration-150 bg-destructive-100 dark:bg-dark-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 dark:active:bg-dark-destructive-200 hover:bg-destructive-200 dark:hover:bg-dark-destructive-200 min-w-28;
   }
 
   .btn-upload {
     @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md;
   }
   .btn-primary {
-    @apply w-fit bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-100 dark:text-dark-dark-100 dark:hover:bg-dark-primary-200 rounded-full font-bold px-5 cursor-pointer min-h-10 shadow-sm;
+    @apply w-fit bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-100 dark:text-white dark:hover:bg-dark-primary-200 rounded-full font-bold px-5 cursor-pointer min-h-10 shadow-sm;
+
+    a {
+      @apply text-white dark:text-white;
+    }
   }
   .btn-secondary {
     @apply w-fit bg-light-100 text-light-600 hover:bg-light-200 dark:bg-dark-dark-200 dark:text-dark-primary-100 dark:hover:bg-dark-dark-300 rounded-full font-bold px-5 cursor-pointer min-h-10 border border-light-400/20 dark:border-white/10;
+
+    a {
+      @apply text-light-600 dark:text-dark-primary-100;
+    }
   }
 
   .btn-upload {
@@ -219,7 +227,11 @@
     }
 
     .btn {
-      @apply w-full bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-200 dark:text-dark-dark-100 dark:hover:bg-dark-primary-200/80 rounded-full min-h-10 font-bold px-5 cursor-pointer shadow-sm;
+      @apply w-full bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-200 dark:text-white dark:hover:bg-dark-primary-200/80 rounded-full min-h-10 font-bold px-5 cursor-pointer shadow-sm;
+
+      a {
+        @apply text-white dark:text-white;
+      }
     }
   }
 
@@ -342,15 +354,15 @@
 }
 
 @utility dark-gradient {
-  @apply bg-gradient-to-b from-[#f7f6f3] to-[#ffffff] dark:from-[#1A1C20] dark:to-[#08090D];
+  @apply bg-gradient-to-b from-[#f7f6f3] to-[#ffffff] dark:from-[#2C2C2E] dark:to-[#1C1C1E];
 }
 
 @utility border-gradient {
-  @apply bg-gradient-to-b from-[#e3e2e0] to-[#d1d1d0] dark:from-[#4B4D4F] dark:to-[#4B4D4F33];
+  @apply bg-gradient-to-b from-[#e3e2e0] to-[#d1d1d0] dark:from-[#3A3A3C] dark:to-[#3A3A3C80];
 }
 
 @utility blue-gradient-dark {
-  @apply bg-gradient-to-b from-[#f1f1f0] to-[#e9e9e8] dark:from-[#171532] dark:to-[#08090D];
+  @apply bg-gradient-to-b from-[#f1f1f0] to-[#e9e9e8] dark:from-[#2C2C32] dark:to-[#1C1C1E];
 }
 
 @utility blue-gradient {

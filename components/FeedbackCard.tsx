@@ -33,9 +33,11 @@ export function FeedbackCard({
   };
 
   const getScoreBgColor = (score: number) => {
-    if (score >= 80) return 'bg-green-500/10 border-green-500/20';
-    if (score >= 60) return 'bg-yellow-500/10 border-yellow-500/20';
-    return 'bg-red-500/10 border-red-500/20';
+    if (score >= 80)
+      return 'bg-green-500/10 border-green-500/20 dark:bg-green-900/30 dark:border-green-700/40';
+    if (score >= 60)
+      return 'bg-yellow-500/10 border-yellow-500/20 dark:bg-yellow-900/30 dark:border-yellow-700/40';
+    return 'bg-red-500/10 border-red-500/20 dark:bg-red-900/30 dark:border-red-700/40';
   };
 
   return (
@@ -64,7 +66,7 @@ export function FeedbackCard({
               <p className='font-semibold text-lg'>
                 {t('feedback.attempt')} {feedback.attemptNumber}
               </p>
-              <div className='flex flex-row items-center gap-2 text-sm text-gray-500'>
+              <div className='flex flex-row items-center gap-2 text-sm text-gray-500 dark:text-gray-300'>
                 <Image
                   src='/calendar.svg'
                   width={16}
@@ -80,7 +82,7 @@ export function FeedbackCard({
 
           {/* Total Score */}
           <div className='flex flex-col items-end'>
-            <p className='text-xs text-gray-500 mb-1'>
+            <p className='text-xs text-gray-500 dark:text-gray-300 mb-1'>
               {t('feedback.totalScore')}
             </p>
             <div
@@ -90,7 +92,9 @@ export function FeedbackCard({
               )}
             >
               {feedback.totalScore}
-              <span className='text-lg text-gray-500'>/100</span>
+              <span className='text-lg text-gray-500 dark:text-gray-300'>
+                /100
+              </span>
             </div>
           </div>
         </div>
@@ -102,7 +106,7 @@ export function FeedbackCard({
           {feedback.categoryScores.map((category, catIndex) => (
             <div key={catIndex} className='flex flex-col gap-1'>
               <div className='flex flex-row items-center justify-between'>
-                <p className='text-sm font-medium text-gray-700'>
+                <p className='text-sm font-medium text-gray-700 dark:text-gray-200'>
                   {t(`feedback.categories.${category.name}`)}
                 </p>
                 <span
@@ -139,7 +143,7 @@ export function FeedbackCard({
               {t('feedback.overallImpression')}
             </p>
           </div>
-          <p className='text-sm text-gray-600 line-clamp-2'>
+          <p className='text-sm text-gray-600 dark:text-gray-300 line-clamp-2'>
             {feedback.finalAssessment}
           </p>
         </div>
