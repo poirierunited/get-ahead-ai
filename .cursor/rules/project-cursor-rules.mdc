@@ -80,9 +80,86 @@ You are an expert full-stack developer skilled in TypeScript, Node.js, React, Ne
 
 ## Testing & Documentation
 
+### Code Documentation
+
+- **MANDATORY**: Document ALL public functions, methods, classes, and exported components with **JSDoc**.
+- **Required JSDoc sections**:
+  - `@description` - Clear explanation of what the function/method does
+  - `@param` - Document each parameter with type and description
+  - `@returns` - Document return type and what it represents
+  - `@throws` - Document any errors that can be thrown
+  - `@example` - Provide usage examples for complex functions
+- Document **complex logic** inline with clear, concise comments.
+- Use **GoDoc-style** comments: start with the function/method name.
+
+**Example:**
+
+```typescript
+/**
+ * Generates and stores structured feedback from an interview transcript using AI.
+ *
+ * @param params - The feedback generation parameters
+ * @param params.interviewId - Unique identifier of the interview
+ * @param params.userId - Unique identifier of the user
+ * @param params.transcript - Array of conversation messages
+ * @param params.language - Language for the feedback ('English' | 'Spanish')
+ * @returns Promise resolving to the generated feedback ID
+ * @throws {BadRequestError} If userId or interviewId is missing
+ * @throws {Error} If AI generation or database storage fails
+ * @example
+ * const result = await generateFeedback({
+ *   interviewId: 'abc123',
+ *   userId: 'user456',
+ *   transcript: [...],
+ *   language: 'English'
+ * });
+ */
+export async function generateFeedback(params: GenerateFeedbackParams) {
+  // Implementation
+}
+```
+
+### Project Documentation (`/docs`)
+
+- **MANDATORY**: When implementing new features, services, or major changes, update relevant documentation in `/docs`.
+- **Create new documentation** when:
+
+  - Adding a new service/module
+  - Implementing a new API endpoint
+  - Adding a new component library or pattern
+  - Changing architecture or data flow
+  - Adding new environment variables or configuration
+
+- **Update existing documentation** when:
+
+  - Modifying existing APIs or services
+  - Changing database schemas
+  - Updating authentication/security flows
+  - Modifying error handling patterns
+  - Changing deployment processes
+
+- **Documentation Structure**:
+
+  - Use Markdown format (`.md`)
+  - Follow the template in `/docs/TEMPLATE.md`
+  - Include code examples, schemas, and diagrams
+  - Add entries to `/docs/README.md` index
+  - Update `mkdocs.yml` navigation if adding new pages
+
+- **Documentation Checklist**:
+  - [ ] Add/update relevant `.md` file in `/docs`
+  - [ ] Update `/docs/README.md` index
+  - [ ] Add to `mkdocs.yml` navigation if needed
+  - [ ] Include TypeScript interfaces/types
+  - [ ] Provide request/response examples
+  - [ ] Document error cases and handling
+  - [ ] Add troubleshooting section if applicable
+
+### Testing
+
 - Write **unit tests** with **Jest** and **React Testing Library**.
-- Use **JSDoc** for reusable functions and components.
-- Comment complex logic clearly and concisely.
+- Place test files **next to the code** they test (not in a global tests directory).
+- Test coverage for all services, utilities, and complex components.
 
 ---
 
@@ -107,8 +184,69 @@ Refactor, improve, and handle edge cases during and after implementation.
 1. **Deep Dive Analysis** – Understand the problem thoroughly.
 2. **Planning** – Outline architecture, use `<PLANNING>` tags if needed.
 3. **Implementation** – Build the solution step-by-step, modularly.
-4. **Review & Optimize** – Refactor and optimize for performance/security.
-5. **Finalization** – Ensure correctness, security, and quality.
+4. **Documentation** – Write JSDoc for all functions and update `/docs` if needed.
+5. **Review & Optimize** – Refactor and optimize for performance/security.
+6. **Finalization** – Ensure correctness, security, quality, and complete documentation.
+
+---
+
+## Documentation Maintenance
+
+### Automatic Documentation Updates
+
+When making code changes, **automatically assess** if documentation needs updating:
+
+#### Triggers for Documentation Updates:
+
+1. **New Features/Services**:
+
+   - Create new `.md` file in appropriate `/docs` subdirectory
+   - Document APIs, schemas, interfaces, and examples
+   - Add to navigation in `mkdocs.yml`
+
+2. **API Changes**:
+
+   - Update `/docs/api/README.md` or specific API docs
+   - Include request/response examples
+   - Document breaking changes
+
+3. **Schema/Interface Changes**:
+
+   - Update relevant documentation with new TypeScript interfaces
+   - Document migration path if breaking
+
+4. **Configuration Changes**:
+
+   - Update environment variables documentation
+   - Document new settings or flags
+
+5. **Security/Auth Changes**:
+   - Update `/docs/security/` documentation
+   - Document new permissions or flows
+
+#### Documentation Quality Standards:
+
+- ✅ Include TypeScript type definitions
+- ✅ Provide real-world examples
+- ✅ Document error cases and edge cases
+- ✅ Add troubleshooting sections
+- ✅ Include diagrams for complex flows (Mermaid syntax)
+- ✅ Keep language clear, concise, and professional
+- ✅ Use proper Markdown formatting
+- ✅ Test all code examples before documenting
+
+#### Documentation Review Checklist:
+
+Before completing any feature implementation, verify:
+
+- [ ] All public functions have JSDoc comments
+- [ ] Complex algorithms have inline explanations
+- [ ] New features are documented in `/docs`
+- [ ] Examples are tested and working
+- [ ] `/docs/README.md` index is updated
+- [ ] `mkdocs.yml` navigation includes new pages
+- [ ] Breaking changes are clearly highlighted
+- [ ] Migration guides provided if needed
 
 ---
 
