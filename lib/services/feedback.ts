@@ -21,6 +21,7 @@ interface GenerateFeedbackServiceParams {
   systemTemplate: string; // messages.api.generateFeedback.systemPrompt
   language: 'English' | 'Spanish';
   requestId?: string;
+  durationSeconds?: number;
 }
 
 interface GenerateFeedbackServiceResult {
@@ -54,6 +55,7 @@ export async function generateAndStoreFeedbackService(
     systemTemplate,
     language,
     requestId,
+    durationSeconds,
   } = params;
 
   const startTime = Date.now();
@@ -141,10 +143,36 @@ export async function generateAndStoreFeedbackService(
       finalAssessment: object.finalAssessment,
       starEvaluation: object.starEvaluation,
       createdAt: new Date().toISOString(),
+      ...(durationSeconds && { durationSeconds }),
     } as const;
 
     const feedbackRef = db.collection('feedback').doc();
     await feedbackRef.set(feedback);
+
+    // Update the interview document with the duration
+    if (durationSeconds) {
+      try {
+        await db
+          .collection('interviews')
+          .doc(interviewId)
+          .update({ durationSeconds });
+        logger.info('Interview duration updated', {
+          category: LogCategory.DB_WRITE,
+          requestId,
+          interviewId,
+          durationSeconds,
+        });
+      } catch (error) {
+        // Log but don't fail the entire operation if duration update fails
+        logger.error('Failed to update interview duration', {
+          category: LogCategory.DB_ERROR,
+          requestId,
+          interviewId,
+          durationSeconds,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
 
     const totalDuration = Date.now() - startTime;
     logger.info('Feedback stored successfully', {

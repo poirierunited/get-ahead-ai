@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
+import { formatDuration } from '@/lib/utils/format-duration';
 
 interface FeedbackCardProps {
   feedback: Feedback;
@@ -66,16 +67,33 @@ export function FeedbackCard({
               <p className='font-semibold text-lg'>
                 {t('feedback.attempt')} {feedback.attemptNumber}
               </p>
-              <div className='flex flex-row items-center gap-2 text-sm text-gray-500 dark:text-gray-300'>
-                <Image
-                  src='/calendar.svg'
-                  width={16}
-                  height={16}
-                  alt='calendar'
-                />
-                <span>
-                  {dayjs(feedback.createdAt).format('MMM D, YYYY h:mm A')}
-                </span>
+              <div className='flex flex-col gap-1'>
+                <div className='flex flex-row items-center gap-2 text-sm text-gray-500 dark:text-gray-300'>
+                  <Image
+                    src='/calendar.svg'
+                    width={16}
+                    height={16}
+                    alt='calendar'
+                  />
+                  <span>
+                    {dayjs(feedback.createdAt).format('MMM D, YYYY h:mm A')}
+                  </span>
+                </div>
+                {feedback.durationSeconds !== undefined &&
+                  feedback.durationSeconds > 0 && (
+                    <div className='flex flex-row items-center gap-2 text-sm text-gray-500 dark:text-gray-300'>
+                      <Image
+                        src='/window.svg'
+                        width={16}
+                        height={16}
+                        alt='duration'
+                      />
+                      <span>
+                        {t('feedback.duration')}:{' '}
+                        {formatDuration(feedback.durationSeconds)}
+                      </span>
+                    </div>
+                  )}
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { DynamicLogo } from './DynamicLogo';
 
@@ -49,13 +49,21 @@ const Agent = ({
   const [terminationReason, setTerminationReason] = useState<string | null>(
     null
   );
+  const callStartTimeRef = useRef<number | null>(null);
+  const callDurationSecondsRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onCallStart = () => {
       setCallStatus(CallStatus.ACTIVE);
+      callStartTimeRef.current = Date.now();
     };
 
     const onCallEnd = () => {
+      if (callStartTimeRef.current) {
+        const durationMs = Date.now() - callStartTimeRef.current;
+        const durationSec = Math.round(durationMs / 1000);
+        callDurationSecondsRef.current = durationSec;
+      }
       setCallStatus(CallStatus.FINISHED);
     };
 
@@ -153,6 +161,8 @@ const Agent = ({
       setCallStatus(CallStatus.GENERATING_FEEDBACK);
 
       try {
+        const durationSeconds = callDurationSecondsRef.current;
+
         const res = await fetch(`/${locale}/api/feedback`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -160,11 +170,12 @@ const Agent = ({
             interviewId: interviewId!,
             transcript: messages,
             userid: userId,
+            durationSeconds: durationSeconds || 0, // Always send a number, default to 0 if null
           }),
         });
 
         const data = await res.json();
-        
+
         // Handle invalid transcript error (422)
         if (res.status === 422 && data?.error === 'InvalidTranscriptError') {
           logger.warn('Invalid transcript - redirecting to home', {

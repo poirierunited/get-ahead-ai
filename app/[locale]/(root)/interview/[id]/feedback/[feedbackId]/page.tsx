@@ -13,6 +13,7 @@ import {
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { ArrowLeft, RotateCcw, HelpCircle } from 'lucide-react';
 import { logger, LogCategory } from '@/lib/logger';
+import { formatDuration } from '@/lib/utils/format-duration';
 
 const FeedbackDetail = async ({
   params,
@@ -107,7 +108,7 @@ const FeedbackDetail = async ({
       </div>
 
       <div className='flex flex-row justify-center mb-6'>
-        <div className='flex flex-row gap-5'>
+        <div className='flex flex-row gap-5 flex-wrap justify-center'>
           {/* Overall Impression */}
           <div className='flex flex-row gap-2 items-center'>
             <Image src='/star.svg' width={22} height={22} alt='star' />
@@ -121,10 +122,27 @@ const FeedbackDetail = async ({
           </div>
 
           {/* Date */}
-          <div className='flex flex-row gap-2'>
+          <div className='flex flex-row gap-2 items-center'>
             <Image src='/calendar.svg' width={22} height={22} alt='calendar' />
             <p>{dayjs(feedback.createdAt).format('MMM D, YYYY h:mm A')}</p>
           </div>
+
+          {/* Duration */}
+          {feedback.durationSeconds !== undefined &&
+            feedback.durationSeconds > 0 && (
+              <div className='flex flex-row gap-2 items-center'>
+                <Image
+                  src='/window.svg'
+                  width={22}
+                  height={22}
+                  alt='duration'
+                />
+                <p>
+                  {t('feedback.duration')}:{' '}
+                  {formatDuration(feedback.durationSeconds)}
+                </p>
+              </div>
+            )}
         </div>
       </div>
 
@@ -184,7 +202,9 @@ const FeedbackDetail = async ({
                 </button>
               </TooltipTrigger>
               <TooltipContent className='max-w-sm'>
-                <p className='text-sm leading-relaxed'>{t('feedback.starTooltip')}</p>
+                <p className='text-sm leading-relaxed'>
+                  {t('feedback.starTooltip')}
+                </p>
               </TooltipContent>
             </Tooltip>
           </h2>

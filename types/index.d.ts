@@ -19,6 +19,7 @@ interface Feedback {
     actionableExamples: string[];
   };
   createdAt: string;
+  durationSeconds?: number;
 }
 
 interface Interview {
@@ -32,6 +33,7 @@ interface Interview {
   userId: string;
   type: string;
   finalized: boolean;
+  durationSeconds?: number;
 }
 
 interface CreateFeedbackParams {
