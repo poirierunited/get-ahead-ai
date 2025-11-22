@@ -12,6 +12,12 @@ interface Feedback {
   strengths: string[];
   areasForImprovement: string[];
   finalAssessment: string;
+  starEvaluation: {
+    overallScore: number;
+    comment: string;
+    missingElements: Array<'S' | 'T' | 'A' | 'R'>;
+    actionableExamples: string[];
+  };
   createdAt: string;
 }
 

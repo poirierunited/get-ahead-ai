@@ -136,9 +136,9 @@ const FeedbackDetail = async ({
               {index + 1}. {t(`feedback.categories.${category.name}`)} (
               {category.score}/100)
             </p>
-            <p className='text-gray-700 dark:text-gray-300'>
+            <div className='text-gray-700 dark:text-gray-300 whitespace-pre-line'>
               {category.comment}
-            </p>
+            </div>
           </div>
         ))}
       </div>
@@ -166,6 +166,78 @@ const FeedbackDetail = async ({
           ))}
         </ul>
       </div>
+
+      {/* STAR Evaluation Section */}
+      {feedback.starEvaluation && (
+        <div className='flex flex-col gap-4 mb-8 border-t pt-6'>
+          <h2 className='text-2xl font-semibold flex items-center gap-2'>
+            {t('feedback.starEvaluation')}
+          </h2>
+
+          <div className='border rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20'>
+            <div className='flex items-center gap-3 mb-3'>
+              <Image src='/star.svg' width={20} height={20} alt='star' />
+              <p className='font-bold text-lg'>
+                {t('feedback.starScore')}:{' '}
+                <span className='text-primary-200'>
+                  {feedback.starEvaluation.overallScore}
+                </span>
+                /100
+              </p>
+            </div>
+            <p className='text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-line'>
+              {feedback.starEvaluation.comment}
+            </p>
+
+            {/* Missing STAR Elements */}
+            {feedback.starEvaluation.missingElements &&
+              feedback.starEvaluation.missingElements.length > 0 && (
+                <div className='mb-4'>
+                  <h4 className='font-semibold mb-2'>
+                    {t('feedback.missingElements')}:
+                  </h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {feedback.starEvaluation.missingElements.map(
+                      (element: string, index: number) => (
+                        <span
+                          key={index}
+                          className='px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm font-medium'
+                        >
+                          {element === 'S' && t('feedback.starElementS')}
+                          {element === 'T' && t('feedback.starElementT')}
+                          {element === 'A' && t('feedback.starElementA')}
+                          {element === 'R' && t('feedback.starElementR')}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+
+            {/* Actionable STAR Examples */}
+            {feedback.starEvaluation.actionableExamples &&
+              feedback.starEvaluation.actionableExamples.length > 0 && (
+                <div>
+                  <h4 className='font-semibold mb-2'>
+                    {t('feedback.actionableExamples')}:
+                  </h4>
+                  <ul className='list-decimal list-inside space-y-3'>
+                    {feedback.starEvaluation.actionableExamples.map(
+                      (example: string, index: number) => (
+                        <li
+                          key={index}
+                          className='text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 p-3 rounded border-l-4 border-blue-500'
+                        >
+                          <span className='whitespace-pre-line'>{example}</span>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
+          </div>
+        </div>
+      )}
 
       <div className='buttons'>
         <Button className='btn-secondary flex-1'>

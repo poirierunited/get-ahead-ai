@@ -103,6 +103,7 @@ export async function generateAndStoreFeedbackService(
       strengths: object.strengths,
       areasForImprovement: object.areasForImprovement,
       finalAssessment: object.finalAssessment,
+      starEvaluation: object.starEvaluation,
       createdAt: new Date().toISOString(),
     } as const;
 

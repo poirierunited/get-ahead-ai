@@ -82,7 +82,17 @@
     "noFeedbacks": "Aún no hay retroalimentación disponible. Completa una entrevista para ver tu retroalimentación aquí.",
     "backToHistory": "Volver al Historial de Retroalimentación",
     "totalAttemptsDone": "Total de Intentos Hechos",
-    "of": "de"
+    "of": "de",
+    "starEvaluation": "Evaluación STAR",
+    "starScore": "Puntuación STAR",
+    "starComment": "Comentario STAR",
+    "missingElements": "Elementos STAR Faltantes",
+    "actionableExamples": "Ejemplos Accionables STAR",
+    "starElementS": "S - Situación",
+    "starElementT": "T - Tarea",
+    "starElementA": "A - Acción",
+    "starElementR": "R - Resultado",
+    "noneOrComplete": "Ninguno (estructura completa) o todos los elementos presentes"
   },
   "auth": {
     "email": "Correo Electrónico",
@@ -139,8 +149,8 @@
       "systemPrompt": "Eres un asistente de IA que genera preguntas de entrevista. Genera las preguntas en idioma {language}."
     },
     "generateFeedback": {
-      "prompt": "Eres un entrevistador de IA analizando una entrevista simulada. Tu tarea es evaluar al candidato basándote en categorías estructuradas. Sé exhaustivo y detallado en tu análisis. No seas indulgente con el candidato. Si hay errores o áreas de mejora, señálalas. Transcripción: {transcript} Por favor puntúa al candidato de 0 a 100 en las siguientes áreas. No agregues categorías distintas a las proporcionadas: - **Habilidades de Comunicación**: Claridad, articulación, respuestas estructuradas. - **Conocimiento Técnico**: Comprensión de conceptos clave para el puesto. - **Resolución de Problemas**: Capacidad de analizar problemas y proponer soluciones. - **Ajuste Cultural y de Puesto**: Alineación con valores de la empresa y rol del trabajo. - **Confianza y Claridad**: Confianza en las respuestas, compromiso y claridad.",
-      "systemPrompt": "Eres un entrevistador profesional analizando una entrevista simulada. Tu tarea es evaluar al candidato basándote en categorías estructuradas. Por favor proporciona retroalimentación en idioma {language}."
+      "prompt": "Analiza esta entrevista simulada:\n\nTRANSCRIPCIÓN:\n{transcript}\n\nDevuelve un JSON con esta estructura EXACTA:\n- totalScore (0-100)\n- categoryScores (5 elementos fijos en este orden):\n  1) communication\n  2) technical\n  3) problemSolving\n  4) culturalFit\n  5) confidenceClarity\n\nCada categoryScore debe incluir:\n- name\n- score (0-100)\n- comment:\n   * 1 párrafo analítico breve\n   * luego 2-3 accionables con viñetas tipo \"Accionable:\"\n   * 1 ejemplo reescrito corto de cómo responder mejor\n\nLuego incluye:\n- strengths: 3 a 5 fortalezas concretas (no genéricas)\n- areasForImprovement: 3 a 5 mejoras específicas (no genéricas)\n- finalAssessment: 1 párrafo final con diagnóstico + foco de mejora priorizado para próximo intento\n\nAdemás, incluye una sección \"starEvaluation\" con:\n- overallScore (0-100)\n- comment (1 párrafo)\n- missingElements: lista con los elementos STAR ausentes o débiles (S, T, A, R)\n- actionableExamples: 2 ejemplos reescritos usando STAR\n\nReglas STAR:\n- Si falta Result: pide cuantificar impacto (%, tiempo, usuarios, dinero, calidad).\n- Si falta Task: explicitar responsabilidad personal.\n- Si Action es vaga: pedir pasos técnicos concretos.",
+      "systemPrompt": "Eres un entrevistador senior y coach de empleabilidad. Analizas entrevistas simuladas y generas retroalimentación basada en evidencia.\n\nPrincipios obligatorios:\n- Honesto y no indulgente, pero respetuoso.\n- Feedback específico y observable: cita conductas o fragmentos de la transcripción cuando sea posible.\n- Siempre entregar accionables concretos y practicables.\n- Evaluar la estructura narrativa con método STAR (Situation, Task, Action, Result).\n- Dar ejemplos reescritos de mejora.\n- Mantener lenguaje claro, breve y orientado a iteración.\n\nNo agregues categorías nuevas fuera de: communication, technical, problemSolving, culturalFit, confidenceClarity.\nPor favor proporciona retroalimentación en idioma {language}.\nResponde solo en JSON válido."
     }
   },
   "interviewForm": {

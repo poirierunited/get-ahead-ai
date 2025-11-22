@@ -82,7 +82,17 @@
     "noFeedbacks": "No feedback available yet. Complete an interview to see your feedback here.",
     "backToHistory": "Back to Feedback History",
     "totalAttemptsDone": "Total Attempts Done",
-    "of": "of"
+    "of": "of",
+    "starEvaluation": "STAR Evaluation",
+    "starScore": "STAR Score",
+    "starComment": "STAR Comment",
+    "missingElements": "Missing STAR Elements",
+    "actionableExamples": "STAR Actionable Examples",
+    "starElementS": "S - Situation",
+    "starElementT": "T - Task",
+    "starElementA": "A - Action",
+    "starElementR": "R - Result",
+    "noneOrComplete": "None (complete structure) or all elements present"
   },
   "auth": {
     "email": "Email",
@@ -139,8 +149,8 @@
       "systemPrompt": "You are an AI assistant that generates interview questions. Generate questions in {language} language."
     },
     "generateFeedback": {
-      "prompt": "You are an AI interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Be thorough and detailed in your analysis. Don't be lenient with the candidate. If there are mistakes or areas for improvement, point them out. Transcript: {transcript} Please score the candidate from 0 to 100 in the following areas. Do not add categories other than the ones provided: - **Communication Skills**: Clarity, articulation, structured responses. - **Technical Knowledge**: Understanding of key concepts for the role. - **Problem-Solving**: Ability to analyze problems and propose solutions. - **Cultural & Role Fit**: Alignment with company values and job role. - **Confidence & Clarity**: Confidence in responses, engagement, and clarity.",
-      "systemPrompt": "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Please provide feedback in {language} language."
+      "prompt": "Analyze this mock interview:\n\nTRANSCRIPT:\n{transcript}\n\nReturn JSON with this EXACT structure:\n- totalScore (0-100)\n- categoryScores (5 fixed elements in this order):\n  1) communication\n  2) technical\n  3) problemSolving\n  4) culturalFit\n  5) confidenceClarity\n\nEach categoryScore must include:\n- name\n- score (0-100)\n- comment:\n   * 1 short analytical paragraph\n   * then 2–3 bullet action steps labeled \"Actionable:\"\n   * 1 short rewritten example showing a better answer\n\nThen include:\n- strengths: 3–5 concrete strengths (not generic)\n- areasForImprovement: 3–5 specific improvements (not generic)\n- finalAssessment: 1 paragraph summarizing performance + top priority for next attempt\n\nAlso include a \"starEvaluation\" section with:\n- overallScore (0-100)\n- comment (1 paragraph)\n- missingElements: list of missing/weak STAR elements (S, T, A, R)\n- actionableExamples: 2 rewritten STAR answers\n\nSTAR rules:\n- If Result is missing: ask to quantify impact (%, time, users, money, quality).\n- If Task is missing: state personal responsibility.\n- If Action is vague: require concrete steps.",
+      "systemPrompt": "You are a senior interviewer and employability coach. You analyze mock interviews and produce evidence-based feedback.\n\nMandatory principles:\n- Honest and not lenient, but respectful.\n- Specific, observable feedback referencing transcript moments when possible.\n- Always provide clear, doable action steps.\n- Evaluate narrative structure using STAR (Situation, Task, Action, Result).\n- Provide rewritten examples to model improvement.\n- Keep language clear, concise, and iteration-oriented.\n\nDo not add categories beyond: communication, technical, problemSolving, culturalFit, confidenceClarity.\nPlease provide feedback in {language} language.\nReturn only valid JSON."
     }
   },
   "interviewForm": {
