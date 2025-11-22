@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { interviewId, transcript, userid } =
+    const { interviewId, transcript, userid, durationSeconds } =
       generateFeedbackSchema.parse(body);
 
     if (!userid || userid.trim().length === 0) {
@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
       systemTemplate: messages.api.generateFeedback.systemPrompt,
       language,
       requestId,
+      durationSeconds,
     });
 
     const duration = Date.now() - startTime;

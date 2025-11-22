@@ -33,6 +33,7 @@ export const interviewEntitySchema = z.object({
   finalized: z.boolean().default(true),
   coverImage: z.string().optional(),
   createdAt: z.string(),
+  durationSeconds: z.number().int().positive().optional(),
 });
 
 export type InterviewEntity = z.infer<typeof interviewEntitySchema>;

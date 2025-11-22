@@ -5,12 +5,13 @@ import { generateObject } from 'ai';
 import { google } from '@ai-sdk/google';
 import { feedbackSchema as feedbackZod } from '@/constants';
 import { savedMessageSchema } from '@/lib/schemas/feedback';
-import { BadRequestError } from '@/lib/errors';
+import { BadRequestError, InvalidTranscriptError } from '@/lib/errors';
 import {
   getFeedbackByInterviewId as repoGetFeedbackByInterviewId,
   getAllFeedbacksByInterviewId as repoGetAllFeedbacksByInterviewId,
 } from '@/lib/repositories/interviews';
 import { logger, LogCategory } from '@/lib/logger';
+import { validateTranscript } from '@/lib/validators/transcript-validator';
 
 interface GenerateFeedbackServiceParams {
   interviewId: string;
@@ -20,6 +21,7 @@ interface GenerateFeedbackServiceParams {
   systemTemplate: string; // messages.api.generateFeedback.systemPrompt
   language: 'English' | 'Spanish';
   requestId?: string;
+  durationSeconds?: number;
 }
 
 interface GenerateFeedbackServiceResult {
@@ -31,14 +33,16 @@ interface GenerateFeedbackServiceResult {
  *
  * This service:
  * 1. Validates input parameters.
- * 2. Calculates the attempt number.
- * 3. Formats the transcript for the LLM.
- * 4. Calls the AI model to generate feedback.
- * 5. Stores the feedback in the database.
+ * 2. Validates transcript quality and user participation.
+ * 3. Calculates the attempt number.
+ * 4. Formats the transcript for the LLM.
+ * 5. Calls the AI model to generate feedback.
+ * 6. Stores the feedback in the database.
  *
  * @param params - The parameters for generating feedback.
  * @returns The ID of the created feedback document.
  * @throws {BadRequestError} If userId or interviewId is missing.
+ * @throws {InvalidTranscriptError} If transcript is invalid or insufficient.
  */
 export async function generateAndStoreFeedbackService(
   params: GenerateFeedbackServiceParams
@@ -51,6 +55,7 @@ export async function generateAndStoreFeedbackService(
     systemTemplate,
     language,
     requestId,
+    durationSeconds,
   } = params;
 
   const startTime = Date.now();
@@ -73,6 +78,39 @@ export async function generateAndStoreFeedbackService(
       });
       throw new BadRequestError('interviewId is required');
     }
+
+    // Validate transcript quality
+    const validationResult = validateTranscript(transcript);
+    if (!validationResult.isValid) {
+      logger.warn('Invalid transcript detected', {
+        category: LogCategory.VALIDATION_ERROR,
+        requestId,
+        userId,
+        interviewId,
+        reason: validationResult.reason,
+        userMessageCount: validationResult.userMessageCount,
+        userWordCount: validationResult.userWordCount,
+        averageUserMessageLength: validationResult.averageUserMessageLength,
+      });
+      throw new InvalidTranscriptError(
+        validationResult.reason || 'Transcript validation failed',
+        {
+          userMessageCount: validationResult.userMessageCount,
+          userWordCount: validationResult.userWordCount,
+          averageUserMessageLength: validationResult.averageUserMessageLength,
+        }
+      );
+    }
+
+    logger.info('Transcript validation passed', {
+      category: LogCategory.VALIDATION_ERROR,
+      requestId,
+      userId,
+      interviewId,
+      userMessageCount: validationResult.userMessageCount,
+      userWordCount: validationResult.userWordCount,
+      averageUserMessageLength: validationResult.averageUserMessageLength,
+    });
 
     const existingFeedbacks = await repoGetAllFeedbacksByInterviewId(
       interviewId,
@@ -103,11 +141,38 @@ export async function generateAndStoreFeedbackService(
       strengths: object.strengths,
       areasForImprovement: object.areasForImprovement,
       finalAssessment: object.finalAssessment,
+      starEvaluation: object.starEvaluation,
       createdAt: new Date().toISOString(),
+      ...(durationSeconds && { durationSeconds }),
     } as const;
 
     const feedbackRef = db.collection('feedback').doc();
     await feedbackRef.set(feedback);
+
+    // Update the interview document with the duration
+    if (durationSeconds) {
+      try {
+        await db
+          .collection('interviews')
+          .doc(interviewId)
+          .update({ durationSeconds });
+        logger.info('Interview duration updated', {
+          category: LogCategory.DB_WRITE,
+          requestId,
+          interviewId,
+          durationSeconds,
+        });
+      } catch (error) {
+        // Log but don't fail the entire operation if duration update fails
+        logger.error('Failed to update interview duration', {
+          category: LogCategory.DB_ERROR,
+          requestId,
+          interviewId,
+          durationSeconds,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    }
 
     const totalDuration = Date.now() - startTime;
     logger.info('Feedback stored successfully', {

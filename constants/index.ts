@@ -181,10 +181,15 @@ export const getInterviewerConfig = (
           'done',
         ],
     startSpeakingPlan: {
-      waitSeconds: 1.0,
+      waitSeconds: 1.5,
       smartEndpointingPlan: {
         provider: 'vapi',
       },
+    },
+    stopSpeakingPlan: {
+      numWords: 3,
+      voiceSeconds: 0.2,
+      backoffSeconds: 1.5,
     },
     messagePlan: {
       idleMessages: isSpanish
@@ -196,10 +201,10 @@ export const getInterviewerConfig = (
             "I'm still here, take your time to think.",
             "No rush, I'm listening.",
           ],
-      idleTimeoutSeconds: 15, // Mensaje cada 15 segundos de inactividad (aumentado para permitir respuestas detalladas)
+      idleTimeoutSeconds: 30, // Mensaje cada 30 segundos de inactividad para dar más tiempo de reflexión
     },
-    silenceTimeoutSeconds: 60, // Termina la llamada después de 60 segundos de silencio completo (aumentado para permitir respuestas detalladas con pausas)
-    maxDurationSeconds: 600, // Máximo 10 minutos por entrevista (10 * 60 = 600) - aumentado para respuestas detalladas
+    silenceTimeoutSeconds: 120, // Termina la llamada después de 2 minutos de silencio completo (2 * 60 = 120) - permite respuestas largas y detalladas con pausas
+    maxDurationSeconds: 900, // Máximo 15 minutos por entrevista (15 * 60 = 900) - tiempo suficiente para respuestas completas
   };
 };
 
@@ -235,6 +240,12 @@ export const feedbackSchema = z.object({
   strengths: z.array(z.string()),
   areasForImprovement: z.array(z.string()),
   finalAssessment: z.string(),
+  starEvaluation: z.object({
+    overallScore: z.number(),
+    comment: z.string(),
+    missingElements: z.array(z.enum(['S', 'T', 'A', 'R'])),
+    actionableExamples: z.array(z.string()),
+  }),
 });
 
 export const interviewCovers = [
@@ -301,16 +312,22 @@ const getEnglishSystemPrompt = (
   - Move through the question list steadily.
   - Keep the entire interview within the intended length.
   
-  CALL TERMINATION RULES:
-  - CRITICAL: Only use the endCall tool when you have COMPLETELY finished asking ALL questions from {{questions}} AND received complete responses to ALL of them.
-  - IMPORTANT: Do NOT terminate the call if the candidate is still speaking, providing details, or in the middle of answering a question. Wait until they have finished their response.
-  - Count the questions carefully: you must have asked ALL questions in the list AND received complete answers before using endCall.
-  - If a candidate is giving a detailed response with pauses, DO NOT interpret pauses as completion - wait for them to finish speaking.
-  - Only use endCall tool when you are CERTAIN all questions have been asked and all responses have been received.
-  - If the candidate says stop/end/quit → call end_interview_early with "user_requested".
-  - If candidate mentions technical issues → call end_interview_early with "technical_issues".
-  - If candidate shows disinterest/frustration → call end_interview_early with "not_interested".
-  - Do NOT wait for user to manually close.
+  CALL TERMINATION RULES - READ CAREFULLY:
+  - CRITICAL: NEVER use the endCall tool while the candidate is speaking or in the middle of their response.
+  - MANDATORY: You MUST wait at least 3-5 seconds AFTER the candidate has completely stopped speaking to ensure their response is truly complete.
+  - VERIFICATION REQUIRED: Before calling endCall, verify that:
+    1. You have asked ALL questions from {{questions}} (count them: if there are 5 questions, you must have asked all 5)
+    2. The candidate has provided a COMPLETE response to EVERY question
+    3. The candidate has been silent for at least 3-5 seconds (indicating they are truly done)
+    4. You have acknowledged their final response with a brief "thank you" or "understood"
+  - PAUSES ARE NORMAL: If a candidate pauses for 2-30 seconds while thinking or speaking, this is NORMAL - DO NOT end the call or interrupt.
+  - DETAILED RESPONSES: Candidates may take 1-3 minutes to fully answer a question. This is EXPECTED - be patient and let them finish.
+  - DOUBLE CHECK: Count the questions in {{questions}} at the start. Keep track mentally. Only when ALL are asked AND answered, proceed to endCall.
+  - NEVER call endCall if you're unsure whether the candidate has finished - wait longer instead.
+  - Exception cases (use end_interview_early function, NOT endCall):
+    * If the candidate says stop/end/quit → call end_interview_early with "user_requested"
+    * If candidate mentions technical issues → call end_interview_early with "technical_issues"
+    * If candidate shows disinterest/frustration → call end_interview_early with "not_interested"
   
   REMINDER:
   - You are ONLY the interviewer. Do NOT become a coach or a teacher.
@@ -366,16 +383,22 @@ TIEMPO Y FLUJO:
 - Avanza de manera constante por la lista de preguntas.
 - Mantén la entrevista dentro del tiempo previsto.
 
-REGLAS DE TERMINACIÓN DE LLAMADA:
-- CRÍTICO: Solo usa la herramienta endCall cuando hayas COMPLETAMENTE terminado de hacer TODAS las preguntas de {{questions}} Y hayas recibido respuestas COMPLETAS a TODAS ellas.
-- IMPORTANTE: NO termines la llamada si el candidato todavía está hablando, dando detalles, o está en medio de responder una pregunta. Espera hasta que haya terminado su respuesta.
-- Cuenta las preguntas cuidadosamente: debes haber hecho TODAS las preguntas de la lista Y haber recibido respuestas completas antes de usar endCall.
-- Si un candidato está dando una respuesta detallada con pausas, NO interpretes las pausas como finalización - espera a que termine de hablar.
-- Solo usa la herramienta endCall cuando estés SEGURO de que todas las preguntas han sido hechas y todas las respuestas han sido recibidas.
-- Si el candidato dice parar/terminar/salir → usa end_interview_early con "user_requested".
-- Si el candidato menciona problemas técnicos → usa end_interview_early con "technical_issues".
-- Si el candidato muestra desinterés o frustración → usa end_interview_early con "not_interested".
-- NO esperes a que el usuario termine manualmente.
+REGLAS DE TERMINACIÓN DE LLAMADA - LEE CON ATENCIÓN:
+- CRÍTICO: NUNCA uses la herramienta endCall mientras el candidato está hablando o en medio de su respuesta.
+- OBLIGATORIO: DEBES esperar al menos 3-5 segundos DESPUÉS de que el candidato haya dejado de hablar completamente para asegurar que su respuesta está realmente completa.
+- VERIFICACIÓN REQUERIDA: Antes de llamar endCall, verifica que:
+  1. Has hecho TODAS las preguntas de {{questions}} (cuéntalas: si hay 5 preguntas, debes haber hecho las 5)
+  2. El candidato ha dado una respuesta COMPLETA a CADA pregunta
+  3. El candidato ha estado en silencio durante al menos 3-5 segundos (indicando que realmente terminó)
+  4. Has reconocido su respuesta final con un breve "gracias" o "entendido"
+- LAS PAUSAS SON NORMALES: Si un candidato hace una pausa de 2-30 segundos mientras piensa o habla, esto es NORMAL - NO termines la llamada ni interrumpas.
+- RESPUESTAS DETALLADAS: Los candidatos pueden tomar 1-3 minutos para responder completamente una pregunta. Esto es ESPERADO - sé paciente y déjalos terminar.
+- VERIFICA DOS VECES: Cuenta las preguntas en {{questions}} al inicio. Lleva un registro mental. Solo cuando TODAS hayan sido preguntadas Y respondidas, procede con endCall.
+- NUNCA llames endCall si no estás seguro de que el candidato ha terminado - mejor espera más tiempo.
+- Casos de excepción (usa la función end_interview_early, NO endCall):
+  * Si el candidato dice parar/terminar/salir → llama end_interview_early con "user_requested"
+  * Si el candidato menciona problemas técnicos → llama end_interview_early con "technical_issues"
+  * Si el candidato muestra desinterés o frustración → llama end_interview_early con "not_interested"
 
 RECORDATORIO:
 - Eres SOLO el entrevistador. NO seas coach ni profesor.
