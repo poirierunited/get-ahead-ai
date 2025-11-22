@@ -1,0 +1,2223 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered interview preparation platform documentation">
+      
+      
+        <meta name="author" content="Get Ahead AI Team">
+      
+      
+        <link rel="canonical" href="https://poirierunited.github.io/get-ahead-ai/DEPLOYMENT/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>🚀 Guía de Deployment de Documentación - Get Ahead AI - Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-de-deployment-de-documentacion" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Get Ahead AI - Documentation" class="md-header__button md-logo" aria-label="Get Ahead AI - Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Get Ahead AI - Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🚀 Guía de Deployment de Documentación
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/poirierunited/get-ahead-ai" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    get-ahead-ai
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../logging/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Guía de Logging
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../architecture/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Arquitectura
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../development/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Desarrollo
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Guías
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/" class="md-tabs__link">
+          
+  
+  
+  APIs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../frontend/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Frontend
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../security/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Seguridad
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../ai/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  AI/ML
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../database/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Base de Datos
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../operations/PLACEHOLDER/" class="md-tabs__link">
+          
+  
+  
+  Operaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CONTRIBUTING/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contribuir
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Get Ahead AI - Documentation" class="md-nav__button md-logo" aria-label="Get Ahead AI - Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Get Ahead AI - Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/poirierunited/get-ahead-ai" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    get-ahead-ai
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía de Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitectura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desarrollo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Desarrollo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    APIs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    APIs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../frontend/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Seguridad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Seguridad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI/ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI/ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Base de Datos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Base de Datos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/PLACEHOLDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Placeholder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribuir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opciones-disponibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 Opciones Disponibles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 Opciones Disponibles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-github-native-ya-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. GitHub Native (✅ Ya Funciona)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-github-pages-mkdocs-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. GitHub Pages + MkDocs (⭐ Recomendado)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. GitHub Pages + MkDocs (⭐ Recomendado)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuracion-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración Inicial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acceso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acceso
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#personalizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Personalización
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-docusaurus-alternativa-avanzada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Docusaurus (Alternativa Avanzada)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Docusaurus (Alternativa Avanzada)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-vitepress-alternativa-moderna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. VitePress (Alternativa Moderna)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. VitePress (Alternativa Moderna)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recomendacion-por-caso-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Recomendación por Caso de Uso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Recomendación por Caso de Uso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#para-empezar-rapido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Empezar Rápido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-proyecto-profesional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Proyecto Profesional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-maxima-personalizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Máxima Personalización
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-performance-extremo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Performance Extremo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usando-mkdocs-setup-actual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Usando MkDocs (Setup Actual)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Usando MkDocs (Setup Actual)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comandos-utiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comandos Útiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estructura-de-archivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estructura de Archivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agregando-nueva-documentacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agregando Nueva Documentación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#personalizando-el-tema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Personalizando el Tema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plugins-utiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plugins Útiles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-gh-pages-branch-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error: "gh-pages branch not found"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-403-forbidden-en-github-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error: "403 Forbidden" en GitHub Pages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#los-cambios-no-se-reflejan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Los cambios no se reflejan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preview-local-no-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preview local no funciona
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparacion-rapida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Comparación Rápida
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Checklist de Deploy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#listo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 ¡Listo!
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="guia-de-deployment-de-documentacion">🚀 Guía de Deployment de Documentación<a class="headerlink" href="#guia-de-deployment-de-documentacion" title="Permanent link">&para;</a></h1>
+<p>Esta guía explica las diferentes opciones para visualizar y deployar la documentación de Get Ahead AI.</p>
+<h2 id="opciones-disponibles">📖 Opciones Disponibles<a class="headerlink" href="#opciones-disponibles" title="Permanent link">&para;</a></h2>
+<h3 id="1-github-native-ya-funciona">1. GitHub Native (✅ Ya Funciona)<a class="headerlink" href="#1-github-native-ya-funciona" title="Permanent link">&para;</a></h3>
+<p>La opción más simple. GitHub renderiza automáticamente los archivos Markdown.</p>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Push tu código a GitHub</li>
+<li>Navega a <code>https://github.com/tu-usuario/get-ahead-ai/tree/main/docs</code></li>
+<li>Los enlaces funcionarán automáticamente</li>
+</ol>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>✅ Sin configuración</li>
+<li>✅ Sin costos</li>
+<li>✅ Funciona inmediatamente</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>❌ UI básica</li>
+<li>❌ Sin búsqueda avanzada</li>
+<li>❌ Sin personalización</li>
+</ul>
+<hr />
+<h3 id="2-github-pages-mkdocs-recomendado">2. GitHub Pages + MkDocs (⭐ Recomendado)<a class="headerlink" href="#2-github-pages-mkdocs-recomendado" title="Permanent link">&para;</a></h3>
+<p>Sitio web estático con UI moderna usando Material for MkDocs.</p>
+<h4 id="configuracion-inicial">Configuración Inicial<a class="headerlink" href="#configuracion-inicial" title="Permanent link">&para;</a></h4>
+<p>Ya está configurado! Solo necesitas:</p>
+<ol>
+<li><strong>Instalar MkDocs localmente</strong> (opcional, para preview):</li>
+</ol>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>mkdocs-material
+</code></pre></div>
+<ol>
+<li><strong>Preview local</strong>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>serve
+<span class="c1"># Abre http://127.0.0.1:8000</span>
+</code></pre></div>
+<ol>
+<li>
+<p><strong>Habilitar GitHub Pages</strong>:</p>
+</li>
+<li>
+<p>Ve a tu repo en GitHub</p>
+</li>
+<li>Settings → Pages</li>
+<li>Source: "Deploy from a branch"</li>
+<li>Branch: <code>gh-pages</code> (se creará automáticamente)</li>
+<li>
+<p>Guarda</p>
+</li>
+<li>
+<p><strong>Push y despliega</strong>:
+   <div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs: setup MkDocs&quot;</span>
+git<span class="w"> </span>push
+</code></pre></div></p>
+</li>
+</ol>
+<p>El GitHub Action (<code>.github/workflows/docs.yml</code>) se ejecutará automáticamente y desplegará tu documentación.</p>
+<h4 id="acceso">Acceso<a class="headerlink" href="#acceso" title="Permanent link">&para;</a></h4>
+<p>Tu documentación estará disponible en:</p>
+<div class="highlight"><pre><span></span><code>https://tu-usuario.github.io/get-ahead-ai/
+</code></pre></div>
+<h4 id="personalizacion">Personalización<a class="headerlink" href="#personalizacion" title="Permanent link">&para;</a></h4>
+<p>Edita <code>mkdocs.yml</code> para:</p>
+<ul>
+<li>Cambiar colores y tema</li>
+<li>Agregar/quitar secciones</li>
+<li>Configurar plugins</li>
+<li>Personalizar navegación</li>
+</ul>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>✅ UI moderna y profesional</li>
+<li>✅ Búsqueda integrada</li>
+<li>✅ Dark mode automático</li>
+<li>✅ Responsive design</li>
+<li>✅ Deploy automático con GitHub Actions</li>
+<li>✅ Gratis</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>❌ Requiere Python localmente (solo para preview)</li>
+</ul>
+<hr />
+<h3 id="3-docusaurus-alternativa-avanzada">3. Docusaurus (Alternativa Avanzada)<a class="headerlink" href="#3-docusaurus-alternativa-avanzada" title="Permanent link">&para;</a></h3>
+<p>Framework de documentación de Meta/Facebook, muy popular en el ecosistema React.</p>
+<h4 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Instalar Docusaurus</span>
+npx<span class="w"> </span>create-docusaurus@latest<span class="w"> </span>docs-site<span class="w"> </span>classic<span class="w"> </span>--typescript
+
+<span class="c1"># Mover documentación</span>
+cp<span class="w"> </span>-r<span class="w"> </span>docs/*<span class="w"> </span>docs-site/docs/
+
+<span class="c1"># Configurar</span>
+<span class="nb">cd</span><span class="w"> </span>docs-site
+npm<span class="w"> </span>install
+npm<span class="w"> </span>start
+</code></pre></div>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>✅ Integración perfecta con React/Next.js</li>
+<li>✅ Componentes interactivos</li>
+<li>✅ Versionado de documentación</li>
+<li>✅ Blog integrado</li>
+<li>✅ Muy customizable</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>❌ Más complejo de configurar</li>
+<li>❌ Requiere Node.js</li>
+</ul>
+<hr />
+<h3 id="4-vitepress-alternativa-moderna">4. VitePress (Alternativa Moderna)<a class="headerlink" href="#4-vitepress-alternativa-moderna" title="Permanent link">&para;</a></h3>
+<p>Similar a VuePress pero más rápido, basado en Vite.</p>
+<h4 id="setup_1">Setup<a class="headerlink" href="#setup_1" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Instalar VitePress</span>
+npm<span class="w"> </span>install<span class="w"> </span>-D<span class="w"> </span>vitepress
+
+<span class="c1"># Inicializar</span>
+npx<span class="w"> </span>vitepress<span class="w"> </span>init
+
+<span class="c1"># Mover docs</span>
+cp<span class="w"> </span>-r<span class="w"> </span>docs/*<span class="w"> </span>docs/
+
+<span class="c1"># Ejecutar</span>
+npm<span class="w"> </span>run<span class="w"> </span>docs:dev
+</code></pre></div>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>✅ Muy rápido</li>
+<li>✅ Vue 3 powered</li>
+<li>✅ HMR instantáneo</li>
+<li>✅ Markdown mejorado</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>❌ Ecosistema más pequeño que Docusaurus</li>
+<li>❌ Menos plugins disponibles</li>
+</ul>
+<hr />
+<h2 id="recomendacion-por-caso-de-uso">🎯 Recomendación por Caso de Uso<a class="headerlink" href="#recomendacion-por-caso-de-uso" title="Permanent link">&para;</a></h2>
+<h3 id="para-empezar-rapido">Para Empezar Rápido<a class="headerlink" href="#para-empezar-rapido" title="Permanent link">&para;</a></h3>
+<p>→ <strong>GitHub Native</strong> o <strong>MkDocs + GitHub Pages</strong></p>
+<h3 id="para-proyecto-profesional">Para Proyecto Profesional<a class="headerlink" href="#para-proyecto-profesional" title="Permanent link">&para;</a></h3>
+<p>→ <strong>MkDocs Material</strong> (ya configurado!)</p>
+<h3 id="para-maxima-personalizacion">Para Máxima Personalización<a class="headerlink" href="#para-maxima-personalizacion" title="Permanent link">&para;</a></h3>
+<p>→ <strong>Docusaurus</strong></p>
+<h3 id="para-performance-extremo">Para Performance Extremo<a class="headerlink" href="#para-performance-extremo" title="Permanent link">&para;</a></h3>
+<p>→ <strong>VitePress</strong></p>
+<hr />
+<h2 id="usando-mkdocs-setup-actual">🚀 Usando MkDocs (Setup Actual)<a class="headerlink" href="#usando-mkdocs-setup-actual" title="Permanent link">&para;</a></h2>
+<h3 id="comandos-utiles">Comandos Útiles<a class="headerlink" href="#comandos-utiles" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Preview local</span>
+mkdocs<span class="w"> </span>serve
+
+<span class="c1"># Preview con livereload en otra dirección</span>
+mkdocs<span class="w"> </span>serve<span class="w"> </span>-a<span class="w"> </span><span class="m">0</span>.0.0.0:8080
+
+<span class="c1"># Build manual</span>
+mkdocs<span class="w"> </span>build
+
+<span class="c1"># Deploy manual a GitHub Pages</span>
+mkdocs<span class="w"> </span>gh-deploy
+
+<span class="c1"># Ver versión</span>
+mkdocs<span class="w"> </span>--version
+</code></pre></div>
+<h3 id="estructura-de-archivos">Estructura de Archivos<a class="headerlink" href="#estructura-de-archivos" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>get-ahead-ai/
+├── mkdocs.yml                    # Configuración de MkDocs
+├── docs/                         # Tu documentación
+│   ├── index.md                 # Página de inicio
+│   ├── logging.md               # Guías
+│   └── ...
+├── .github/
+│   └── workflows/
+│       └── docs.yml             # GitHub Action para deploy automático
+└── site/                        # Generado automáticamente (ignorado)
+</code></pre></div>
+<h3 id="agregando-nueva-documentacion">Agregando Nueva Documentación<a class="headerlink" href="#agregando-nueva-documentacion" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Crear el archivo</strong> en <code>docs/</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># Ejemplo</span>
+cp<span class="w"> </span>docs/TEMPLATE.md<span class="w"> </span>docs/guides/quick-start.md
+<span class="c1"># Edita el contenido</span>
+</code></pre></div>
+<ol>
+<li><strong>Actualizar navegación</strong> en <code>mkdocs.yml</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nt">nav</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.md</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Guías</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Quick Start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">guides/quick-start.md</span><span class="w"> </span><span class="c1"># ← Agregar aquí</span>
+</code></pre></div>
+<ol>
+<li><strong>Commit y push</strong>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs: add quick start guide&quot;</span>
+git<span class="w"> </span>push
+</code></pre></div>
+<ol>
+<li><strong>Espera 1-2 minutos</strong> - GitHub Action deployará automáticamente</li>
+</ol>
+<h3 id="personalizando-el-tema">Personalizando el Tema<a class="headerlink" href="#personalizando-el-tema" title="Permanent link">&para;</a></h3>
+<p>En <code>mkdocs.yml</code>, puedes cambiar:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">theme</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">palette</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">primary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">indigo</span><span class="w"> </span><span class="c1"># Cambia el color principal</span>
+<span class="w">    </span><span class="nt">accent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pink</span><span class="w"> </span><span class="c1"># Color de acento</span>
+
+<span class="w">  </span><span class="nt">features</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">navigation.tabs</span><span class="w"> </span><span class="c1"># Tabs en lugar de sidebar</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">toc.integrate</span><span class="w"> </span><span class="c1"># TOC integrada</span>
+</code></pre></div>
+<p>Colores disponibles:</p>
+<ul>
+<li>red, pink, purple, deep purple, indigo, blue</li>
+<li>light blue, cyan, teal, green, light green</li>
+<li>lime, yellow, amber, orange, deep orange</li>
+</ul>
+<h3 id="plugins-utiles">Plugins Útiles<a class="headerlink" href="#plugins-utiles" title="Permanent link">&para;</a></h3>
+<p>Ya incluidos:</p>
+<ul>
+<li>✅ Búsqueda (search)</li>
+<li>✅ Tags</li>
+</ul>
+<p>Puedes agregar:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">plugins</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git-revision-date-localized</span><span class="w"> </span><span class="c1"># Muestra última actualización</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minify</span><span class="w"> </span><span class="c1"># Minifica HTML</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redirects</span><span class="w"> </span><span class="c1"># Redirecciones</span>
+</code></pre></div>
+<p>Instalar con:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>mkdocs-git-revision-date-localized-plugin
+pip<span class="w"> </span>install<span class="w"> </span>mkdocs-minify-plugin
+pip<span class="w"> </span>install<span class="w"> </span>mkdocs-redirects
+</code></pre></div>
+<hr />
+<h2 id="troubleshooting">🔧 Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="error-gh-pages-branch-not-found">Error: "gh-pages branch not found"<a class="headerlink" href="#error-gh-pages-branch-not-found" title="Permanent link">&para;</a></h3>
+<p><strong>Solución</strong>: El branch se crea automáticamente en el primer deploy. Espera a que corra el GitHub Action.</p>
+<h3 id="error-403-forbidden-en-github-pages">Error: "403 Forbidden" en GitHub Pages<a class="headerlink" href="#error-403-forbidden-en-github-pages" title="Permanent link">&para;</a></h3>
+<p><strong>Solución</strong>:</p>
+<ol>
+<li>Ve a Settings → Pages</li>
+<li>Asegúrate que Source esté en <code>gh-pages</code></li>
+<li>Verifica que GitHub Actions tenga permisos de escritura</li>
+</ol>
+<h3 id="los-cambios-no-se-reflejan">Los cambios no se reflejan<a class="headerlink" href="#los-cambios-no-se-reflejan" title="Permanent link">&para;</a></h3>
+<p><strong>Solución</strong>:</p>
+<ol>
+<li>Verifica que el Action haya corrido: Actions tab en GitHub</li>
+<li>Limpia caché del navegador (Ctrl+Shift+R)</li>
+<li>Espera 1-2 minutos para propagación de CDN</li>
+</ol>
+<h3 id="preview-local-no-funciona">Preview local no funciona<a class="headerlink" href="#preview-local-no-funciona" title="Permanent link">&para;</a></h3>
+<p><strong>Solución</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Reinstalar dependencias</span>
+pip<span class="w"> </span>uninstall<span class="w"> </span>mkdocs<span class="w"> </span>mkdocs-material
+pip<span class="w"> </span>install<span class="w"> </span>mkdocs-material
+
+<span class="c1"># Verificar instalación</span>
+mkdocs<span class="w"> </span>--version
+</code></pre></div>
+<hr />
+<h2 id="comparacion-rapida">📊 Comparación Rápida<a class="headerlink" href="#comparacion-rapida" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>GitHub Native</th>
+<th>MkDocs</th>
+<th>Docusaurus</th>
+<th>VitePress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>⚡ Inmediato</td>
+<td>🟢 Fácil</td>
+<td>🟡 Medio</td>
+<td>🟡 Medio</td>
+</tr>
+<tr>
+<td>UI</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Búsqueda</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Velocidad</td>
+<td>⚡⚡⚡</td>
+<td>⚡⚡⚡</td>
+<td>⚡⚡</td>
+<td>⚡⚡⚡</td>
+</tr>
+<tr>
+<td>Customización</td>
+<td>❌</td>
+<td>🟢 Buena</td>
+<td>🟢 Excelente</td>
+<td>🟢 Buena</td>
+</tr>
+<tr>
+<td>Deploy</td>
+<td>⚡ Auto</td>
+<td>⚡ Auto</td>
+<td>🔧 Manual</td>
+<td>🔧 Manual</td>
+</tr>
+<tr>
+<td>Costo</td>
+<td>💚 Gratis</td>
+<td>💚 Gratis</td>
+<td>💚 Gratis</td>
+<td>💚 Gratis</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="checklist-de-deploy">✅ Checklist de Deploy<a class="headerlink" href="#checklist-de-deploy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Código pusheado a GitHub</li>
+<li>[ ] GitHub Pages habilitado en Settings</li>
+<li>[ ] Branch <code>gh-pages</code> existe (se crea automáticamente)</li>
+<li>[ ] GitHub Action corrió exitosamente</li>
+<li>[ ] URL funciona: <code>https://tu-usuario.github.io/get-ahead-ai/</code></li>
+<li>[ ] Navegación funciona correctamente</li>
+<li>[ ] Búsqueda funciona</li>
+<li>[ ] Dark mode funciona</li>
+<li>[ ] Links internos funcionan</li>
+<li>[ ] Responsive design se ve bien</li>
+</ul>
+<hr />
+<h2 id="listo">🎉 ¡Listo!<a class="headerlink" href="#listo" title="Permanent link">&para;</a></h2>
+<p>Tu documentación ahora está disponible en:</p>
+<p>🌐 <strong>https://tu-usuario.github.io/get-ahead-ai/</strong></p>
+<p>Cada vez que hagas push a <code>main</code> con cambios en <code>docs/</code>, se desplegará automáticamente.</p>
+<hr />
+<p><a href="./README.md">← Volver a Documentación</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/poirierunited/get-ahead-ai" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
