@@ -1,10 +1,10 @@
 site_name: Get Ahead AI - Documentation
 site_description: AI-powered interview preparation platform documentation
 site_author: Get Ahead AI Team
-site_url: https://tu-usuario.github.io/get-ahead-ai
+site_url: https://poirierunited.github.io/get-ahead-ai
 
 repo_name: get-ahead-ai
-repo_url: https://github.com/tu-usuario/get-ahead-ai
+repo_url: https://github.com/poirierunited/get-ahead-ai
 edit_uri: edit/main/docs/
 
 theme:
@@ -90,4 +90,4 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/tu-usuario/get-ahead-ai
+      link: https://github.com/poirierunited/get-ahead-ai
