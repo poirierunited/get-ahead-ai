@@ -196,10 +196,10 @@ export const getInterviewerConfig = (
             "I'm still here, take your time to think.",
             "No rush, I'm listening.",
           ],
-      idleTimeoutSeconds: 15, // Mensaje cada 15 segundos de inactividad (aumentado para permitir respuestas detalladas)
+      idleTimeoutSeconds: 30, // Mensaje cada 30 segundos de inactividad para dar más tiempo de reflexión
     },
-    silenceTimeoutSeconds: 60, // Termina la llamada después de 60 segundos de silencio completo (aumentado para permitir respuestas detalladas con pausas)
-    maxDurationSeconds: 600, // Máximo 10 minutos por entrevista (10 * 60 = 600) - aumentado para respuestas detalladas
+    silenceTimeoutSeconds: 120, // Termina la llamada después de 2 minutos de silencio completo (2 * 60 = 120) - permite respuestas largas y detalladas con pausas
+    maxDurationSeconds: 900, // Máximo 15 minutos por entrevista (15 * 60 = 900) - tiempo suficiente para respuestas completas
   };
 };
 
