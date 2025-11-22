@@ -37,6 +37,7 @@
   "interview": {
     "title": "Interview Generation",
     "start": "Start Interview",
+    "startInterview": "Start the interview",
     "end": "End Interview",
     "connecting": "Connecting...",
     "active": "Interview in Progress",
@@ -92,7 +93,8 @@
     "starElementT": "T - Task",
     "starElementA": "A - Action",
     "starElementR": "R - Result",
-    "noneOrComplete": "None (complete structure) or all elements present"
+    "noneOrComplete": "None (complete structure) or all elements present",
+    "starTooltip": "STAR is a method for structuring interview responses: Situation (context), Task (your responsibility), Action (specific steps you took), and Result (measurable impact). It helps provide complete and compelling answers."
   },
   "auth": {
     "email": "Email",

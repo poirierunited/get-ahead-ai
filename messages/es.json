@@ -37,6 +37,7 @@
   "interview": {
     "title": "Generación de Entrevistas",
     "start": "Iniciar Entrevista",
+    "startInterview": "Comenzar la entrevista",
     "end": "Finalizar Entrevista",
     "connecting": "Conectando...",
     "active": "Entrevista en Progreso",
@@ -92,7 +93,8 @@
     "starElementT": "T - Tarea",
     "starElementA": "A - Acción",
     "starElementR": "R - Resultado",
-    "noneOrComplete": "Ninguno (estructura completa) o todos los elementos presentes"
+    "noneOrComplete": "Ninguno (estructura completa) o todos los elementos presentes",
+    "starTooltip": "STAR es un método para estructurar respuestas en entrevistas: Situación (contexto), Tarea (tu responsabilidad), Acción (pasos específicos que tomaste) y Resultado (impacto medible). Ayuda a dar respuestas completas y convincentes."
   },
   "auth": {
     "email": "Correo Electrónico",

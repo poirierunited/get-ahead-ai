@@ -60,9 +60,9 @@ const InterviewDetails = async ({
 
   return (
     <>
-      <div className='flex flex-row gap-4 justify-between'>
-        <div className='flex flex-row gap-4 items-center max-sm:flex-col'>
-          <div className='flex flex-row gap-4 items-center'>
+      <div className='flex flex-col md:flex-row gap-3 md:gap-4 md:justify-between md:items-center'>
+        <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center'>
+          <div className='flex flex-row gap-3 items-center'>
             <Image
               src={getRandomInterviewCover()}
               alt='cover-image'
@@ -70,7 +70,7 @@ const InterviewDetails = async ({
               height={40}
               className='rounded-full object-cover size-[40px]'
             />
-            <h3 className='capitalize'>
+            <h3 className='capitalize text-base md:text-lg'>
               {interview.role} {t('interviewDetails.interview')}
             </h3>
           </div>
@@ -92,8 +92,8 @@ const InterviewDetails = async ({
               technical: 'badge-technical',
             }[typeKey] || 'badge-mixed';
           return (
-            <div className={`w-fit px-4 py-2 rounded-md ${badgeColor}`}>
-              <p className='badge-text'>{t(`interview.types.${typeKey}`)}</p>
+            <div className={`w-fit px-3 py-1.5 md:px-4 md:py-2 rounded-md ${badgeColor} self-start md:self-auto`}>
+              <p className='badge-text text-sm'>{t(`interview.types.${typeKey}`)}</p>
             </div>
           );
         })()}

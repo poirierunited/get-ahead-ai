@@ -23,6 +23,7 @@ export function toHttpResponse(error: unknown): {
         success: false,
         error: err.name || 'Error',
         message: err.message,
+        details: err.validationDetails,
       },
     };
   }
@@ -77,6 +78,16 @@ export class InternalServerError extends Error {
   constructor(message = 'Internal Server Error') {
     super(message);
     this.name = 'InternalServerError';
+  }
+}
+
+export class InvalidTranscriptError extends Error {
+  readonly status = 422 as const;
+  readonly validationDetails?: Record<string, any>;
+  constructor(message = 'Invalid or insufficient transcript data', details?: Record<string, any>) {
+    super(message);
+    this.name = 'InvalidTranscriptError';
+    this.validationDetails = details;
   }
 }
 

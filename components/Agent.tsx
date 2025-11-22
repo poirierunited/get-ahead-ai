@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DynamicLogo } from './DynamicLogo';
@@ -11,6 +12,7 @@ import { getInterviewerConfig } from '@/constants';
 import { useParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { logger, LogCategory } from '@/lib/logger';
+import { ArrowLeft } from 'lucide-react';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -18,6 +20,7 @@ enum CallStatus {
   ACTIVE = 'ACTIVE',
   FINISHED = 'FINISHED',
   CANCELLED = 'CANCELLED',
+  CANCELLED_BY_USER = 'CANCELLED_BY_USER',
   GENERATING_FEEDBACK = 'GENERATING_FEEDBACK',
 }
 
@@ -46,38 +49,6 @@ const Agent = ({
   const [terminationReason, setTerminationReason] = useState<string | null>(
     null
   );
-
-  // Heuristic: a question is considered answered if there is at least one
-  // meaningful user message between two assistant questions (or before the call ends).
-  function countAnsweredQuestions(conversation: SavedMessage[]) {
-    let inQuestion = false; // we saw an assistant question and are awaiting user reply
-    let userReplied = false; // we saw at least one meaningful user message while inQuestion
-    let answered = 0;
-
-    const isLikelyQuestion = (text: string) => text.trim().endsWith('?');
-    const hasMeaningfulContent = (text: string) => text.trim().length > 1;
-
-    for (const message of conversation) {
-      if (message.role === 'assistant') {
-        if (isLikelyQuestion(message.content)) {
-          // Starting a new question: finalize the previous one if user replied
-          if (inQuestion && userReplied) answered += 1;
-          inQuestion = true;
-          userReplied = false;
-        }
-        // Non-question assistant messages do not change state
-      } else if (message.role === 'user') {
-        if (inQuestion && hasMeaningfulContent(message.content)) {
-          userReplied = true; // count only once until the next assistant question
-        }
-      }
-    }
-
-    // If the conversation ended while still in the same question, count it if user replied
-    if (inQuestion && userReplied) answered += 1;
-
-    return answered;
-  }
 
   useEffect(() => {
     const onCallStart = () => {
@@ -178,24 +149,6 @@ const Agent = ({
         return;
       }
 
-      // Guard: only generate feedback when at least 50% of questions were answered
-      const totalQuestions = Array.isArray(questions) ? questions.length : 0;
-      const answeredCount = countAnsweredQuestions(messages);
-      const minRequired = Math.ceil(totalQuestions * 0.5);
-      const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
-
-      if (!meetsThreshold) {
-        logger.warn('Skipping feedback: below 50% answered threshold', {
-          totalQuestions,
-          answeredCount,
-          minRequired,
-          interviewId,
-          userId,
-        });
-        router.push(`/${locale}`);
-        return;
-      }
-
       // Set status to generating feedback before making the API call
       setCallStatus(CallStatus.GENERATING_FEEDBACK);
 
@@ -211,6 +164,21 @@ const Agent = ({
         });
 
         const data = await res.json();
+        
+        // Handle invalid transcript error (422)
+        if (res.status === 422 && data?.error === 'InvalidTranscriptError') {
+          logger.warn('Invalid transcript - redirecting to home', {
+            category: LogCategory.CLIENT_ERROR,
+            interviewId,
+            userId,
+            reason: data?.message,
+            details: data?.details,
+          });
+          // Redirect to home without feedback
+          router.push(`/${locale}`);
+          return;
+        }
+
         if (res.ok && data?.success && data?.feedbackId) {
           router.push(`/${locale}/interview/${interviewId}/feedback`);
           return;
@@ -231,19 +199,13 @@ const Agent = ({
     };
 
     if (callStatus === CallStatus.FINISHED) {
-      const totalQuestions = Array.isArray(questions) ? questions.length : 0;
-      const answeredCount = countAnsweredQuestions(messages);
-      const minRequired = Math.ceil(totalQuestions * 0.5);
-      const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
-
-      if (!meetsThreshold) {
-        router.push(`/${locale}`);
-        return;
-      }
-
+      // Always generate feedback when interview finishes naturally
       handleGenerateFeedback(messages);
-    } else if (callStatus === CallStatus.CANCELLED) {
-      // Interview was cancelled by user - do NOT generate feedback
+    } else if (
+      callStatus === CallStatus.CANCELLED ||
+      callStatus === CallStatus.CANCELLED_BY_USER
+    ) {
+      // Interview was cancelled - do NOT generate feedback, redirect to home
       router.push(`/${locale}`);
     }
   }, [
@@ -280,6 +242,14 @@ const Agent = ({
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
     vapi.stop();
+  };
+
+  const handleBackToHome = () => {
+    // If call is active, stop it first
+    if (callStatus === CallStatus.ACTIVE) {
+      vapi.stop();
+    }
+    setCallStatus(CallStatus.CANCELLED_BY_USER);
   };
 
   return (
@@ -331,10 +301,21 @@ const Agent = ({
         </div>
       )}
 
-      <div className='w-full flex justify-center'>
+      <div className='w-full flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4'>
+        {/* Back button - bottom on mobile, left on desktop */}
+        <button
+          className='btn-secondary flex items-center justify-center gap-2 w-full md:w-auto'
+          onClick={() => handleBackToHome()}
+          disabled={callStatus === CallStatus.GENERATING_FEEDBACK}
+        >
+          <ArrowLeft className='h-4 w-4' />
+          {t('common.back')}
+        </button>
+
+        {/* Call control button - top on mobile (more prominent), right-aligned on desktop */}
         {callStatus !== CallStatus.ACTIVE ? (
           <button
-            className='relative btn-call'
+            className='relative btn-call w-full md:w-auto'
             onClick={() => handleCall()}
             disabled={callStatus === CallStatus.GENERATING_FEEDBACK}
           >
@@ -350,14 +331,17 @@ const Agent = ({
             <span className='relative'>
               {callStatus === CallStatus.INACTIVE ||
               callStatus === CallStatus.FINISHED
-                ? t('interview.call')
+                ? t('interview.startInterview')
                 : callStatus === CallStatus.GENERATING_FEEDBACK
                 ? t('interview.generatingFeedback')
                 : '. . .'}
             </span>
           </button>
         ) : (
-          <button className='btn-disconnect' onClick={() => handleDisconnect()}>
+          <button
+            className='btn-disconnect w-full md:w-auto'
+            onClick={() => handleDisconnect()}
+          >
             {t('interview.end')}
           </button>
         )}

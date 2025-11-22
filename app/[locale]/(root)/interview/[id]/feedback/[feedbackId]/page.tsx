@@ -5,8 +5,13 @@ import { getTranslations } from 'next-intl/server';
 import dayjs from 'dayjs';
 
 import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { getCurrentUser } from '@/lib/actions/auth.action';
-import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ArrowLeft, RotateCcw, HelpCircle } from 'lucide-react';
 import { logger, LogCategory } from '@/lib/logger';
 
 const FeedbackDetail = async ({
@@ -172,6 +177,16 @@ const FeedbackDetail = async ({
         <div className='flex flex-col gap-4 mb-8 border-t pt-6'>
           <h2 className='text-2xl font-semibold flex items-center gap-2'>
             {t('feedback.starEvaluation')}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className='inline-flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors p-1'>
+                  <HelpCircle className='h-5 w-5 text-gray-500 dark:text-gray-400' />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className='max-w-sm'>
+                <p className='text-sm leading-relaxed'>{t('feedback.starTooltip')}</p>
+              </TooltipContent>
+            </Tooltip>
           </h2>
 
           <div className='border rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20'>
