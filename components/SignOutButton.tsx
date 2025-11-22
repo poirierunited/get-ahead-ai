@@ -7,6 +7,7 @@ import { auth } from '@/firebase/client';
 import { signOut as firebaseSignOut } from 'firebase/auth';
 import { signOut as serverSignOut } from '@/lib/actions/auth.action';
 import { toast } from 'sonner';
+import { logger, LogCategory } from '@/lib/logger';
 
 export function SignOutButton() {
   const router = useRouter();
@@ -28,7 +29,12 @@ export function SignOutButton() {
       toast.success(`${tNav('signOut')} - ${tCommon('success')}`);
       router.push(`/${locale}/sign-in`);
     } catch (error) {
-      console.error('Sign out error:', error);
+      logger.error('Sign out error', {
+        category: LogCategory.AUTH_FAILURE,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        errorName: error instanceof Error ? error.name : 'Unknown',
+        locale,
+      });
       toast.error(`${tNav('signOut')} - ${tCommon('error')}`);
     }
   };

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { FeedbackCard } from '@/components/FeedbackCard';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { logger } from '@/lib/logger';
 
 const Feedback = async ({
   params,
@@ -34,7 +35,7 @@ const Feedback = async ({
     }
     interview = data.interview;
   } catch (error) {
-    console.error('Error fetching interview:', error);
+    logger.error('error_fetching_interview', { error });
     redirect(`/${locale}`);
   }
 
@@ -54,12 +55,12 @@ const Feedback = async ({
 
     if (data.success && data.feedbacks && Array.isArray(data.feedbacks)) {
       feedbacks = data.feedbacks;
-      console.log('Feedbacks loaded:', feedbacks.length);
+      logger.info('feedbacks_loaded', { count: feedbacks.length });
     } else {
-      console.warn('No feedbacks found or invalid response:', data);
+      logger.warn('no_feedbacks_found_or_invalid_response', { data });
     }
   } catch (error) {
-    console.error('Error fetching feedbacks:', error);
+    logger.error('error_fetching_feedbacks', { error });
   }
 
   return (

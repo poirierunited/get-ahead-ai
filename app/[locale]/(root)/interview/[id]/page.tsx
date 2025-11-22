@@ -7,6 +7,7 @@ import { getRandomInterviewCover } from '@/lib/utils';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import DisplayTechIcons from '@/components/DisplayTechIcons';
 import { getTranslations } from 'next-intl/server';
+import { logger } from '@/lib/logger';
 
 const InterviewDetails = async ({
   params,
@@ -36,7 +37,7 @@ const InterviewDetails = async ({
     }
     interview = data.interview;
   } catch (error) {
-    console.error('Error fetching interview:', error);
+    logger.error('error_fetching_interview', { error });
     redirect(`/${locale}`);
   }
 
@@ -54,7 +55,7 @@ const InterviewDetails = async ({
       feedback = data.feedback;
     }
   } catch (error) {
-    console.error('Error fetching feedback:', error);
+    logger.error('error_fetching_feedback', { error });
   }
 
   return (

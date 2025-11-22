@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { Button } from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { logger, LogCategory } from '@/lib/logger';
 
 const FeedbackDetail = async ({
   params,
@@ -35,7 +36,15 @@ const FeedbackDetail = async ({
     }
     interview = data.interview;
   } catch (error) {
-    console.error('Error fetching interview:', error);
+    logger.error('Failed to fetch interview for feedback detail page', {
+      category: LogCategory.CLIENT_ERROR,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      errorName: error instanceof Error ? error.name : 'Unknown',
+      interviewId: id,
+      feedbackId,
+      userId: user?.id,
+      locale,
+    });
     redirect(`/${locale}`);
   }
 
@@ -58,7 +67,15 @@ const FeedbackDetail = async ({
       feedback = feedbacks.find((f: Feedback) => f.id === feedbackId) || null;
     }
   } catch (error) {
-    console.error('Error fetching feedbacks:', error);
+    logger.error('Failed to fetch feedbacks for feedback detail page', {
+      category: LogCategory.CLIENT_ERROR,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      errorName: error instanceof Error ? error.name : 'Unknown',
+      interviewId: id,
+      feedbackId,
+      userId: user?.id,
+      locale,
+    });
   }
 
   // If feedback not found, redirect to feedback list

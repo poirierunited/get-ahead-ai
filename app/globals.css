@@ -174,7 +174,7 @@
 
 @layer components {
   .btn-call {
-    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white dark:text-white transition-colors duration-150 bg-success-100 dark:bg-dark-primary-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 dark:active:bg-dark-primary-200 hover:bg-success-200 dark:hover:bg-dark-primary-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
+    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white dark:text-dark-dark-100 transition-colors duration-150 bg-success-100 dark:bg-dark-primary-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 dark:active:bg-dark-primary-200 hover:bg-success-200 dark:hover:bg-dark-primary-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
 
     .span {
       @apply bg-success-100 dark:bg-dark-primary-100 h-[85%] w-[65%];
@@ -182,24 +182,24 @@
   }
 
   .btn-disconnect {
-    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white dark:text-white transition-colors duration-150 bg-destructive-100 dark:bg-dark-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 dark:active:bg-dark-destructive-200 hover:bg-destructive-200 dark:hover:bg-dark-destructive-200 min-w-28;
+    @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white dark:text-dark-dark-100 transition-colors duration-150 bg-destructive-100 dark:bg-dark-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 dark:active:bg-dark-destructive-200 hover:bg-destructive-200 dark:hover:bg-dark-destructive-200 min-w-28;
   }
 
   .btn-upload {
     @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md;
   }
   .btn-primary {
-    @apply w-fit bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-100 dark:text-white dark:hover:bg-dark-primary-200 rounded-full font-bold px-5 cursor-pointer min-h-10 shadow-sm;
+    @apply w-fit bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-100 dark:text-dark-dark-100 dark:hover:bg-dark-primary-200 rounded-full font-bold px-5 cursor-pointer min-h-10 shadow-sm;
 
     a {
-      @apply text-white dark:text-white;
+      @apply text-white dark:text-dark-dark-100;
     }
   }
   .btn-secondary {
-    @apply w-fit bg-light-100 text-light-600 hover:bg-light-200 dark:bg-dark-dark-200 dark:text-dark-primary-100 dark:hover:bg-dark-dark-300 rounded-full font-bold px-5 cursor-pointer min-h-10 border border-light-400/20 dark:border-white/10;
+    @apply w-fit bg-light-600 text-white hover:bg-light-800 dark:bg-dark-primary-200 dark:text-dark-dark-100 dark:hover:bg-dark-primary-200/80 rounded-full font-bold px-5 cursor-pointer min-h-10 shadow-sm;
 
     a {
-      @apply text-light-600 dark:text-dark-primary-100;
+      @apply text-white dark:text-dark-dark-100;
     }
   }
 
@@ -227,10 +227,10 @@
     }
 
     .btn {
-      @apply w-full bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-200 dark:text-white dark:hover:bg-dark-primary-200/80 rounded-full min-h-10 font-bold px-5 cursor-pointer shadow-sm;
+      @apply w-full bg-primary-100 text-white hover:bg-primary-200 dark:bg-dark-primary-100 dark:text-dark-dark-100 dark:hover:bg-dark-primary-200 rounded-full min-h-10 font-bold px-5 cursor-pointer shadow-sm;
 
       a {
-        @apply text-white dark:text-white;
+        @apply text-white dark:text-dark-dark-100;
       }
     }
   }
