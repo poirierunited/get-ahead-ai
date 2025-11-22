@@ -196,10 +196,10 @@
     }
   }
   .btn-secondary {
-    @apply w-fit bg-light-100 text-light-600 hover:bg-light-200 dark:bg-dark-dark-200 dark:text-dark-primary-100 dark:hover:bg-dark-dark-300 rounded-full font-bold px-5 cursor-pointer min-h-10 border border-light-400/20 dark:border-white/10;
+    @apply w-fit bg-light-600 text-white hover:bg-light-800 dark:bg-dark-dark-200 dark:text-white dark:hover:bg-dark-dark-300 rounded-full font-bold px-5 cursor-pointer min-h-10 shadow-sm;
 
     a {
-      @apply text-light-600 dark:text-dark-primary-100;
+      @apply text-white dark:text-white;
     }
   }
 
