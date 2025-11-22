@@ -14,21 +14,8 @@ export async function createInterview(
   interview: InterviewEntity
 ): Promise<string> {
   try {
-    logger.debug('Creating interview in Firestore', {
-      category: LogCategory.DB_INSERT,
-      userId: interview.userId,
-      questionsCount: interview.questions?.length || 0,
-    });
-
     const collectionRef = db.collection('interviews');
     const docRef = await collectionRef.add(interview);
-
-    logger.info('Interview created successfully in Firestore', {
-      category: LogCategory.DB_INSERT,
-      userId: interview.userId,
-      interviewId: docRef.id,
-    });
-
     return docRef.id;
   } catch (error) {
     if (error instanceof Error) {
@@ -54,26 +41,12 @@ export async function getInterviewById(
   id: string
 ): Promise<(InterviewEntity & { id: string }) | null> {
   try {
-    logger.debug('Querying interview by ID from Firestore', {
-      category: LogCategory.DB_QUERY,
-      interviewId: id,
-    });
-
     const docRef = db.collection('interviews').doc(id);
     const snap = await docRef.get();
 
     if (!snap.exists) {
-      logger.debug('Interview not found in Firestore', {
-        category: LogCategory.DB_QUERY,
-        interviewId: id,
-      });
       return null;
     }
-
-    logger.debug('Interview retrieved successfully from Firestore', {
-      category: LogCategory.DB_QUERY,
-      interviewId: id,
-    });
 
     return { id: snap.id, ...(snap.data() as InterviewEntity) };
   } catch (error) {
@@ -103,12 +76,6 @@ export async function getFeedbackByInterviewId(
   userId: string
 ): Promise<Feedback | null> {
   try {
-    logger.debug('Querying latest feedback from Firestore', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-    });
-
     const querySnapshot = await db
       .collection('feedback')
       .where('interviewId', '==', interviewId)
@@ -118,22 +85,10 @@ export async function getFeedbackByInterviewId(
       .get();
 
     if (querySnapshot.empty) {
-      logger.debug('No feedback found in Firestore', {
-        category: LogCategory.DB_QUERY,
-        interviewId,
-        userId,
-      });
       return null;
     }
 
     const feedbackDoc = querySnapshot.docs[0];
-    logger.debug('Latest feedback retrieved successfully from Firestore', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-      feedbackId: feedbackDoc.id,
-    });
-
     return { id: feedbackDoc.id, ...feedbackDoc.data() } as Feedback;
   } catch (error) {
     if (error instanceof Error) {
@@ -162,12 +117,6 @@ export async function getAllFeedbacksByInterviewId(
   userId: string
 ): Promise<Feedback[]> {
   try {
-    logger.debug('Querying all feedbacks from Firestore', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-    });
-
     const querySnapshot = await db
       .collection('feedback')
       .where('interviewId', '==', interviewId)
@@ -176,11 +125,6 @@ export async function getAllFeedbacksByInterviewId(
       .get();
 
     if (querySnapshot.empty) {
-      logger.debug('No feedbacks found in Firestore', {
-        category: LogCategory.DB_QUERY,
-        interviewId,
-        userId,
-      });
       return [];
     }
 
@@ -188,13 +132,6 @@ export async function getAllFeedbacksByInterviewId(
       id: doc.id,
       ...doc.data(),
     })) as Feedback[];
-
-    logger.debug('All feedbacks retrieved successfully from Firestore', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-      count: feedbacks.length,
-    });
 
     return feedbacks;
   } catch (error) {
@@ -225,12 +162,6 @@ export async function getLatestInterviews(
   limit: number = 20
 ): Promise<(InterviewEntity & { id: string })[]> {
   try {
-    logger.debug('Querying latest interviews from Firestore', {
-      category: LogCategory.DB_QUERY,
-      userId,
-      limit,
-    });
-
     const interviewsRef = await db
       .collection('interviews')
       .orderBy('createdAt', 'desc')
@@ -243,13 +174,6 @@ export async function getLatestInterviews(
       id: doc.id,
       ...doc.data(),
     })) as (InterviewEntity & { id: string })[];
-
-    logger.debug('Latest interviews retrieved successfully from Firestore', {
-      category: LogCategory.DB_QUERY,
-      userId,
-      count: interviews.length,
-      limit,
-    });
 
     return interviews;
   } catch (error) {
@@ -277,11 +201,6 @@ export async function getInterviewsByUserId(
   userId: string
 ): Promise<(InterviewEntity & { id: string })[]> {
   try {
-    logger.debug('Querying user interviews from Firestore', {
-      category: LogCategory.DB_QUERY,
-      userId,
-    });
-
     const interviewsRef = await db
       .collection('interviews')
       .where('userId', '==', userId)
@@ -292,12 +211,6 @@ export async function getInterviewsByUserId(
       id: doc.id,
       ...doc.data(),
     })) as (InterviewEntity & { id: string })[];
-
-    logger.debug('User interviews retrieved successfully from Firestore', {
-      category: LogCategory.DB_QUERY,
-      userId,
-      count: interviews.length,
-    });
 
     return interviews;
   } catch (error) {

@@ -74,29 +74,11 @@ export async function generateAndStoreFeedbackService(
       throw new BadRequestError('interviewId is required');
     }
 
-    logger.debug('Fetching existing feedbacks for attempt calculation', {
-      category: LogCategory.FEEDBACK_GENERATE,
-      requestId,
-      userId,
-      interviewId,
-    });
-
-    // Calculate attempt number by counting existing feedbacks for this interview and user
     const existingFeedbacks = await repoGetAllFeedbacksByInterviewId(
       interviewId,
       userId
     );
     const attemptNumber = existingFeedbacks.length + 1;
-
-    logger.info('Preparing AI prompt for feedback generation', {
-      category: LogCategory.FEEDBACK_GENERATE,
-      requestId,
-      userId,
-      interviewId,
-      attemptNumber,
-      transcriptLength: transcript.length,
-      language,
-    });
 
     const formattedTranscript = transcript
       .map((s) => `- ${s.role}: ${s.content}\n`)
@@ -105,33 +87,11 @@ export async function generateAndStoreFeedbackService(
     const prompt = promptTemplate.replace('{transcript}', formattedTranscript);
     const system = systemTemplate.replace('{language}', language);
 
-    const aiStartTime = Date.now();
-    logger.info('Calling AI model for feedback generation', {
-      category: LogCategory.AI_REQUEST,
-      requestId,
-      userId,
-      interviewId,
-      model: 'gemini-2.0-flash-001',
-    });
-
     const { object } = await generateObject({
       model: google('gemini-2.0-flash-001', { structuredOutputs: false }),
       schema: feedbackZod,
       prompt,
       system,
-    });
-
-    const aiDuration = Date.now() - aiStartTime;
-    logger.info('AI feedback generated successfully', {
-      category: LogCategory.AI_RESPONSE,
-      requestId,
-      userId,
-      interviewId,
-      totalScore: object.totalScore,
-      categoriesCount: object.categoryScores?.length || 0,
-      strengthsCount: object.strengths?.length || 0,
-      improvementsCount: object.areasForImprovement?.length || 0,
-      aiDuration,
     });
 
     const feedback = {
@@ -146,14 +106,6 @@ export async function generateAndStoreFeedbackService(
       createdAt: new Date().toISOString(),
     } as const;
 
-    logger.debug('Storing feedback in database', {
-      category: LogCategory.DB_INSERT,
-      requestId,
-      userId,
-      interviewId,
-      attemptNumber,
-    });
-
     const feedbackRef = db.collection('feedback').doc();
     await feedbackRef.set(feedback);
 
@@ -164,14 +116,13 @@ export async function generateAndStoreFeedbackService(
       userId,
       interviewId,
       feedbackId: feedbackRef.id,
-      attemptNumber,
-      totalDuration,
+      duration: totalDuration,
     });
 
     return { feedbackId: feedbackRef.id };
   } catch (error) {
     const duration = Date.now() - startTime;
-    
+
     if (error instanceof Error) {
       logger.error('Feedback service failed', {
         category: LogCategory.SYSTEM_ERROR,
@@ -184,7 +135,7 @@ export async function generateAndStoreFeedbackService(
         duration,
       });
     }
-    
+
     throw error;
   }
 }
@@ -202,21 +153,7 @@ export async function getFeedbackByInterviewIdService(
   userId: string
 ) {
   try {
-    logger.debug('Fetching latest feedback from repository', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-    });
-
     const feedback = await repoGetFeedbackByInterviewId(interviewId, userId);
-
-    logger.debug('Latest feedback fetch completed', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-      found: !!feedback,
-    });
-
     return feedback;
   } catch (error) {
     if (error instanceof Error) {
@@ -244,24 +181,10 @@ export async function getAllFeedbacksByInterviewIdService(
   userId: string
 ): Promise<Feedback[]> {
   try {
-    logger.debug('Fetching all feedbacks from repository', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-    });
-
     const feedbacks = await repoGetAllFeedbacksByInterviewId(
       interviewId,
       userId
     );
-
-    logger.debug('All feedbacks fetch completed', {
-      category: LogCategory.DB_QUERY,
-      interviewId,
-      userId,
-      count: feedbacks.length,
-    });
-
     return feedbacks;
   } catch (error) {
     if (error instanceof Error) {

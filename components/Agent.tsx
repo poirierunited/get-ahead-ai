@@ -81,30 +81,14 @@ const Agent = ({
 
   useEffect(() => {
     const onCallStart = () => {
-      logger.info('Call started - setting status to ACTIVE', {
-        category: LogCategory.CLIENT_ACTION,
-        interviewId,
-        userId,
-      });
       setCallStatus(CallStatus.ACTIVE);
     };
 
     const onCallEnd = () => {
-      logger.info('Call ended - setting status to FINISHED', {
-        category: LogCategory.CLIENT_ACTION,
-        interviewId,
-        userId,
-      });
       setCallStatus(CallStatus.FINISHED);
     };
 
     const onMessage = (message: Message) => {
-      logger.debug('Message received', {
-        category: LogCategory.CLIENT_ACTION,
-        message,
-        interviewId,
-      });
-
       if (message.type === 'transcript' && message.transcriptType === 'final') {
         const newMessage = { role: message.role, content: message.transcript };
         setMessages((prev) => [...prev, newMessage]);
@@ -122,20 +106,10 @@ const Agent = ({
     };
 
     const onSpeechStart = () => {
-      logger.debug('Speech start', {
-        category: LogCategory.CLIENT_ACTION,
-        interviewId,
-        userId,
-      });
       setIsSpeaking(true);
     };
 
     const onSpeechEnd = () => {
-      logger.debug('Speech end', {
-        category: LogCategory.CLIENT_ACTION,
-        interviewId,
-        userId,
-      });
       setIsSpeaking(false);
     };
 
@@ -195,13 +169,6 @@ const Agent = ({
     }
 
     const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-      logger.info('Generating feedback', {
-        category: LogCategory.CLIENT_ACTION,
-        interviewId,
-        userId,
-        messageCount: messages.length,
-      });
-
       if (!userId) {
         logger.error('userId is missing for feedback generation', {
           category: LogCategory.CLIENT_ERROR,
@@ -269,25 +236,7 @@ const Agent = ({
       const minRequired = Math.ceil(totalQuestions * 0.5);
       const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
 
-      logger.info('Feedback gate check', {
-        category: LogCategory.CLIENT_ACTION,
-        totalQuestions,
-        answeredCount,
-        minRequired,
-        meetsThreshold,
-        interviewId,
-        userId,
-      });
-
       if (!meetsThreshold) {
-        logger.warn('Skipping feedback: below 50% answered threshold', {
-          category: LogCategory.CLIENT_ACTION,
-          totalQuestions,
-          answeredCount,
-          minRequired,
-          interviewId,
-          userId,
-        });
         router.push(`/${locale}`);
         return;
       }
@@ -295,17 +244,6 @@ const Agent = ({
       handleGenerateFeedback(messages);
     } else if (callStatus === CallStatus.CANCELLED) {
       // Interview was cancelled by user - do NOT generate feedback
-      logger.info('Interview cancelled by user', {
-        category: LogCategory.CLIENT_ACTION,
-        terminationReason,
-        interviewId,
-        userId,
-      });
-      logger.info('Skipping feedback generation for cancelled interview', {
-        category: LogCategory.CLIENT_ACTION,
-        interviewId,
-        userId,
-      });
       router.push(`/${locale}`);
     }
   }, [

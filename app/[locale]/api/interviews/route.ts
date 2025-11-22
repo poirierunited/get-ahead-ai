@@ -38,14 +38,6 @@ export async function POST(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const locale = pathname.split('/')[1];
 
-    logger.info('Interview generation request received', {
-      category: LogCategory.API_REQUEST,
-      requestId,
-      locale,
-      method: 'POST',
-      path: pathname,
-    });
-
     if (isRateLimited(request)) {
       logger.warn('Rate limit exceeded for interview generation', {
         category: LogCategory.RATE_LIMIT,
@@ -81,19 +73,6 @@ export async function POST(request: NextRequest) {
     const messages = await getMessages({ locale });
     const language = locale === 'es' ? 'Spanish' : 'English';
 
-    logger.info('Starting interview generation', {
-      category: LogCategory.INTERVIEW_GENERATE,
-      requestId,
-      userId: userid,
-      role,
-      level,
-      type,
-      questionsAmount: amount,
-      hasTechStack: !!techstack,
-      hasJobDescription: !!jobDescription,
-      language,
-    });
-
     const { interview, questions, documentId } =
       await generateAndStoreInterview({
         title,
@@ -120,7 +99,6 @@ export async function POST(request: NextRequest) {
       interviewId: documentId,
       questionsCount: Array.isArray(questions) ? questions.length : 0,
       duration,
-      statusCode: 200,
     });
 
     return NextResponse.json(
@@ -164,7 +142,6 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   const requestId = generateRequestId();
-  const startTime = Date.now();
 
   try {
     const { searchParams, pathname } = request.nextUrl;
@@ -174,25 +151,8 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
     const locale = pathname.split('/')[1];
 
-    logger.info('Interview fetch request received', {
-      category: LogCategory.API_REQUEST,
-      requestId,
-      method: 'GET',
-      path: pathname,
-      id,
-      userId: userId ?? undefined,
-      type,
-      limit,
-    });
-
     // Get single interview by ID
     if (id) {
-      logger.debug('Fetching interview by ID', {
-        category: LogCategory.INTERVIEW_FETCH,
-        requestId,
-        interviewId: id,
-      });
-
       const interview = await getInterviewByIdService(id);
 
       if (!interview) {
@@ -208,15 +168,6 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      const duration = Date.now() - startTime;
-      logger.info('Interview fetched successfully', {
-        category: LogCategory.API_RESPONSE,
-        requestId,
-        interviewId: id,
-        duration,
-        statusCode: 200,
-      });
-
       return NextResponse.json(
         { success: true, interview, locale },
         { status: 200 }
@@ -226,52 +177,15 @@ export async function GET(request: NextRequest) {
     // Get latest interviews or user interviews
     if (userId) {
       if (type === 'user') {
-        // Get user's own interviews
-        logger.debug('Fetching user interviews', {
-          category: LogCategory.INTERVIEW_FETCH,
-          requestId,
-          userId,
-        });
-
         const interviews = await getInterviewsByUserIdService(userId);
-
-        const duration = Date.now() - startTime;
-        logger.info('User interviews fetched successfully', {
-          category: LogCategory.API_RESPONSE,
-          requestId,
-          userId,
-          count: interviews.length,
-          duration,
-          statusCode: 200,
-        });
 
         return NextResponse.json(
           { success: true, interviews, locale },
           { status: 200 }
         );
       } else {
-        // Get latest interviews (excluding user's own)
         const limitNum = limit ? parseInt(limit, 10) : 20;
-
-        logger.debug('Fetching latest interviews', {
-          category: LogCategory.INTERVIEW_FETCH,
-          requestId,
-          userId,
-          limit: limitNum,
-        });
-
         const interviews = await getLatestInterviewsService(userId, limitNum);
-
-        const duration = Date.now() - startTime;
-        logger.info('Latest interviews fetched successfully', {
-          category: LogCategory.API_RESPONSE,
-          requestId,
-          userId,
-          count: interviews.length,
-          limit: limitNum,
-          duration,
-          statusCode: 200,
-        });
 
         return NextResponse.json(
           { success: true, interviews, locale },
@@ -290,8 +204,6 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     );
   } catch (error) {
-    const duration = Date.now() - startTime;
-
     if (error instanceof Error) {
       logger.error('Interview fetch failed', {
         category: LogCategory.API_ERROR,
@@ -299,7 +211,6 @@ export async function GET(request: NextRequest) {
         error: error.message,
         errorName: error.name,
         stack: error.stack,
-        duration,
       });
     }
 

@@ -64,18 +64,6 @@ export async function generateAndStoreInterview(
   const startTime = Date.now();
 
   try {
-    logger.info('Building interview generation prompt', {
-      category: LogCategory.INTERVIEW_GENERATE,
-      requestId,
-      userId,
-      role,
-      level,
-      type,
-      amount,
-      hasTechStack: !!techstack,
-      hasJobDescription: !!jobDescription,
-    });
-
     const prompt = buildGenerateInterviewPrompt({
       template: promptTemplate,
       role,
@@ -88,48 +76,25 @@ export async function generateAndStoreInterview(
 
     const system = buildSystemPrompt(systemTemplate, language);
 
-    const aiStartTime = Date.now();
-    logger.info('Calling AI model for interview generation', {
-      category: LogCategory.AI_REQUEST,
-      requestId,
-      userId,
-      model: 'gemini-flash',
-      language,
-    });
-
     const text = await generateTextWithModel({
       model: models.geminiFlash(),
       prompt,
       system,
     });
 
-    const aiDuration = Date.now() - aiStartTime;
-    logger.info('AI response received', {
-      category: LogCategory.AI_RESPONSE,
-      requestId,
-      userId,
-      responseLength: text.length,
-      aiDuration,
-    });
-
     let questions: InterviewQuestion[];
     try {
       questions = JSON.parse(text);
-      if (!Array.isArray(questions)) throw new Error('Questions is not an array');
-      
-      logger.debug('Interview questions parsed successfully', {
-        category: LogCategory.INTERVIEW_GENERATE,
-        requestId,
-        userId,
-        questionsCount: questions.length,
-      });
+      if (!Array.isArray(questions))
+        throw new Error('Questions is not an array');
     } catch (parseError) {
       logger.error('AI returned invalid JSON', {
         category: LogCategory.AI_ERROR,
         requestId,
         userId,
         sample: text.slice(0, 100),
-        error: parseError instanceof Error ? parseError.message : 'Unknown error',
+        error:
+          parseError instanceof Error ? parseError.message : 'Unknown error',
       });
       throw new BadRequestError('AI returned invalid JSON');
     }
@@ -147,29 +112,22 @@ export async function generateAndStoreInterview(
       createdAt: new Date().toISOString(),
     };
 
-    logger.debug('Storing interview in database', {
-      category: LogCategory.DB_INSERT,
-      requestId,
-      userId,
-      questionsCount: questions.length,
-    });
-
     const documentId = await createInterview(entity);
 
     const totalDuration = Date.now() - startTime;
-    logger.info('Interview created and stored successfully', {
+    logger.info('Interview created successfully', {
       category: LogCategory.INTERVIEW_GENERATE,
       requestId,
       userId,
       interviewId: documentId,
       questionsCount: questions.length,
-      totalDuration,
+      duration: totalDuration,
     });
 
     return { interview: entity, questions, documentId };
   } catch (error) {
     const duration = Date.now() - startTime;
-    
+
     if (error instanceof Error) {
       logger.error('Interview service failed', {
         category: LogCategory.SYSTEM_ERROR,
@@ -181,7 +139,7 @@ export async function generateAndStoreInterview(
         duration,
       });
     }
-    
+
     throw error;
   }
 }
@@ -194,19 +152,7 @@ export async function generateAndStoreInterview(
  */
 export async function getInterviewByIdService(id: string) {
   try {
-    logger.debug('Fetching interview by ID from repository', {
-      category: LogCategory.DB_QUERY,
-      interviewId: id,
-    });
-
     const interview = await repoGetInterviewById(id);
-
-    logger.debug('Interview fetch completed', {
-      category: LogCategory.DB_QUERY,
-      interviewId: id,
-      found: !!interview,
-    });
-
     return interview;
   } catch (error) {
     if (error instanceof Error) {
@@ -233,21 +179,7 @@ export async function getLatestInterviewsService(
   limit: number = 20
 ) {
   try {
-    logger.debug('Fetching latest interviews from repository', {
-      category: LogCategory.DB_QUERY,
-      userId,
-      limit,
-    });
-
     const interviews = await repoGetLatestInterviews(userId, limit);
-
-    logger.debug('Latest interviews fetch completed', {
-      category: LogCategory.DB_QUERY,
-      userId,
-      count: interviews.length,
-      limit,
-    });
-
     return interviews;
   } catch (error) {
     if (error instanceof Error) {
@@ -271,19 +203,7 @@ export async function getLatestInterviewsService(
  */
 export async function getInterviewsByUserIdService(userId: string) {
   try {
-    logger.debug('Fetching user interviews from repository', {
-      category: LogCategory.DB_QUERY,
-      userId,
-    });
-
     const interviews = await repoGetInterviewsByUserId(userId);
-
-    logger.debug('User interviews fetch completed', {
-      category: LogCategory.DB_QUERY,
-      userId,
-      count: interviews.length,
-    });
-
     return interviews;
   } catch (error) {
     if (error instanceof Error) {
