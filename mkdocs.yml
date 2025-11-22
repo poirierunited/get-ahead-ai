@@ -67,6 +67,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Guía de Logging: logging.md
+  - Estructura de Feedback: FEEDBACK_STRUCTURE.md
   - Arquitectura:
       - Placeholder: architecture/PLACEHOLDER.md
   - Desarrollo:

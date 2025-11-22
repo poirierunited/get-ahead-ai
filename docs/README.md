@@ -13,6 +13,7 @@ Bienvenido al centro de documentación de Get Ahead AI. Aquí encontrarás toda 
 ### 🏗️ Arquitectura y Desarrollo
 
 - **[Logging System](./logging.md)** - Sistema de logging estructurado, categorías, mejores prácticas y troubleshooting
+- **[Estructura de Feedback](./FEEDBACK_STRUCTURE.md)** - Documentación completa del sistema de feedback, schemas, prompts y oportunidades de mejora
 - **[Arquitectura](./architecture/overview.md)** _(Próximamente)_ - Visión general de la arquitectura del sistema
 - **[Convenciones de Código](./development/code-conventions.md)** _(Próximamente)_ - Estándares y convenciones de código
 
@@ -64,6 +65,7 @@ Bienvenido al centro de documentación de Get Ahead AI. Aquí encontrarás toda 
 docs/
 ├── README.md                      # Este archivo - índice central
 ├── logging.md                     # Sistema de logging ✅
+├── FEEDBACK_STRUCTURE.md          # Sistema de feedback ✅
 │
 ├── architecture/                  # Documentación de arquitectura
 │   ├── overview.md               # Visión general del sistema
@@ -189,6 +191,7 @@ Enlaces a recursos externos
 | Tema          | Documento                                                           |
 | ------------- | ------------------------------------------------------------------- |
 | Logging       | [logging.md](./logging.md)                                          |
+| Feedback      | [FEEDBACK_STRUCTURE.md](./FEEDBACK_STRUCTURE.md)                    |
 | Setup inicial | [guides/quick-start.md](./guides/quick-start.md) _(próximamente)_   |
 | API Endpoints | [api/README.md](./api/README.md) _(próximamente)_                   |
 | Componentes   | [frontend/components.md](./frontend/components.md) _(próximamente)_ |
@@ -199,6 +202,7 @@ Enlaces a recursos externos
 #### Desarrolladores Backend
 
 - [Logging System](./logging.md)
+- [Feedback Structure](./FEEDBACK_STRUCTURE.md)
 - API Reference _(próximamente)_
 - Database Schema _(próximamente)_
 - External Services _(próximamente)_
