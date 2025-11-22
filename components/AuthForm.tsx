@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 
 import { signIn, signUp } from '@/lib/actions/auth.action';
 import { handleAuthError } from '@/lib/auth.utils';
+import { logger, LogCategory } from '@/lib/logger';
 import FormField from './FormField';
 
 const authFormSchema = (type: FormType) => {
@@ -99,7 +100,14 @@ const AuthForm = ({ type }: { type: FormType }) => {
         router.push(`/${locale}`);
       }
     } catch (error: any) {
-      console.error('Authentication error:', error);
+      logger.error('Authentication error', {
+        category: LogCategory.AUTH_FAILURE,
+        error: error.message || 'Unknown error',
+        errorCode: error.code,
+        errorName: error.name,
+        type,
+        email: form.getValues('email'),
+      });
       const errorMessage = handleAuthError(error, t);
       toast.error(errorMessage);
     }

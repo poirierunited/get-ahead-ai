@@ -1,9 +1,10 @@
-"use server";
+'use server';
 
-import { auth, db } from "@/firebase/admin";
-import { cookies } from "next/headers";
-import { AUTH_COOKIES, SESSION_DURATION, COOKIE_OPTIONS } from "@/constants";
-import { handleAuthError } from "@/lib/auth.utils";
+import { auth, db } from '@/firebase/admin';
+import { cookies } from 'next/headers';
+import { AUTH_COOKIES, SESSION_DURATION, COOKIE_OPTIONS } from '@/constants';
+import { handleAuthError } from '@/lib/auth.utils';
+import { logger, LogCategory } from '@/lib/logger';
 
 // Set session cookie
 export async function setSessionCookie(idToken: string) {
@@ -23,15 +24,15 @@ export async function signUp(params: SignUpParams) {
 
   try {
     // check if user exists in db
-    const userRecord = await db.collection("users").doc(uid).get();
+    const userRecord = await db.collection('users').doc(uid).get();
     if (userRecord.exists)
       return {
         success: false,
-        message: "User already exists. Please sign in.",
+        message: 'User already exists. Please sign in.',
       };
 
     // save user to db
-    await db.collection("users").doc(uid).set({
+    await db.collection('users').doc(uid).set({
       name,
       email,
       // profileURL,
@@ -40,10 +41,16 @@ export async function signUp(params: SignUpParams) {
 
     return {
       success: true,
-      message: "Account created successfully. Please sign in.",
+      message: 'Account created successfully. Please sign in.',
     };
   } catch (error: any) {
-    console.error("Error creating user:", error);
+    logger.error('Error creating user', {
+      category: LogCategory.AUTH_FAILURE,
+      error: error.message,
+      errorName: error.name,
+      uid,
+      email,
+    });
     return {
       success: false,
       message: handleAuthError(error),
@@ -59,17 +66,22 @@ export async function signIn(params: SignInParams) {
     if (!userRecord)
       return {
         success: false,
-        message: "User does not exist. Create an account.",
+        message: 'User does not exist. Create an account.',
       };
 
     await setSessionCookie(idToken);
 
     return {
       success: true,
-      message: "Signed in successfully.",
+      message: 'Signed in successfully.',
     };
   } catch (error: any) {
-    console.error("Sign in error:", error);
+    logger.error('Sign in error', {
+      category: LogCategory.AUTH_FAILURE,
+      error: error.message,
+      errorName: error.name,
+      email,
+    });
     return {
       success: false,
       message: handleAuthError(error),
@@ -102,7 +114,7 @@ export async function getCurrentUser(): Promise<User | null> {
 
     // get user info from db
     const userRecord = await db
-      .collection("users")
+      .collection('users')
       .doc(decodedClaims.uid)
       .get();
     if (!userRecord.exists) return null;
@@ -112,7 +124,10 @@ export async function getCurrentUser(): Promise<User | null> {
       id: userRecord.id,
     } as User;
   } catch (error) {
-    console.log(error);
+    logger.warn('Session verification failed', {
+      category: LogCategory.AUTH_SESSION,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
 
     // Invalid or expired session
     return null;

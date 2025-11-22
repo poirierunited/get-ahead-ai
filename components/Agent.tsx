@@ -10,6 +10,7 @@ import { vapi } from '@/lib/vapi.sdk';
 import { getInterviewerConfig } from '@/constants';
 import { useParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { logger, LogCategory } from '@/lib/logger';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -80,17 +81,29 @@ const Agent = ({
 
   useEffect(() => {
     const onCallStart = () => {
-      console.log('Call started - setting status to ACTIVE');
+      logger.info('Call started - setting status to ACTIVE', {
+        category: LogCategory.CLIENT_ACTION,
+        interviewId,
+        userId,
+      });
       setCallStatus(CallStatus.ACTIVE);
     };
 
     const onCallEnd = () => {
-      console.log('Call ended - setting status to FINISHED');
+      logger.info('Call ended - setting status to FINISHED', {
+        category: LogCategory.CLIENT_ACTION,
+        interviewId,
+        userId,
+      });
       setCallStatus(CallStatus.FINISHED);
     };
 
     const onMessage = (message: Message) => {
-      console.log('Message received:', message);
+      logger.debug('Message received', {
+        category: LogCategory.CLIENT_ACTION,
+        message,
+        interviewId,
+      });
 
       if (message.type === 'transcript' && message.transcriptType === 'final') {
         const newMessage = { role: message.role, content: message.transcript };
@@ -109,17 +122,31 @@ const Agent = ({
     };
 
     const onSpeechStart = () => {
-      console.log('speech start');
+      logger.debug('Speech start', {
+        category: LogCategory.CLIENT_ACTION,
+        interviewId,
+        userId,
+      });
       setIsSpeaking(true);
     };
 
     const onSpeechEnd = () => {
-      console.log('speech end');
+      logger.debug('Speech end', {
+        category: LogCategory.CLIENT_ACTION,
+        interviewId,
+        userId,
+      });
       setIsSpeaking(false);
     };
 
     const onError = (error: Error) => {
-      console.log('Error:', error);
+      logger.error('Vapi error', {
+        category: LogCategory.CLIENT_ERROR,
+        error: error.message,
+        errorName: error.name,
+        interviewId,
+        userId,
+      });
     };
 
     vapi.on('call-start', onCallStart);
@@ -168,10 +195,18 @@ const Agent = ({
     }
 
     const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-      console.log('handleGenerateFeedback');
+      logger.info('Generating feedback', {
+        category: LogCategory.CLIENT_ACTION,
+        interviewId,
+        userId,
+        messageCount: messages.length,
+      });
 
       if (!userId) {
-        console.error('userId is missing');
+        logger.error('userId is missing for feedback generation', {
+          category: LogCategory.CLIENT_ERROR,
+          interviewId,
+        });
         router.push(`/${locale}`);
         return;
       }
@@ -183,10 +218,12 @@ const Agent = ({
       const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
 
       if (!meetsThreshold) {
-        console.warn('Skipping feedback: below 50% answered threshold', {
+        logger.warn('Skipping feedback: below 50% answered threshold', {
           totalQuestions,
           answeredCount,
           minRequired,
+          interviewId,
+          userId,
         });
         router.push(`/${locale}`);
         return;
@@ -212,7 +249,13 @@ const Agent = ({
           return;
         }
       } catch (err) {
-        console.error('Error saving feedback:', err);
+        logger.error('Error saving feedback', {
+          category: LogCategory.CLIENT_ERROR,
+          error: err instanceof Error ? err.message : 'Unknown error',
+          errorName: err instanceof Error ? err.name : 'Unknown',
+          interviewId,
+          userId,
+        });
       }
 
       {
@@ -226,18 +269,24 @@ const Agent = ({
       const minRequired = Math.ceil(totalQuestions * 0.5);
       const meetsThreshold = totalQuestions > 0 && answeredCount >= minRequired;
 
-      console.log('Feedback gate check', {
+      logger.info('Feedback gate check', {
+        category: LogCategory.CLIENT_ACTION,
         totalQuestions,
         answeredCount,
         minRequired,
         meetsThreshold,
+        interviewId,
+        userId,
       });
 
       if (!meetsThreshold) {
-        console.warn('Skipping feedback: below 50% answered threshold', {
+        logger.warn('Skipping feedback: below 50% answered threshold', {
+          category: LogCategory.CLIENT_ACTION,
           totalQuestions,
           answeredCount,
           minRequired,
+          interviewId,
+          userId,
         });
         router.push(`/${locale}`);
         return;
@@ -246,8 +295,17 @@ const Agent = ({
       handleGenerateFeedback(messages);
     } else if (callStatus === CallStatus.CANCELLED) {
       // Interview was cancelled by user - do NOT generate feedback
-      console.log('Interview cancelled by user, reason:', terminationReason);
-      console.log('Skipping feedback generation for cancelled interview');
+      logger.info('Interview cancelled by user', {
+        category: LogCategory.CLIENT_ACTION,
+        terminationReason,
+        interviewId,
+        userId,
+      });
+      logger.info('Skipping feedback generation for cancelled interview', {
+        category: LogCategory.CLIENT_ACTION,
+        interviewId,
+        userId,
+      });
       router.push(`/${locale}`);
     }
   }, [

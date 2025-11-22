@@ -12,6 +12,7 @@ import { Button } from './ui/button';
 import DisplayTechIcons from './DisplayTechIcons';
 
 import { cn, getRandomInterviewCover } from '@/lib/utils';
+import { logger, LogCategory } from '@/lib/logger';
 
 interface InterviewCardProps {
   interviewId: string;
@@ -60,7 +61,14 @@ const InterviewCard = ({
             setFeedback(data.feedback);
           }
         } catch (error) {
-          console.error('Error fetching feedback:', error);
+          logger.error('Failed to fetch feedback for interview card', {
+            category: LogCategory.CLIENT_ERROR,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            errorName: error instanceof Error ? error.name : 'Unknown',
+            interviewId,
+            userId,
+            locale,
+          });
           hasFetchedRef.current = false; // Reset on error to allow retry
         }
       }

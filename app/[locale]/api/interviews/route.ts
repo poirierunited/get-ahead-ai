@@ -14,12 +14,49 @@ import {
   getLatestInterviewsService,
   getInterviewsByUserIdService,
 } from '@/lib/services/interview';
-import { logger } from '@/lib/logger';
+import { logger, generateRequestId, LogCategory } from '@/lib/logger';
 
-// document this function.
+/**
+ * Creates a new interview session using AI generation.
+ *
+ * This endpoint accepts interview parameters (role, tech stack, etc.),
+ * generates interview questions using the AI service, and stores the
+ * interview session in the database.
+ *
+ * @param request - The NextRequest object containing the JSON body with interview details.
+ * @returns A NextResponse containing the created interview, questions, and document ID.
+ *
+ * @throws {TooManyRequestsError} If the user has exceeded the rate limit.
+ * @throws {BadRequestError} If the user ID is missing or invalid.
+ * @throws {ZodError} If the request body does not match the expected schema.
+ */
 export async function POST(request: NextRequest) {
+  const requestId = generateRequestId();
+  const startTime = Date.now();
+
   try {
-    if (isRateLimited(request)) throw new TooManyRequestsError();
+    const pathname = request.nextUrl.pathname;
+    const locale = pathname.split('/')[1];
+
+    logger.info('Interview generation request received', {
+      category: LogCategory.API_REQUEST,
+      requestId,
+      locale,
+      method: 'POST',
+      path: pathname,
+    });
+
+    if (isRateLimited(request)) {
+      logger.warn('Rate limit exceeded for interview generation', {
+        category: LogCategory.RATE_LIMIT,
+        requestId,
+        ip:
+          request.headers.get('x-real-ip') ??
+          request.headers.get('x-forwarded-for') ??
+          'unknown',
+      });
+      throw new TooManyRequestsError();
+    }
 
     const body = await request.json();
     const {
@@ -34,13 +71,28 @@ export async function POST(request: NextRequest) {
     } = generateInterviewSchema.parse(body);
 
     if (!userid || userid.trim().length === 0) {
+      logger.error('Missing userId in interview request', {
+        category: LogCategory.VALIDATION_ERROR,
+        requestId,
+      });
       throw new BadRequestError('userid is required');
     }
 
-    const pathname = request.nextUrl.pathname;
-    const locale = pathname.split('/')[1];
-
     const messages = await getMessages({ locale });
+    const language = locale === 'es' ? 'Spanish' : 'English';
+
+    logger.info('Starting interview generation', {
+      category: LogCategory.INTERVIEW_GENERATE,
+      requestId,
+      userId: userid,
+      role,
+      level,
+      type,
+      questionsAmount: amount,
+      hasTechStack: !!techstack,
+      hasJobDescription: !!jobDescription,
+      language,
+    });
 
     const { interview, questions, documentId } =
       await generateAndStoreInterview({
@@ -54,14 +106,21 @@ export async function POST(request: NextRequest) {
         userId: userid,
         promptTemplate: messages.api.generateInterview.prompt,
         systemTemplate: messages.api.generateInterview.systemPrompt,
-        language: locale === 'es' ? 'Spanish' : 'English',
+        language,
+        requestId,
       });
 
     interview.coverImage = getRandomInterviewCover();
 
-    logger.info('generate_interview_success', {
+    const duration = Date.now() - startTime;
+    logger.info('Interview generated successfully', {
+      category: LogCategory.API_RESPONSE,
+      requestId,
       userId: userid,
+      interviewId: documentId,
       questionsCount: Array.isArray(questions) ? questions.length : 0,
+      duration,
+      statusCode: 200,
     });
 
     return NextResponse.json(
@@ -74,38 +133,89 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    const duration = Date.now() - startTime;
+
     if (error instanceof Error) {
-      logger.error('generate_interview_error', { message: error.message });
+      logger.error('Interview generation failed', {
+        category: LogCategory.API_ERROR,
+        requestId,
+        error: error.message,
+        errorName: error.name,
+        stack: error.stack,
+        duration,
+      });
     }
+
     const { status, body } = toHttpResponse(error);
     return NextResponse.json(body, { status });
   }
 }
 
+/**
+ * Retrieves interview data based on search parameters.
+ *
+ * Supports three modes:
+ * 1. Get single interview by `id`.
+ * 2. Get all interviews for a specific user (`userId` + `type=user`).
+ * 3. Get latest public interviews (`userId` + no type).
+ *
+ * @param request - The NextRequest object containing URL search parameters.
+ * @returns A NextResponse containing the requested interview(s) or an error.
+ */
 export async function GET(request: NextRequest) {
+  const requestId = generateRequestId();
+  const startTime = Date.now();
+
   try {
     const { searchParams, pathname } = request.nextUrl;
     const id = searchParams.get('id');
     const userId = searchParams.get('userId');
     const limit = searchParams.get('limit');
+    const type = searchParams.get('type');
     const locale = pathname.split('/')[1];
+
+    logger.info('Interview fetch request received', {
+      category: LogCategory.API_REQUEST,
+      requestId,
+      method: 'GET',
+      path: pathname,
+      id,
+      userId: userId ?? undefined,
+      type,
+      limit,
+    });
 
     // Get single interview by ID
     if (id) {
-      if (!id) {
-        return NextResponse.json(
-          { success: false, error: 'id is required' },
-          { status: 400 }
-        );
-      }
+      logger.debug('Fetching interview by ID', {
+        category: LogCategory.INTERVIEW_FETCH,
+        requestId,
+        interviewId: id,
+      });
 
       const interview = await getInterviewByIdService(id);
+
       if (!interview) {
+        logger.warn('Interview not found', {
+          category: LogCategory.INTERVIEW_FETCH,
+          requestId,
+          interviewId: id,
+        });
+
         return NextResponse.json(
           { success: false, error: 'Interview not found' },
           { status: 404 }
         );
       }
+
+      const duration = Date.now() - startTime;
+      logger.info('Interview fetched successfully', {
+        category: LogCategory.API_RESPONSE,
+        requestId,
+        interviewId: id,
+        duration,
+        statusCode: 200,
+      });
 
       return NextResponse.json(
         { success: true, interview, locale },
@@ -115,11 +225,26 @@ export async function GET(request: NextRequest) {
 
     // Get latest interviews or user interviews
     if (userId) {
-      const type = searchParams.get('type');
-
       if (type === 'user') {
         // Get user's own interviews
+        logger.debug('Fetching user interviews', {
+          category: LogCategory.INTERVIEW_FETCH,
+          requestId,
+          userId,
+        });
+
         const interviews = await getInterviewsByUserIdService(userId);
+
+        const duration = Date.now() - startTime;
+        logger.info('User interviews fetched successfully', {
+          category: LogCategory.API_RESPONSE,
+          requestId,
+          userId,
+          count: interviews.length,
+          duration,
+          statusCode: 200,
+        });
+
         return NextResponse.json(
           { success: true, interviews, locale },
           { status: 200 }
@@ -127,7 +252,27 @@ export async function GET(request: NextRequest) {
       } else {
         // Get latest interviews (excluding user's own)
         const limitNum = limit ? parseInt(limit, 10) : 20;
+
+        logger.debug('Fetching latest interviews', {
+          category: LogCategory.INTERVIEW_FETCH,
+          requestId,
+          userId,
+          limit: limitNum,
+        });
+
         const interviews = await getLatestInterviewsService(userId, limitNum);
+
+        const duration = Date.now() - startTime;
+        logger.info('Latest interviews fetched successfully', {
+          category: LogCategory.API_RESPONSE,
+          requestId,
+          userId,
+          count: interviews.length,
+          limit: limitNum,
+          duration,
+          statusCode: 200,
+        });
+
         return NextResponse.json(
           { success: true, interviews, locale },
           { status: 200 }
@@ -135,11 +280,29 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    logger.error('Missing required parameters', {
+      category: LogCategory.VALIDATION_ERROR,
+      requestId,
+    });
+
     return NextResponse.json(
       { success: false, error: 'id or userId is required' },
       { status: 400 }
     );
   } catch (error) {
+    const duration = Date.now() - startTime;
+
+    if (error instanceof Error) {
+      logger.error('Interview fetch failed', {
+        category: LogCategory.API_ERROR,
+        requestId,
+        error: error.message,
+        errorName: error.name,
+        stack: error.stack,
+        duration,
+      });
+    }
+
     const { status, body } = toHttpResponse(error);
     return NextResponse.json(body, { status });
   }

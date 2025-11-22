@@ -6,6 +6,7 @@ import InterviewCard from '@/components/InterviewCard';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { logger } from '@/lib/logger';
 
 const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = await params;
@@ -53,7 +54,7 @@ const Page = async ({ params }: { params: Promise<{ locale: string }> }) => {
       allInterview = latestData.interviews;
     }
   } catch (error) {
-    console.error('Error fetching interviews:', error);
+    logger.error('error_fetching_interviews', { error });
   }
 
   const hasPastInterviews = userInterviews?.length! > 0;
